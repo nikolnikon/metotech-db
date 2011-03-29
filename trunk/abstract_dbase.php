@@ -23,6 +23,10 @@ abstract class AbstractDBase
         $this->disconnect();
     }
     
+    public function getDBName() {
+    	return $this->m_dbName;
+    }
+    
     abstract public function select($query);
     //abstract public function insert();
     //abstract public function update();
@@ -52,8 +56,7 @@ abstract class AbstractDBase
     /*
      * Abstract methods that needs to be implemented by child classes
      */
-    abstract protected function connect($address, $account,
-        $pwd, $name);
+    abstract protected function connect($address, $account, $pwd, $name);
     abstract protected function disconnect();
     
 }
