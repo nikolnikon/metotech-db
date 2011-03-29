@@ -21,9 +21,7 @@ class MySQLDBase
         	throw new Exception("Не удалось выбрать базу данных", E_USER_ERROR);
     }	
  
-    /*
-     * Disconnect function
-     */
+    /*Отсоединение от БД*/
     protected function disconnect() {
     	@mysql_close($this->m_dbConn);
     }
