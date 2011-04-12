@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Тетирование БД</title>
+</head>
+<body>
+	<?php
+		require_once('price_list.php');
+		try {
+			$db = new MySQLDBase('127.0.0.1', 'root', '', 'metalls');
+		}
+		catch(Exception $e) {
+			echo "Ошибка\n".$e->getMessage();
+		}
+		$price = new PriceList($db, "nikel-price");
+	?>
+	
+	<?php
+		require_once('alloy.php');
+
+		try {
+			$db = new MySQLDBase('127.0.0.1', 'root', '', 'metalls');
+		}
+		catch(Exception $e) {
+			echo "Ошибка\n".$e->getMessage();
+		}
+
+		$alloy = new Alloy(1, $db);
+		print("<br><br>$alloy");
+	?>
+</body>
+</html>
