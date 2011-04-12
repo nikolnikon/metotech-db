@@ -1,8 +1,8 @@
 <?php
 
-require_once('db_iface.inc');
+require_once('abstract_dbase.php');
 
-class MySQLDBase
+class MySQLDBase extends AbstractDBase
 {
 	private $m_dbConn;
     private $m_Result;
@@ -12,7 +12,7 @@ class MySQLDBase
      * Returns 1 upon success, otherwise 0
      */
     protected function connect($address, $user, $pwd, $name) {
-        $this->m_dbConn = @mysql_connect($address, $user, $pwd);
+        $this->m_dbConn = mysql_connect($address, $user, $pwd);
  
         if (! $this->m_dbConn) 
         	throw new Exception("Не удалось соединиться с базой данных", E_USER_ERROR);
@@ -23,17 +23,17 @@ class MySQLDBase
  
     /*Отсоединение от БД*/
     protected function disconnect() {
-    	@mysql_close($this->m_dbConn);
+    	mysql_close($this->m_dbConn);
     }
     
     /*Функция выполняет запрос SELECT и возвращает выбору в виде двумерного ассоциативного массива*/
     public function select($query) {
     	$this->m_Result = mysql_query($query, $this->m_dbConn);
     	if (! $this->m_Result) {
-    		throw new Exception("Ошибка при выполнении запроса.\n".mysql_error($this->m_dbConn));
+    		throw new Exception("Ошибка при выполнении запроса.<br>".mysql_error($this->m_dbConn)."<br>");
     	}
     	$arReturn = array();
-    	while ($row = mysql_fetch_assoc()) {
+    	while ($row = mysql_fetch_assoc($this->m_Result)) {
     		$arReturn[] = $row;
     	}
     	
