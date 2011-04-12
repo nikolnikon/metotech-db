@@ -14,8 +14,7 @@ abstract class AbstractDBase
         $this->m_dbName = $name;
  
         /* Call the connect method in the child class */
-        $this->connect($this->m_dbAddress, $this->m_dbUser,
-            $this->m_dbPwd, $this->m_dbName);
+        $this->connect($this->m_dbAddress, $this->m_dbUser, $this->m_dbPwd, $this->m_dbName);
     }
  
     /* Let the child disconnect when the object is destroyed */
@@ -49,8 +48,7 @@ abstract class AbstractDBase
  
     /* We have been unserialized, re-connect */
     public function __wakeup() {
-        $this->connect($this->m_dbAddress, $this->m_dbUser,
-            $this->m_dbPwd, $this->m_dbName);
+        $this->connect($this->m_dbAddress, $this->m_dbUser, $this->m_dbPwd, $this->m_dbName);
     }
  
     /*
