@@ -18,6 +18,11 @@
 	
 	<?php
 		require_once('alloy.php');
+		require_once('rounds_product.php');
+		require_once('sheet_product.php');
+		require_once('strip_product.php');
+		require_once('pipe_product.php');
+		require_once('powder_product.php');
 
 		try {
 			$db = new MySQLDBase('127.0.0.1', 'root', '', 'metalls');
@@ -28,6 +33,22 @@
 
 		$alloy = new Alloy(1, $db);
 		print("<br><br>$alloy");
+
+		$wire = new RoundsProduct(1, $db);
+		print("<br><br>$wire");
+
+		$strip = new StripProduct(8, $db);
+		print("<br><br>$strip");
+
+		$sheet = new SheetProduct(6, $db);
+		print("<br><br>$sheet");
+
+		$pipe = new PipeProduct(4, $db);
+		print("<br><br>$pipe");
+
+		$powder = new PowderProduct(9, $db);
+		print("<br><br>$powder");
 	?>
+	
 </body>
 </html>

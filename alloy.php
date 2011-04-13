@@ -10,7 +10,7 @@ class Alloy extends GenericObject
 	
 	public function __toString() {
 		$str .= $this->name;
-		$str .= ';';
+		$str .= ':';
 		$str .= $this->grade;
 		return $str;
 	}
