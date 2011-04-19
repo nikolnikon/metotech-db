@@ -1,6 +1,6 @@
 <?php
 
-require_once('abstract_dbase.php');
+require_once('class.abstract_dbase.php');
 
 class MySQLDBase extends AbstractDBase
 {

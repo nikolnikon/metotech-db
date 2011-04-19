@@ -1,14 +1,14 @@
 <?php
 
-require_once 'mysql_dbase.php';
+require_once 'class.mysql_dbase.php';
 
 class GenericObject
 {
 	private $_id;
 	private $_tableName;
-	private $_dbFields;
+	private $_dbFields = array();
 	private $_loaded;
-	private $_modifiedFields;
+	private $_modifiedFields = array();
 	private $_modified;
 	private $_db;
 	
@@ -58,11 +58,9 @@ class GenericObject
 	}
 	
 	public function __set($field, $value) {
-		if (array_key_exists($field, $this->_dbFields)) {
-			$this->_dbFields[$field] = $value;
-			$this->_modifiedFields[$field] = true;
-			$this->_modified = true;			
-		}
+		$this->_dbFields[$field] = $value;
+		$this->_modifiedFields[$field] = true;
+		$this->_modified = true;			
 	}
 	
 	public function remove() {
