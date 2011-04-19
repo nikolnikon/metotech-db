@@ -1,6 +1,6 @@
 <?php
 
-require_once 'generic_object.php';
+require_once 'class.generic_object.php';
 
 class Product extends GenericObject
 {

@@ -6,7 +6,7 @@
 </head>
 <body>
 	<?php
-		require_once('price_list.php');
+		require_once('class.price_list.php');
 		try {
 			$db = new MySQLDBase('127.0.0.1', 'root', '', 'metalls');
 		}
@@ -14,15 +14,16 @@
 			echo "Ошибка\n".$e->getMessage();
 		}
 		$price = new PriceList($db, "nikel-price");
+		$price->printToTable();
 	?>
 	
-	<?php
-		require_once('alloy.php');
-		require_once('rounds_product.php');
-		require_once('sheet_product.php');
-		require_once('strip_product.php');
-		require_once('pipe_product.php');
-		require_once('powder_product.php');
+	<!--<?php
+		require_once('class.alloy.php');
+		require_once('class.rounds_product.php');
+		require_once('class.sheet_product.php');
+		require_once('class.strip_product.php');
+		require_once('class.pipe_product.php');
+		require_once('class.other_product.php');
 
 		try {
 			$db = new MySQLDBase('127.0.0.1', 'root', '', 'metalls');
@@ -46,9 +47,9 @@
 		$pipe = new PipeProduct(4, $db);
 		print("<br><br>$pipe");
 
-		$powder = new PowderProduct(9, $db);
+		$powder = new OtherProduct(9, $db);
 		print("<br><br>$powder");
-	?>
+	?>-->
 	
 </body>
 </html>

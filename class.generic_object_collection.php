@@ -8,10 +8,15 @@ class GenericObjectCollection
 	private $_idArray;
 	private $_objArray;
 	private $_db;
+	/**
+	 * @var string имя функции, которая возвращает имя класса generic. Если не задано, то используется $_className
+	 */
+	private $_classNameFunc;
 	
-	public function __construct($table_name, $class_name) {
+	public function __construct($table_name, $class_name, $db) {
 		$this->_tableName = $table_name;
 		$this->_className = $class_name;
+		$this->_db = $db;
 	}
 	
 	public function addTuple($id) {
@@ -26,40 +31,58 @@ class GenericObjectCollection
 		return $this->_itemsCount;
 	}
 	
+	public function setClassNameFunc($func) {
+		$this->_classNameFunc = $func;
+	}
+	
 	public function populateObjectArray() {
 		if ($this->_itemsCount > 0) {
 			$query = "SELECT * FROM `".$this->_db->getDBName()."`.`$this->_tableName` WHERE id IN (".$this->_getCommaSeparatedIdList().")";
-		}
-		try {
-			$res = $this->_db->select(query);
-			foreach ($res as $row) {
-				$id = $row["id"];
-				$index = $this->_getIndexForTuple($id);
-				if ($index >= 0) {
-					$robj = &$this->_objArray[$index];
-					$s  = "\$robj = new $this->_className($id, \$this->_db);";
-					eval($s);
-					$robj->forceLoaded();
-					foreach ($row as $key => $value) {
-						if (! is_numeric($key)) {
-							$robj->__set($key, $value);	
+			try {
+				$res = $this->_db->select($query);
+				foreach ($res as $row) {
+					$id = $row["id"];
+					$index = $this->_getIndexForTuple($id);
+					if ($index >= 0) {
+						$robj = &$this->_objArray[$index];
+						$class_name = $this->_className;
+						if (isset($this->_classNameFunc))
+							$class_name = call_user_func($this->_classNameFunc, $row);
+						$s  = "\$robj = new $class_name($id, \$this->_db);";
+						eval($s);
+						$robj->forceLoaded();
+						foreach ($row as $key => $value) {
+							if (! is_numeric($key)) {
+								$robj->__set($key, $value);
+							}
 						}
 					}
 				}
 			}
-		}
-		catch (Exception $e) {
-			print $e->getMessage();
+			catch (Exception $e) {
+				print $e->getMessage();
+			}
 		}
 	}
 	
 	public function getPopulatedObjects() {
-		
+		$return_array = array();
+		foreach ($this->_idArray as $id) {
+			$index = $this->_getIndexForTuple($id);
+			if ($index >= 0) {
+				$return_array[$id] = $this->_objArray[$index];
+			}			
+		}
+		return $return_array;
 	}
 	
-	public function getObject($id) {
-		
-	}
+	/*public function getObject($id) {
+		$index = $this->_getIndexForTuple($id);
+		if ($index < 0) {
+			return null;
+		}
+		return $this->_objArray[$index];
+	}*/
 	
 	private function _getCommaSeparatedIdList() {
 		for ($i = 0; $i < count($this->_idArray); $i++) {
@@ -74,7 +97,7 @@ class GenericObjectCollection
 	private function _getIndexForTuple($id) {
 		$index = -1;
 		$i = array_search($id, $this->_idArray);
-		if ($i && is_numeric($i)) {
+		if ($i !== false && is_numeric($i)) {
 			$index = $i;
 		}
 		return $index;
