@@ -23,7 +23,9 @@ class MySQLDBase extends AbstractDBase
  
     /*Отсоединение от БД*/
     protected function disconnect() {
-    	mysql_close($this->m_dbConn);
+    	if (is_resource($this->m_dbConn)) {
+    		mysql_close($this->m_dbConn);
+    	}
     }
     
     /*Функция выполняет запрос SELECT и возвращает выбору в виде двумерного ассоциативного массива*/
