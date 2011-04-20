@@ -40,16 +40,16 @@ abstract class AbstractDBase
     /* We are about to be serialized, disconnect
      * and return data needed for serialization
      */
-    public function __sleep() {
+    /*public function __sleep() {
         $this->disconnect();
         return array('m_dbAddress', 'm_dbUser',
             'm_dbPwd', 'm_dbName');
-    }
+    }*/
  
     /* We have been unserialized, re-connect */
-    public function __wakeup() {
+    /*public function __wakeup() {
         $this->connect($this->m_dbAddress, $this->m_dbUser, $this->m_dbPwd, $this->m_dbName);
-    }
+    }*/
  
     /*
      * Abstract methods that needs to be implemented by child classes
