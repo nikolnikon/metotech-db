@@ -20,7 +20,7 @@ class GenericObjectCollection
 	}
 	
 	public function addTuple($id) {
-		if (! $this->id_array) {
+		if (! $this->_idArray) {
 			$this->_idArray = array();
 		}
 		array_push($this->_idArray, $id);
