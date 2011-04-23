@@ -41,6 +41,10 @@ class PriceList
 			echo $e->getMessage();
 		}
 		
+		echo "ids: ";
+		print_r($ids);
+		echo '<br>';
+		
 		$gen_obj_col = new GenericObjectCollection('general_price', 'PriceItem', $this->dbase);
 		foreach ($ids as $row) {
 			$gen_obj_col->addTuple($row["gprice_id"]);
@@ -78,7 +82,7 @@ class PriceList
 	}
 	
 	public function printToTable() {
-		print("\n\n<table border=\"0\" cellspacing=\"1\" cellpadding=\"1\" class=\"ooo\">
+		print("\n\n<table border=\"1\" cellspacing=\"1\" cellpadding=\"1\" class=\"ooo\">
 			   	<tr align=\"center\" valign=\"middle\">
 					<th width=\"50\" height=\"25\" scope=\"col\">№</th>
 					<th width=\"100\" height=\"25\" scope=\"col\">Материал</th>
