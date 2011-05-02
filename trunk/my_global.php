@@ -35,6 +35,25 @@ function getProductGenObject($db_row) {
 		default: 
 			return 'OtherProduct';
 	}
-} 
+}
+
+/**
+ * Возвращает список значений массива, разделенных запятыми
+ * @param array $array
+ * @return string $s
+ */
+function getCommaSeparatedList($array) {
+	$s = '';
+	foreach ($array as $value) {
+		if (is_numeric($value)) {
+			$s .= "$value,";
+		}
+		else {
+			$s .= "'$value',";
+		}
+	}
+	$s = substr($s, 0, strlen($s) - 1);
+	return $s;
+}
 
 ?>
