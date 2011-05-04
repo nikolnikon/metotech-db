@@ -26,6 +26,11 @@ abstract class AbstractDBase
     	return $this->m_dbName;
     }
     
+    /**
+     * Функция выполняет запрос SELECT и возвращает выбору в виде двумерного ассоциативного массива
+     * @param string $query код запроса
+     * @return array двумерный массив, key -> № ряда, value - ассоциативный массив выборки
+     */
     abstract public function select($query);
     //abstract public function insert();
     //abstract public function update();
