@@ -28,7 +28,6 @@ class MySQLDBase extends AbstractDBase
     	}
     }
     
-    /*Функция выполняет запрос SELECT и возвращает выбору в виде двумерного ассоциативного массива*/
     public function select($query) {
     	$this->m_Result = mysql_query($query, $this->m_dbConn);
     	if (! $this->m_Result) {
