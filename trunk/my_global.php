@@ -20,7 +20,7 @@ class ProductType
  * @return string имя подходящего класса
  */
 function getProductGenObject($db_row) {
-	$prod_type = $db_row['type'];
+	$prod_type = $db_row['prod_type'];
 	switch ($prod_type) {
 		case ProductType::ROUNDS:
 			return 'RoundsProduct';

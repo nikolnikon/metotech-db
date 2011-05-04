@@ -1,4 +1,4 @@
-<?php
+п»ї<?php
 
 require_once('class.mysql_dbase.php');
 require_once('class.generic_object_collection.php');
@@ -13,25 +13,36 @@ require_once('my_global.php');
 
 class PriceList
 {
+	/**
+	 * @var MySQLDBase РѕС‚РІРµС‡Р°РµС‚ Р·Р° СЂР°Р±РѕС‚Сѓ СЃ Р‘Р”
+	 */
 	private $_dbase;
+	/**
+	 * @var string РЅР°Р·РІР°РЅРёРµ РїСЂР°Р№СЃ-Р»РёСЃС‚Р°
+	 */
 	private $_priceName;
 	/**
-	 * @var array содержит набор записей из general_price, которые удовлетворяют данному прайс-листу, key -> id записи
+	 * @var array СЃРѕРґРµСЂР¶РёС‚ РЅР°Р±РѕСЂ Р·Р°РїРёСЃРµР№ РёР· general_price, РєРѕС‚РѕСЂС‹Рµ СѓРґРѕРІР»РµС‚РІРѕСЂСЏСЋС‚ РґР°РЅРЅРѕРјСѓ РїСЂР°Р№СЃ-Р»РёСЃС‚Сѓ, key -> id Р·Р°РїРёСЃРё
 	 */
 	private $_priceItemsArray = array(); 
 	/**
-	 * @var array содержит набор записей из alloys, которые используются в прайс-листе, key -> id записи
+	 * @var array СЃРѕРґРµСЂР¶РёС‚ РЅР°Р±РѕСЂ Р·Р°РїРёСЃРµР№ РёР· alloys, РєРѕС‚РѕСЂС‹Рµ РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ РІ РїСЂР°Р№СЃ-Р»РёСЃС‚Рµ, key -> id Р·Р°РїРёСЃРё
 	 */
-	private $_alloysArray  = array(); // содержит фрагмент таблицы alloys
+	private $_alloysArray  = array(); // СЃРѕРґРµСЂР¶РёС‚ С„СЂР°РіРјРµРЅС‚ С‚Р°Р±Р»РёС†С‹ alloys
 	/**
-	 * @var array содержит набор записей из production, которые используются в прайс-листе, key -> id записи
+	 * @var array СЃРѕРґРµСЂР¶РёС‚ РЅР°Р±РѕСЂ Р·Р°РїРёСЃРµР№ РёР· production, РєРѕС‚РѕСЂС‹Рµ РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ РІ РїСЂР°Р№СЃ-Р»РёСЃС‚Рµ, key -> id Р·Р°РїРёСЃРё
 	 */
 	private $_productArray  = array();
+	
+	private $_filterValues;
 	
 	public function __construct($dbase, $price_name, $conditions = null) {
 		$this->_dbase = $dbase;
 		$this->_priceName = $price_name;
 		$this->_load($conditions);
+		$this->_filterValues['alloy_name'] = array();
+		$this->_filterValues['grade'] = array();
+		$this->_filterValues['prod_name'] = array();
 	}
 	
 	public function printToTable() {
@@ -39,18 +50,18 @@ class PriceList
 		print ($this->_createMultipleSelectCode('MATERIAL'));
 		print ($this->_createMultipleSelectCode('PRODUCT'));
 		print ($this->_createMultipleSelectCode('GRADE'));
-		print "\n<input type=\"submit\" name=\"filter\" value=\"Фильтровать\">";
+		print "\n<input type=\"submit\" name=\"filter\" value=\"Р¤РёР»СЊС‚СЂРѕРІР°С‚СЊ\">";
 		print "\n</form>";
 		print "<br><br>";
 		print("\n\n<table border=\"0\" cellspacing=\"1\" cellpadding=\"1\" class=\"ooo\">
 			   	<tr align=\"center\" valign=\"middle\">
-					<th width=\"50\" height=\"25\" scope=\"col\">№</th>
-					<th width=\"100\" height=\"25\" scope=\"col\">Материал</th>
-					<th width=\"120\" height=\"25\" scope=\"col\">Тип проката</th>
-					<th width=\"101\" height=\"25\" scope=\"col\">Марка</th>
-					<th width=\"100\" height=\"25\" scope=\"col\">Размеры, мм </th>
-					<th width=\"110\" height=\"25\" scope=\"col\">Общий вес, кг</th>
-					<th width=\"120\" height=\"25\" scope=\"col\">Цена, р/кг</th>
+					<th width=\"50\" height=\"25\" scope=\"col\">в„–</th>
+					<th width=\"100\" height=\"25\" scope=\"col\">РњР°С‚РµСЂРёР°Р»</th>
+					<th width=\"120\" height=\"25\" scope=\"col\">РўРёРї РїСЂРѕРєР°С‚Р°</th>
+					<th width=\"101\" height=\"25\" scope=\"col\">РњР°СЂРєР°</th>
+					<th width=\"100\" height=\"25\" scope=\"col\">Р Р°Р·РјРµСЂС‹, РјРј </th>
+					<th width=\"110\" height=\"25\" scope=\"col\">РћР±С‰РёР№ РІРµСЃ, РєРі</th>
+					<th width=\"120\" height=\"25\" scope=\"col\">Р¦РµРЅР°, СЂ/РєРі</th>
 				</tr>");
 		print("<tr>\n");
 		$count = 1;
@@ -73,11 +84,11 @@ class PriceList
 	}
 	
 	/**
-	 * Загружает из БД прайс-лист. Если задан параметр, то записи прайс-листа фильтруются
-	 * @param array $conditions массив, содержащий значения для фильтруемых полей, key -> фильтруемое поле, value -> значения
-	 * @return bool результат загрузки
+	 * Р—Р°РіСЂСѓР¶Р°РµС‚ РёР· Р‘Р” РїСЂР°Р№СЃ-Р»РёСЃС‚. Р•СЃР»Рё Р·Р°РґР°РЅ РїР°СЂР°РјРµС‚СЂ, С‚Рѕ Р·Р°РїРёСЃРё РїСЂР°Р№СЃ-Р»РёСЃС‚Р° С„РёР»СЊС‚СЂСѓСЋС‚СЃСЏ
+	 * @param array $conditions РјР°СЃСЃРёРІ, СЃРѕРґРµСЂР¶Р°С‰РёР№ Р·РЅР°С‡РµРЅРёСЏ РґР»СЏ С„РёР»СЊС‚СЂСѓРµРјС‹С… РїРѕР»РµР№, key -> С„РёР»СЊС‚СЂСѓРµРјРѕРµ РїРѕР»Рµ, value -> Р·РЅР°С‡РµРЅРёСЏ
+	 * @return bool СЂРµР·СѓР»СЊС‚Р°С‚ Р·Р°РіСЂСѓР·РєРё
 	 */
-	private function _load($conditions) {
+	private function _load(&$conditions) {
 		$gprice_query = '';
 		if (! is_null($conditions) && is_array($conditions)) {
 			$fields = array();
@@ -92,6 +103,7 @@ class PriceList
 			}
 			
 			$ids_list = array();
+			// РїРѕР»СѓС‡Р°РµРј РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂС‹ РёР· alloys Рё production, СѓРґРѕРІР»РµС‚РІРѕСЂСЏСЋС‰РёРµ РєСЂРёС‚РµСЂРёСЏРј С„РёР»СЊС‚СЂР°
 			foreach ($fields as $table => $values) {
 				$query = $this->_getFilterQuery($table, $values);
 				try {
@@ -105,6 +117,7 @@ class PriceList
 					return false;
 				}
 			}
+			// РїРѕР»СѓС‡Р°РµРј РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂС‹ РёР· general_price, СѓРґРѕРІР»РµС‚РІРѕСЂСЏСЋС‰РёРµ РєСЂРёС‚РµСЂРёСЏРј С„РёР»СЊС‚СЂР°
 			$gprice_query = "SELECT `id` FROM `metalls`.`general_price` WHERE ";
 			$keys = array_keys($ids_list);
 			foreach ($keys as $key) {
@@ -132,7 +145,7 @@ class PriceList
 			$gprice_query = "AND `gprice_id` IN (".getCommaSeparatedList($gprice_ids).")";
 		}
 		
-		// получаем все необходимые записи общего прайс-листа из таблицы general_price
+		// РїРѕР»СѓС‡Р°РµРј РІСЃРµ РЅРµРѕР±С…РѕРґРёРјС‹Рµ Р·Р°РїРёСЃРё РѕР±С‰РµРіРѕ РїСЂР°Р№СЃ-Р»РёСЃС‚Р° РёР· С‚Р°Р±Р»РёС†С‹ general_price
 		$query_1 = "SELECT `id` FROM `metalls`.`special_prices` WHERE `price_name` = '".mysql_real_escape_string($this->_priceName)."'";
 		$query_2 = "SELECT `gprice_id` FROM `metalls`.`prices_mapping` WHERE `sprice_id` = ($query_1) $gprice_query";
 		
@@ -146,15 +159,12 @@ class PriceList
 			return false;
 		}
 		
-		$gen_obj_col = new GenericObjectCollection('general_price', 'PriceItem', $this->_dbase);
 		foreach ($ids as $row) {
-			$gen_obj_col->addTuple($row["gprice_id"]);
+			$ids_g[] = $row["gprice_id"];
 		}
-		$gen_obj_col->populateObjectArray();
-		$this->_priceItemsArray = $gen_obj_col->getPopulatedObjects();
-		unset($gen_obj_col);
+		$this->_fillArray('general_price', 'PriceItem', '_priceItemsArray', $ids_g);
 		
-		// получаем все необходимые записи из alloys и production
+		// РїРѕР»СѓС‡Р°РµРј РІСЃРµ РЅРµРѕР±С…РѕРґРёРјС‹Рµ Р·Р°РїРёСЃРё РёР· alloys Рё production
 		$ids_a = array();
 		$ids_p = array();
 		foreach ($this->_priceItemsArray as $price_item) {
@@ -163,91 +173,53 @@ class PriceList
 			if (! in_array($price_item->product_id, $ids_p))
 				$ids_p[] = $price_item->product_id;
 		}
-		unset($gen_obj_col);
-
-		$gen_obj_col = new GenericObjectCollection('alloys', 'Alloy', $this->_dbase);
-		foreach ($ids_a as $id) {
-			$gen_obj_col->addTuple($id);
-		}
-		$gen_obj_col->populateObjectArray();
-		$this->_alloysArray = $gen_obj_col->getPopulatedObjects();
-		unset($gen_obj_col);
-		
-		$gen_obj_col = new GenericObjectCollection('production', 'Product', $this->_dbase);
-		$gen_obj_col->setClassNameFunc('getProductGenObject');
-		foreach ($ids_p as $id) {
-			$gen_obj_col->addTuple($id);
-		}
-		$gen_obj_col->populateObjectArray();
-		$this->_productArray = $gen_obj_col->getPopulatedObjects();
+		$this->_fillArray('alloys', 'Alloy', '_alloysArray', $ids_a);
+		$this->_fillArray('production', 'Product', '_productArray', $ids_p, 'getProductGenObject');
 		return true;
 	}
 	
-	/**
-	 * @param array $conditions key -> имя фильтруемого поля, value -> список 
-	 */
-	private function _filteredLoad($conditions) {
-		if (isset($conditions) && is_array($conditions)) {
-			$fields = array();
-			if (array_key_exists('alloy_name', $conditions))
-				$fields['alloys']['alloy_name'] = $conditions['alloy_name'];
-			if (array_key_exists('grade', $conditions))
-				$fields['alloys']['grade']  = $conditions['grade'];
-			if (array_key_exists('prod_name', $conditions))
-				$fields['production']['prod_name']  = $conditions['prod_name'];
-			
-			// получаем все необходимые записи из alloys
-			$query = $this->_getFilterQuery('alloys', $fields['alloys']);
-			try {
-				$ids = $this->_dbase->select($query);
-			}
-			catch(Exception $e) {
-				echo $e->getMessage();
-			}
-			
-			$ids_a = array();
-			foreach ($ids as $row) {
-				if (! in_array($row['id'], $ids_a)) {
-					$ids_a[] = $row['id'];
+	private function _fillArray($table_name, $class_name, $array_name, &$ids, $func_name = null) {
+		$gen_obj_col = new GenericObjectCollection($table_name, $class_name, $this->_dbase);
+		if (isset($func_name)) {
+			$gen_obj_col->setClassNameFunc($func_name);
+		}
+		foreach ($ids as $id) {
+			$gen_obj_col->addTuple($id);
+		}
+		$gen_obj_col->populateObjectArray();
+		$this->$array_name = $gen_obj_col->getPopulatedObjects();	
+	}
+	
+	private function _fillFilterArray(&$conditions) {
+		if (! is_null($conditions) && is_array($conditions)) {
+			$query_1 = "SELECT `id` FROM `metalls`.`special_prices` WHERE `price_name` = '".mysql_real_escape_string($this->_priceName)."'";
+			$query_2 = "SELECT `gprice_id` FROM `metalls`.`prices_mapping` WHERE `sprice_id` = ($query_1) $gprice_query";
+			$query = "SELECT `alloy_id`, `product_id` FROM `metalls`.`general_price` WHERE id IN (";
+			$query = "SELECT `alloy_name`, `grade`, `product_name` FROM `metalls`.`alloys`, `metalls`."
+		}
+		else {
+			$keys = array_keys($this->_filterValues);
+			foreach ($keys as $key) {
+				switch ($key) {
+					case 'alloy_name':
+					case 'grade':
+						$array = $this->_alloysArray;
+						break;
+					case 'prod_name':
+						$array = $this->_productArray;
+						break;
+				}
+				foreach ($array as $gen_obj) {
+					$this->_filterValues[$key][] = $gen_obj->$key;
 				}
 			}
-			$gen_obj_col = new GenericObjectCollection('alloys', 'Alloy', $this->_dbase);
-			foreach ($ids_a as $id) {
-				$gen_obj_col->addTuple($id);
-			}
-			$gen_obj_col->populateObjectArray();
-			$this->_alloysArray = $gen_obj_col->getPopulatedObjects();
-			unset($gen_obj_col);
-			
-			// получаем все необходимые записи из alloys
-			$query = $this->_getFilterQuery('production', $fields['production']);
-			try {
-				$ids = $this->_dbase->select($query);
-			}
-			catch(Exception $e) {
-				echo $e->getMessage();
-			}
-			
-			$ids_p = array();
-			foreach ($ids as $row) {
-				if (! in_array($row['id'], $ids_p)) {
-					$ids_p[] = $row['id'];
-				}
-			}
-			$gen_obj_col = new GenericObjectCollection('production', 'Product', $this->_dbase);
-			$gen_obj_col->setClassNameFunc('getProductGenObject');
-			foreach ($ids_p as $id) {
-				$gen_obj_col->addTuple($id);
-			}
-			$gen_obj_col->populateObjectArray();
-			$this->_productArray = $gen_obj_col->getPopulatedObjects();
 		}
 	}
 	
 	/**
-	 * Составляет запрос для фильтрации
-	 * @param string $table имя таблицы, для которой строится запрос
-	 * @param array $fields key -> фильтруемое поле, value -> значения
+	 * РЎРѕСЃС‚Р°РІР»СЏРµС‚ Р·Р°РїСЂРѕСЃ РґР»СЏ С„РёР»СЊС‚СЂР°С†РёРё
+	 * @param string $table РёРјСЏ С‚Р°Р±Р»РёС†С‹, РґР»СЏ РєРѕС‚РѕСЂРѕР№ СЃС‚СЂРѕРёС‚СЃСЏ Р·Р°РїСЂРѕСЃ
+	 * @param array $fields key -> С„РёР»СЊС‚СЂСѓРµРјРѕРµ РїРѕР»Рµ, value -> Р·РЅР°С‡РµРЅРёСЏ
 	 */
 	private function _getFilterQuery($table, $fields) {
 		$query .= "SELECT `id` FROM `metalls`.`$table` WHERE ";
@@ -262,8 +234,8 @@ class PriceList
 	}
 	
 	/**
-	 * Формирует список значений для фильтра
-	 * @param $type string определяет тип списка; MATERIAL - материал, PRODUCT - название продукции, GRADE - марка сплава.
+	 * Р¤РѕСЂРјРёСЂСѓРµС‚ СЃРїРёСЃРѕРє Р·РЅР°С‡РµРЅРёР№ РґР»СЏ С„РёР»СЊС‚СЂР°
+	 * @param $type string РѕРїСЂРµРґРµР»СЏРµС‚ С‚РёРї СЃРїРёСЃРєР°; MATERIAL - РјР°С‚РµСЂРёР°Р», PRODUCT - РЅР°Р·РІР°РЅРёРµ РїСЂРѕРґСѓРєС†РёРё, GRADE - РјР°СЂРєР° СЃРїР»Р°РІР°.
 	 */
 	private function _createMultipleSelectCode($type) {
 		$array = array();
@@ -284,7 +256,7 @@ class PriceList
 				break;
 		}
 		$return_array = array();
-		foreach ($array as $key => $gen_obj) {
+		foreach ($array as $gen_obj) {
 			$value = $gen_obj->$field;
 			if (! in_array($value, $return_array)) {
 				$return_array[] = $value;
