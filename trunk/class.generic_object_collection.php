@@ -76,14 +76,6 @@ class GenericObjectCollection
 		return $return_array;
 	}
 	
-	/*public function getObject($id) {
-		$index = $this->_getIndexForTuple($id);
-		if ($index < 0) {
-			return null;
-		}
-		return $this->_objArray[$index];
-	}*/
-	
 	private function _getCommaSeparatedIdList() {
 		for ($i = 0; $i < count($this->_idArray); $i++) {
 			if (is_numeric($this->_idArray[$i])) {

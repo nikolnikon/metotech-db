@@ -33,7 +33,9 @@ class PriceList
 	 * @var array содержит набор записей из production, которые используются в прайс-листе, key -> id записи
 	 */
 	private $_productArray  = array();
-	
+	/**
+	 * @var array key -> название фильтруемого поля, value -> значения для списка фильтра
+	 */
 	private $_filterValues;
 	
 	public function __construct($dbase, $price_name, $conditions = null) {
@@ -44,8 +46,9 @@ class PriceList
 		$this->_filterValues['prod_name'] = array();
 		$this->_load(null);
 		$this->_fillFilterArray();
-		if (isset($conditions))
+		if (isset($conditions)) {
 			$this->_load($conditions);
+		}
 	}
 	
 	public function printToTable() {
@@ -143,6 +146,9 @@ class PriceList
 				print $e->getMessage();
 				return false;
 			}
+			if (empty($gprice_ids)) {
+				print '<script language="JavaScript">alert("Ни одна запись не удовлетворяет заданным критериям.");</script>';
+			}
 			$gprice_query = "AND `gprice_id` IN (".getCommaSeparatedList($gprice_ids).")";
 		}
 		
@@ -184,11 +190,13 @@ class PriceList
 		if (isset($func_name)) {
 			$gen_obj_col->setClassNameFunc($func_name);
 		}
-		foreach ($ids as $id) {
-			$gen_obj_col->addTuple($id);
-		}
-		$gen_obj_col->populateObjectArray();
-		$array = $gen_obj_col->getPopulatedObjects();	
+		if (! empty($ids)) {
+			foreach ($ids as $id) {
+				$gen_obj_col->addTuple($id);
+			}
+			$gen_obj_col->populateObjectArray();
+			$array = $gen_obj_col->getPopulatedObjects();
+		}	
 	}
 	
 	private function _fillFilterArray() {
