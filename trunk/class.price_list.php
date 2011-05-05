@@ -51,6 +51,9 @@ class PriceList
 		}
 	}
 	
+	/**
+	 * Выводит html-код фильтра и таблицы с прайс-листом
+	 */
 	public function printToTable() {
 		print "\n<form method=\"get\" action=\"test.htm\">";
 		print $this->_createFilterHTMLCode();
@@ -75,11 +78,11 @@ class PriceList
 			$product = $this->_productArray[$price_item->product_id];
 			$str .= "\t\t<td>$count</td>\n";
 			$str .= "\t\t<td>$alloy->alloy_name</td>\n";
-			$str .= "\t\t<td>$product->prod_name</td>\n";
+			$str .= "\t\t<td>".$product->getProdName()."</td>\n";
 			$str .= "\t\t<td>$alloy->grade</td>\n";
-			$str .= "\t\t<td>$product</td>\n";
+			$str .= "\t\t<td>".$product->getProdSize()."</td>\n";
 			$str .= "\t\t<td>$price_item->mass</td>\n";
-			$str .= "\t\t<td>$price_item->price</td>\n";
+			$str .= "\t\t<td>от $price_item->price</td>\n";
 			$str .= "\t</tr>\n";
 			$count += 1;
 		}
@@ -185,6 +188,14 @@ class PriceList
 		return true;
 	}
 	
+	/**
+	 * Заполняет массивы, содержащие GenericObject 
+	 * @param string $table_name
+	 * @param string $class_name
+	 * @param array $array ссылка массив, содержащий GenericObject
+	 * @param array $ids ссылка на массив, содержащий идентификаторы записей, которые надо получить из БД
+	 * @param string $func_name имя функции, необходимое классу GenericObjectCollection
+	 */
 	private function _fillArray($table_name, $class_name, &$array, &$ids, $func_name = null) {
 		$gen_obj_col = new GenericObjectCollection($table_name, $class_name, $this->_dbase);
 		if (isset($func_name)) {
@@ -199,6 +210,9 @@ class PriceList
 		}	
 	}
 	
+	/**
+	 * Заполняет массив, содержащий данные для списков фильтра
+	 */
 	private function _fillFilterArray() {
 		$keys = array_keys($this->_filterValues);
 		foreach ($keys as $key) {
@@ -217,7 +231,6 @@ class PriceList
 				}
 			}
 		}
-		print_r($this->_filterValues);
 	}
 	
 	/**

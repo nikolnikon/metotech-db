@@ -4,16 +4,10 @@ require_once 'class.product.php';
 
 class SheetProduct extends Product {
 	
-	public function __toString() {
-		/*$str .= $this->prod_name;
-		$str .= ':';*/
-		$str .= $this->thickness;
-		$str .= 'x';
-		$str .= $this->width;
-		$str .= 'x';
-		$str .= $this->length;
-		return $str;
-	} 
+	public function getProdSize() {
+		$size = $this->thickness."x".$this->width."x".$this->length;
+		return $size;
+	}
 }
 
 ?>
