@@ -44,6 +44,9 @@ function getProductGenObject($db_row) {
  */
 function getCommaSeparatedList($array) {
 	$s = '';
+	if (empty($array)) {
+		return 'NULL';
+	}
 	foreach ($array as $value) {
 		if (is_numeric($value)) {
 			$s .= "$value,";
