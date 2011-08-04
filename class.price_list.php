@@ -91,6 +91,78 @@ class PriceList
 	}
 	
 	/**
+	 * Возвращает прайс-лист в виде XML документа
+	 */
+	public function getXML() {
+		$string = <<<XML
+<?xml version='1.0' standalone='yes'?>
+<movies>
+ <movie>
+  <title>PHP: Behind the Parser</title>
+  <characters>
+   <character>
+    <name>Ms. Coder</name>
+    <actor>Onlivia Actora</actor>
+   </character>
+   <character>
+    <name>Mr. Coder</name>
+    <actor>El Act&#211;r</actor>
+   </character>
+  </characters>
+  <plot>
+   So, this language. It's like, a programming language. Or is it a
+   scripting language? All is revealed in this thrilling horror spoof
+   of a documentary.
+  </plot>
+  <great-lines>
+   <line>PHP solves all my web problems</line>
+  </great-lines>
+  <rating type="thumbs">7</rating>
+  <rating type="stars">5</rating>
+ </movie>
+</movies>
+XML;
+		$sx = new SimpleXMLElement($string);
+		$count = 0;
+		$movie = $sx->addChild('movie');
+		$movie->addChild('title', 'PHP2: More Parser Stories');
+		$movie->addChild('plot', 'This is all about the people who make it work.');
+		
+		$characters = $movie->addChild('characters');
+		$character  = $characters->addChild('character');
+		$character->addChild('name', 'Mr. Parser');
+		$character->addChild('actor', 'John Doe');
+		
+		$rating = $movie->addChild('rating', '5');
+		$rating->addAttribute('type', 'stars');
+		//echo $sx->asXML();
+		/*foreach ($this->_priceItemsArray as $price_item) {
+			$alloy = $this->_alloysArray[$price_item->alloy_id];
+			$product = $this->_productArray[$price_item->product_id];
+			$item = $sx->items->addChild('item');
+			//$item->addChild('alloy_name', $alloy->alloy_name);
+			$item->addChild('alloy_name', $alloy->alloy_name);
+			$sx->items->total = $count;
+			/*$item->addChild('grade', $alloy->grade);
+			$item->addChild('prod_name', $product->prod_name);
+			$item->addChild('note', $product->note);
+			$item->addChild('diameter', $product->diameter);
+			$item->addChild('length', $product->length);
+			$item->addChild('width', $product->width);
+			$item->addChild('thickness', $product->thickness);
+			$item->addChild('other_dim', $product->other_dim);
+			$item->addChild('quantity', $product->quantity);
+			$item->addChild('mass', $price_item->mass);
+			$item->addChild('price', $price_item->price);
+			$item->addChild('order', $price_item->order);*/
+			//$count+=1;
+		//}
+		file_put_contents('test.xml', $sx->asXML());
+		print 'ok';
+		//print $sx->asXML();
+	}
+	
+	/**
 	 * Загружает из БД прайс-лист. Если задан параметр, то записи прайс-листа фильтруются
 	 * @param array $conditions массив, содержащий значения для фильтруемых полей, key -> фильтруемое поле, value -> значения
 	 * @return bool результат загрузки
@@ -159,7 +231,7 @@ class PriceList
 		$query_1 = "SELECT `id` FROM `metalls`.`special_prices` WHERE `price_name` = '".mysql_real_escape_string($this->_priceName)."'";
 		$query_2 = "SELECT `gprice_id` FROM `metalls`.`prices_mapping` WHERE `sprice_id` = ($query_1) $gprice_query";
 		
-		echo "<br><br>query_2: $query_2<br><br>";
+		//echo "<br><br>query_2: $query_2<br><br>";
 		
 		try {
 			$ids = $this->_dbase->select($query_2);
