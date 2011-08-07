@@ -1,4 +1,4 @@
-<?php
+п»ї<?php
 
 require_once('class.mysql_dbase.php');
 require_once('class.generic_object_collection.php');
@@ -14,27 +14,27 @@ require_once('my_global.php');
 class PriceList
 {
 	/**
-	 * @var MySQLDBase отвечает за работу с БД
+	 * @var MySQLDBase РѕС‚РІРµС‡Р°РµС‚ Р·Р° СЂР°Р±РѕС‚Сѓ СЃ Р‘Р”
 	 */
 	private $_dbase;
 	/**
-	 * @var string название прайс-листа
+	 * @var string РЅР°Р·РІР°РЅРёРµ РїСЂР°Р№СЃ-Р»РёСЃС‚Р°
 	 */
 	private $_priceName;
 	/**
-	 * @var array содержит набор записей из general_price, которые удовлетворяют данному прайс-листу, key -> id записи
+	 * @var array СЃРѕРґРµСЂР¶РёС‚ РЅР°Р±РѕСЂ Р·Р°РїРёСЃРµР№ РёР· general_price, РєРѕС‚РѕСЂС‹Рµ СѓРґРѕРІР»РµС‚РІРѕСЂСЏСЋС‚ РґР°РЅРЅРѕРјСѓ РїСЂР°Р№СЃ-Р»РёСЃС‚Сѓ, key -> id Р·Р°РїРёСЃРё
 	 */
 	private $_priceItemsArray = array(); 
 	/**
-	 * @var array содержит набор записей из alloys, которые используются в прайс-листе, key -> id записи
+	 * @var array СЃРѕРґРµСЂР¶РёС‚ РЅР°Р±РѕСЂ Р·Р°РїРёСЃРµР№ РёР· alloys, РєРѕС‚РѕСЂС‹Рµ РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ РІ РїСЂР°Р№СЃ-Р»РёСЃС‚Рµ, key -> id Р·Р°РїРёСЃРё
 	 */
-	private $_alloysArray  = array(); // содержит фрагмент таблицы alloys
+	private $_alloysArray  = array(); // СЃРѕРґРµСЂР¶РёС‚ С„СЂР°РіРјРµРЅС‚ С‚Р°Р±Р»РёС†С‹ alloys
 	/**
-	 * @var array содержит набор записей из production, которые используются в прайс-листе, key -> id записи
+	 * @var array СЃРѕРґРµСЂР¶РёС‚ РЅР°Р±РѕСЂ Р·Р°РїРёСЃРµР№ РёР· production, РєРѕС‚РѕСЂС‹Рµ РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ РІ РїСЂР°Р№СЃ-Р»РёСЃС‚Рµ, key -> id Р·Р°РїРёСЃРё
 	 */
 	private $_productArray  = array();
 	/**
-	 * @var array key -> название фильтруемого поля, value -> значения для списка фильтра
+	 * @var array key -> РЅР°Р·РІР°РЅРёРµ С„РёР»СЊС‚СЂСѓРµРјРѕРіРѕ РїРѕР»СЏ, value -> Р·РЅР°С‡РµРЅРёСЏ РґР»СЏ СЃРїРёСЃРєР° С„РёР»СЊС‚СЂР°
 	 */
 	private $_filterValues;
 	
@@ -52,23 +52,23 @@ class PriceList
 	}
 	
 	/**
-	 * Выводит html-код фильтра и таблицы с прайс-листом
+	 * Р’С‹РІРѕРґРёС‚ html-РєРѕРґ С„РёР»СЊС‚СЂР° Рё С‚Р°Р±Р»РёС†С‹ СЃ РїСЂР°Р№СЃ-Р»РёСЃС‚РѕРј
 	 */
 	public function printToTable() {
 		print "\n<form method=\"get\" action=\"test.htm\">";
 		print $this->_createFilterHTMLCode();
-		print "\n<input type=\"submit\" name=\"filter\" value=\"Фильтровать\">";
+		print "\n<input type=\"submit\" name=\"filter\" value=\"Р¤РёР»СЊС‚СЂРѕРІР°С‚СЊ\">";
 		print "\n</form>";
 		print "<br><br>";
 		print("\n\n<table border=\"0\" cellspacing=\"1\" cellpadding=\"1\" class=\"ooo\">
 			   	<tr align=\"center\" valign=\"middle\">
-					<th width=\"50\" height=\"25\" scope=\"col\">№</th>
-					<th width=\"100\" height=\"25\" scope=\"col\">Материал</th>
-					<th width=\"120\" height=\"25\" scope=\"col\">Тип проката</th>
-					<th width=\"101\" height=\"25\" scope=\"col\">Марка</th>
-					<th width=\"100\" height=\"25\" scope=\"col\">Размеры, мм </th>
-					<th width=\"110\" height=\"25\" scope=\"col\">Общий вес, кг</th>
-					<th width=\"120\" height=\"25\" scope=\"col\">Цена, р/кг</th>
+					<th width=\"50\" height=\"25\" scope=\"col\">в„–</th>
+					<th width=\"100\" height=\"25\" scope=\"col\">РњР°С‚РµСЂРёР°Р»</th>
+					<th width=\"120\" height=\"25\" scope=\"col\">РўРёРї РїСЂРѕРєР°С‚Р°</th>
+					<th width=\"101\" height=\"25\" scope=\"col\">РњР°СЂРєР°</th>
+					<th width=\"100\" height=\"25\" scope=\"col\">Р Р°Р·РјРµСЂС‹, РјРј </th>
+					<th width=\"110\" height=\"25\" scope=\"col\">РћР±С‰РёР№ РІРµСЃ, РєРі</th>
+					<th width=\"120\" height=\"25\" scope=\"col\">Р¦РµРЅР°, СЂ/РєРі</th>
 				</tr>");
 		print("<tr>\n");
 		$count = 1;
@@ -82,7 +82,7 @@ class PriceList
 			$str .= "\t\t<td>$alloy->grade</td>\n";
 			$str .= "\t\t<td>".$product->getProdSize()."</td>\n";
 			$str .= "\t\t<td>$price_item->mass</td>\n";
-			$str .= "\t\t<td>от $price_item->price</td>\n";
+			$str .= "\t\t<td>РѕС‚ $price_item->price</td>\n";
 			$str .= "\t</tr>\n";
 			$count += 1;
 		}
@@ -91,59 +91,23 @@ class PriceList
 	}
 	
 	/**
-	 * Возвращает прайс-лист в виде XML документа
+	 * Р’РѕР·РІСЂР°С‰Р°РµС‚ РїСЂР°Р№СЃ-Р»РёСЃС‚ РІ РІРёРґРµ XML РґРѕРєСѓРјРµРЅС‚Р°
 	 */
 	public function getXML() {
 		$string = <<<XML
-<?xml version='1.0' standalone='yes'?>
-<movies>
- <movie>
-  <title>PHP: Behind the Parser</title>
-  <characters>
-   <character>
-    <name>Ms. Coder</name>
-    <actor>Onlivia Actora</actor>
-   </character>
-   <character>
-    <name>Mr. Coder</name>
-    <actor>El Act&#211;r</actor>
-   </character>
-  </characters>
-  <plot>
-   So, this language. It's like, a programming language. Or is it a
-   scripting language? All is revealed in this thrilling horror spoof
-   of a documentary.
-  </plot>
-  <great-lines>
-   <line>PHP solves all my web problems</line>
-  </great-lines>
-  <rating type="thumbs">7</rating>
-  <rating type="stars">5</rating>
- </movie>
-</movies>
+<?xml version='1.0' encoding='utf-8'?>
+<price_list>
+	<items>
+	</items>
+</price_list>
 XML;
 		$sx = new SimpleXMLElement($string);
-		$count = 0;
-		$movie = $sx->addChild('movie');
-		$movie->addChild('title', 'PHP2: More Parser Stories');
-		$movie->addChild('plot', 'This is all about the people who make it work.');
-		
-		$characters = $movie->addChild('characters');
-		$character  = $characters->addChild('character');
-		$character->addChild('name', 'Mr. Parser');
-		$character->addChild('actor', 'John Doe');
-		
-		$rating = $movie->addChild('rating', '5');
-		$rating->addAttribute('type', 'stars');
-		//echo $sx->asXML();
-		/*foreach ($this->_priceItemsArray as $price_item) {
+		foreach ($this->_priceItemsArray as $price_item) {
 			$alloy = $this->_alloysArray[$price_item->alloy_id];
 			$product = $this->_productArray[$price_item->product_id];
 			$item = $sx->items->addChild('item');
-			//$item->addChild('alloy_name', $alloy->alloy_name);
 			$item->addChild('alloy_name', $alloy->alloy_name);
-			$sx->items->total = $count;
-			/*$item->addChild('grade', $alloy->grade);
+			$item->addChild('grade', $alloy->grade);
 			$item->addChild('prod_name', $product->prod_name);
 			$item->addChild('note', $product->note);
 			$item->addChild('diameter', $product->diameter);
@@ -154,18 +118,17 @@ XML;
 			$item->addChild('quantity', $product->quantity);
 			$item->addChild('mass', $price_item->mass);
 			$item->addChild('price', $price_item->price);
-			$item->addChild('order', $price_item->order);*/
-			//$count+=1;
-		//}
-		file_put_contents('test.xml', $sx->asXML());
-		print 'ok';
-		//print $sx->asXML();
+			$item->addChild('order', $price_item->order);
+		}
+		/*file_put_contents('test.xml', $sx->asXML());
+		print 'ok';*/
+		print $sx->asXML();
 	}
 	
 	/**
-	 * Загружает из БД прайс-лист. Если задан параметр, то записи прайс-листа фильтруются
-	 * @param array $conditions массив, содержащий значения для фильтруемых полей, key -> фильтруемое поле, value -> значения
-	 * @return bool результат загрузки
+	 * Р—Р°РіСЂСѓР¶Р°РµС‚ РёР· Р‘Р” РїСЂР°Р№СЃ-Р»РёСЃС‚. Р•СЃР»Рё Р·Р°РґР°РЅ РїР°СЂР°РјРµС‚СЂ, С‚Рѕ Р·Р°РїРёСЃРё РїСЂР°Р№СЃ-Р»РёСЃС‚Р° С„РёР»СЊС‚СЂСѓСЋС‚СЃСЏ
+	 * @param array $conditions РјР°СЃСЃРёРІ, СЃРѕРґРµСЂР¶Р°С‰РёР№ Р·РЅР°С‡РµРЅРёСЏ РґР»СЏ С„РёР»СЊС‚СЂСѓРµРјС‹С… РїРѕР»РµР№, key -> С„РёР»СЊС‚СЂСѓРµРјРѕРµ РїРѕР»Рµ, value -> Р·РЅР°С‡РµРЅРёСЏ
+	 * @return bool СЂРµР·СѓР»СЊС‚Р°С‚ Р·Р°РіСЂСѓР·РєРё
 	 */
 	private function _load($conditions) {
 		$gprice_query = '';
@@ -182,7 +145,7 @@ XML;
 			}
 			
 			$ids_list = array();
-			// получаем идентификаторы из alloys и production, удовлетворяющие критериям фильтра
+			// РїРѕР»СѓС‡Р°РµРј РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂС‹ РёР· alloys Рё production, СѓРґРѕРІР»РµС‚РІРѕСЂСЏСЋС‰РёРµ РєСЂРёС‚РµСЂРёСЏРј С„РёР»СЊС‚СЂР°
 			foreach ($fields as $table => $values) {
 				$query = $this->_getFilterQuery($table, $values, array(0 => 'id'));
 				try {
@@ -196,7 +159,7 @@ XML;
 					return false;
 				}
 			}
-			// получаем идентификаторы из general_price, удовлетворяющие критериям фильтра
+			// РїРѕР»СѓС‡Р°РµРј РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂС‹ РёР· general_price, СѓРґРѕРІР»РµС‚РІРѕСЂСЏСЋС‰РёРµ РєСЂРёС‚РµСЂРёСЏРј С„РёР»СЊС‚СЂР°
 			$gprice_query = "SELECT `id` FROM `metalls`.`general_price` WHERE ";
 			$keys = array_keys($ids_list);
 			foreach ($keys as $key) {
@@ -222,12 +185,12 @@ XML;
 				return false;
 			}
 			if (empty($gprice_ids)) {
-				print '<script language="JavaScript">alert("Ни одна запись не удовлетворяет заданным критериям.");</script>';
+				print '<script language="JavaScript">alert("РќРё РѕРґРЅР° Р·Р°РїРёСЃСЊ РЅРµ СѓРґРѕРІР»РµС‚РІРѕСЂСЏРµС‚ Р·Р°РґР°РЅРЅС‹Рј РєСЂРёС‚РµСЂРёСЏРј.");</script>';
 			}
 			$gprice_query = "AND `gprice_id` IN (".getCommaSeparatedList($gprice_ids).")";
 		}
 		
-		// получаем все необходимые записи общего прайс-листа из таблицы general_price
+		// РїРѕР»СѓС‡Р°РµРј РІСЃРµ РЅРµРѕР±С…РѕРґРёРјС‹Рµ Р·Р°РїРёСЃРё РѕР±С‰РµРіРѕ РїСЂР°Р№СЃ-Р»РёСЃС‚Р° РёР· С‚Р°Р±Р»РёС†С‹ general_price
 		$query_1 = "SELECT `id` FROM `metalls`.`special_prices` WHERE `price_name` = '".mysql_real_escape_string($this->_priceName)."'";
 		$query_2 = "SELECT `gprice_id` FROM `metalls`.`prices_mapping` WHERE `sprice_id` = ($query_1) $gprice_query";
 		
@@ -246,7 +209,7 @@ XML;
 		}
 		$this->_fillArray('general_price', 'PriceItem', $this->_priceItemsArray, $ids_g);
 		
-		// получаем все необходимые записи из alloys и production
+		// РїРѕР»СѓС‡Р°РµРј РІСЃРµ РЅРµРѕР±С…РѕРґРёРјС‹Рµ Р·Р°РїРёСЃРё РёР· alloys Рё production
 		$ids_a = array();
 		$ids_p = array();
 		foreach ($this->_priceItemsArray as $price_item) {
@@ -261,12 +224,12 @@ XML;
 	}
 	
 	/**
-	 * Заполняет массивы, содержащие GenericObject 
+	 * Р—Р°РїРѕР»РЅСЏРµС‚ РјР°СЃСЃРёРІС‹, СЃРѕРґРµСЂР¶Р°С‰РёРµ GenericObject 
 	 * @param string $table_name
 	 * @param string $class_name
-	 * @param array $array ссылка массив, содержащий GenericObject
-	 * @param array $ids ссылка на массив, содержащий идентификаторы записей, которые надо получить из БД
-	 * @param string $func_name имя функции, необходимое классу GenericObjectCollection
+	 * @param array $array СЃСЃС‹Р»РєР° РјР°СЃСЃРёРІ, СЃРѕРґРµСЂР¶Р°С‰РёР№ GenericObject
+	 * @param array $ids СЃСЃС‹Р»РєР° РЅР° РјР°СЃСЃРёРІ, СЃРѕРґРµСЂР¶Р°С‰РёР№ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂС‹ Р·Р°РїРёСЃРµР№, РєРѕС‚РѕСЂС‹Рµ РЅР°РґРѕ РїРѕР»СѓС‡РёС‚СЊ РёР· Р‘Р”
+	 * @param string $func_name РёРјСЏ С„СѓРЅРєС†РёРё, РЅРµРѕР±С…РѕРґРёРјРѕРµ РєР»Р°СЃСЃСѓ GenericObjectCollection
 	 */
 	private function _fillArray($table_name, $class_name, &$array, &$ids, $func_name = null) {
 		$gen_obj_col = new GenericObjectCollection($table_name, $class_name, $this->_dbase);
@@ -283,7 +246,7 @@ XML;
 	}
 	
 	/**
-	 * Заполняет массив, содержащий данные для списков фильтра
+	 * Р—Р°РїРѕР»РЅСЏРµС‚ РјР°СЃСЃРёРІ, СЃРѕРґРµСЂР¶Р°С‰РёР№ РґР°РЅРЅС‹Рµ РґР»СЏ СЃРїРёСЃРєРѕРІ С„РёР»СЊС‚СЂР°
 	 */
 	private function _fillFilterArray() {
 		$keys = array_keys($this->_filterValues);
@@ -306,9 +269,9 @@ XML;
 	}
 	
 	/**
-	 * Составляет запрос для фильтрации
-	 * @param string $table имя таблицы, для которой строится запрос
-	 * @param array $fields key -> фильтруемое поле, value -> значения
+	 * РЎРѕСЃС‚Р°РІР»СЏРµС‚ Р·Р°РїСЂРѕСЃ РґР»СЏ С„РёР»СЊС‚СЂР°С†РёРё
+	 * @param string $table РёРјСЏ С‚Р°Р±Р»РёС†С‹, РґР»СЏ РєРѕС‚РѕСЂРѕР№ СЃС‚СЂРѕРёС‚СЃСЏ Р·Р°РїСЂРѕСЃ
+	 * @param array $fields key -> С„РёР»СЊС‚СЂСѓРµРјРѕРµ РїРѕР»Рµ, value -> Р·РЅР°С‡РµРЅРёСЏ
 	 */
 	private function _getFilterQuery($table, $fields, $returned_fields) {
 		$query = "SELECT ";
@@ -327,8 +290,8 @@ XML;
 	}
 	
 	/**
-	 * Формирует список значений для фильтра
-	 * @param $type string определяет тип списка; MATERIAL - материал, PRODUCT - название продукции, GRADE - марка сплава.
+	 * Р¤РѕСЂРјРёСЂСѓРµС‚ СЃРїРёСЃРѕРє Р·РЅР°С‡РµРЅРёР№ РґР»СЏ С„РёР»СЊС‚СЂР°
+	 * @param $type string РѕРїСЂРµРґРµР»СЏРµС‚ С‚РёРї СЃРїРёСЃРєР°; MATERIAL - РјР°С‚РµСЂРёР°Р», PRODUCT - РЅР°Р·РІР°РЅРёРµ РїСЂРѕРґСѓРєС†РёРё, GRADE - РјР°СЂРєР° СЃРїР»Р°РІР°.
 	 */
 	private function _createFilterHTMLCode() {
 		include 'tpl.multiple_select.php';

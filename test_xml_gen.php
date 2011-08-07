@@ -5,7 +5,7 @@
 		$db = new MySQLDBase('127.0.0.1', 'root', '', 'metalls');
 	}
 	catch(Exception $e) {
-		echo "Îøèáêà\n".$e->getMessage();
+		echo "ÐžÑˆÐ¸Ð±ÐºÐ°\n".$e->getMessage();
 	}
 	$price = new PriceList($db, "nikel-price", $_GET);
 	$price->getXML();
