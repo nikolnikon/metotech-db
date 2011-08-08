@@ -1,4 +1,4 @@
-<?php
+п»ї<?php
 
 require_once 'class.generic_object.php';
 
@@ -11,7 +11,7 @@ class PriceItem extends GenericObject
 	public function __toString() {
 		$str .= $this->mass;
 		$str .= ':';
-		$str .= "от $this->price";
+		$str .= "РѕС‚ $this->price";
 		return $str;
 	}
 }

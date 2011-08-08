@@ -1,4 +1,4 @@
-<?php
+п»ї<?php
 abstract class AbstractDBase
 {
     private $m_dbAddress; /* Address of SQL server */
@@ -27,9 +27,9 @@ abstract class AbstractDBase
     }
     
     /**
-     * Функция выполняет запрос SELECT и возвращает выбору в виде двумерного ассоциативного массива
-     * @param string $query код запроса
-     * @return array двумерный массив, key -> № ряда, value - ассоциативный массив выборки
+     * Р¤СѓРЅРєС†РёСЏ РІС‹РїРѕР»РЅСЏРµС‚ Р·Р°РїСЂРѕСЃ SELECT Рё РІРѕР·РІСЂР°С‰Р°РµС‚ РІС‹Р±РѕСЂСѓ РІ РІРёРґРµ РґРІСѓРјРµСЂРЅРѕРіРѕ Р°СЃСЃРѕС†РёР°С‚РёРІРЅРѕРіРѕ РјР°СЃСЃРёРІР°
+     * @param string $query РєРѕРґ Р·Р°РїСЂРѕСЃР°
+     * @return array РґРІСѓРјРµСЂРЅС‹Р№ РјР°СЃСЃРёРІ, key -> в„– СЂСЏРґР°, value - Р°СЃСЃРѕС†РёР°С‚РёРІРЅС‹Р№ РјР°СЃСЃРёРІ РІС‹Р±РѕСЂРєРё
      */
     abstract public function select($query);
     //abstract public function insert();

@@ -118,11 +118,11 @@ XML;
 			$item->addChild('quantity', $product->quantity);
 			$item->addChild('mass', $price_item->mass);
 			$item->addChild('price', $price_item->price);
-			$item->addChild('order', $price_item->order);
+			$item->addChild('order', 0);
 		}
-		/*file_put_contents('test.xml', $sx->asXML());
-		print 'ok';*/
 		print $sx->asXML();
+		/*echo '<br>ok';*/
+		file_put_contents('test.xml', $sx->asXML());
 	}
 	
 	/**
