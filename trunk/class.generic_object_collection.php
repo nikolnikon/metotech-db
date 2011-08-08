@@ -1,4 +1,4 @@
-<?php
+ï»¿<?php
 
 class GenericObjectCollection
 {
@@ -9,7 +9,7 @@ class GenericObjectCollection
 	private $_objArray;
 	private $_db;
 	/**
-	 * @var string èìÿ ôóíêöèè, êîòîðàÿ âîçâðàùàåò èìÿ êëàññà generic. Åñëè íå çàäàíî, òî èñïîëüçóåòñÿ $_className
+	 * @var string Ð¸Ð¼Ñ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸, ÐºÐ¾Ñ‚Ð¾Ñ€Ð°Ñ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÑ‚ Ð¸Ð¼Ñ ÐºÐ»Ð°ÑÑÐ° generic. Ð•ÑÐ»Ð¸ Ð½Ðµ Ð·Ð°Ð´Ð°Ð½Ð¾, Ñ‚Ð¾ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÑ‚ÑÑ $_className
 	 */
 	private $_classNameFunc;
 	

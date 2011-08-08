@@ -1,4 +1,4 @@
-<?php
+п»ї<?php
 
 require_once('class.abstract_dbase.php');
 
@@ -15,13 +15,13 @@ class MySQLDBase extends AbstractDBase
         $this->m_dbConn = mysql_connect($address, $user, $pwd);
  
         if (! $this->m_dbConn) 
-        	throw new Exception("Не удалось соединиться с базой данных", E_USER_ERROR);
+        	throw new Exception("РќРµ СѓРґР°Р»РѕСЃСЊ СЃРѕРµРґРёРЅРёС‚СЊСЃСЏ СЃ Р±Р°Р·РѕР№ РґР°РЅРЅС‹С…", E_USER_ERROR);
         
         if (! mysql_select_db($name, $this->m_dbConn))
-        	throw new Exception("Не удалось выбрать базу данных", E_USER_ERROR);
+        	throw new Exception("РќРµ СѓРґР°Р»РѕСЃСЊ РІС‹Р±СЂР°С‚СЊ Р±Р°Р·Сѓ РґР°РЅРЅС‹С…", E_USER_ERROR);
     }	
  
-    /*Отсоединение от БД*/
+    /*РћС‚СЃРѕРµРґРёРЅРµРЅРёРµ РѕС‚ Р‘Р”*/
     protected function disconnect() {
     	if (is_resource($this->m_dbConn)) {
     		mysql_close($this->m_dbConn);
@@ -31,7 +31,7 @@ class MySQLDBase extends AbstractDBase
     public function select($query) {
     	$this->m_Result = mysql_query($query, $this->m_dbConn);
     	if (! $this->m_Result) {
-    		throw new Exception("Ошибка при выполнении запроса.<br>".mysql_error($this->m_dbConn)."<br>");
+    		throw new Exception("РћС€РёР±РєР° РїСЂРё РІС‹РїРѕР»РЅРµРЅРёРё Р·Р°РїСЂРѕСЃР°.<br>".mysql_error($this->m_dbConn)."<br>");
     	}
     	$arReturn = array();
     	while ($row = mysql_fetch_assoc($this->m_Result)) {
