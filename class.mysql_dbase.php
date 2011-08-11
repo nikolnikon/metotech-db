@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 require_once('class.abstract_dbase.php');
 

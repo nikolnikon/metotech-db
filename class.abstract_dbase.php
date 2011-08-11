@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 abstract class AbstractDBase
 {
     private $m_dbAddress; /* Address of SQL server */

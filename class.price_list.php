@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 require_once('class.mysql_dbase.php');
 require_once('class.generic_object_collection.php');
@@ -97,10 +97,11 @@ class PriceList
 		$string = <<<XML
 <?xml version='1.0' encoding='utf-8'?>
 <price_list>
-	<items>
-	</items>
+        <items>
+        </items>
 </price_list>
 XML;
+
 		$sx = new SimpleXMLElement($string);
 		foreach ($this->_priceItemsArray as $price_item) {
 			$alloy = $this->_alloysArray[$price_item->alloy_id];
@@ -120,9 +121,8 @@ XML;
 			$item->addChild('price', $price_item->price);
 			$item->addChild('order', 0);
 		}
-		print $sx->asXML();
-		/*echo '<br>ok';*/
 		file_put_contents('test.xml', $sx->asXML());
+		print $sx->asXML();
 	}
 	
 	/**
