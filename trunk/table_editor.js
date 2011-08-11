@@ -1,4 +1,9 @@
-﻿Ext.onReady(function(){
+﻿Ext.require([
+    'Ext.data.*',
+    'Ext.grid.*'
+]);
+
+Ext.onReady(function(){
     Ext.define('PriceList',{
         extend: 'Ext.data.Model',
         fields: [
@@ -16,28 +21,17 @@
         proxy: {
             // load using HTTP
             type: 'ajax',
-            url: 'http://metotech-db/trunk/test_xml_gen.php',
+            url: 'test_xml_gen.php',
             //url: 'price_list_items.xml',
             //url: 'test.xml',
             // the return will be XML, so lets set up a reader
             reader: {
                 type: 'xml',
-                // records will have an "Item" tag
                 root: 'items',
-                record: 'item'//,
-                //idProperty: 'order'
-            }/*,
-            writer: {
-            	type: 'xml',
-            	
-            }*/
+                record: 'item'
+            }
         }
     });
-    
-    // create the editor plugin
-    /*var rowEditing = Ext.create('Ext.grid.plugin.RowEditing', {
-    	clicksToEdit: 1
-    });*/
 
     // create the grid
     var grid = Ext.create('Ext.grid.Panel', {
@@ -57,16 +51,8 @@
             {text: "Цена", width: 100, dataIndex: 'price', sortable: true}
         ],
         selType: 'rowmodel',
-        renderTo: Ext.getBody(),
-        width: 1300,
-        height: 400,
-        plugins: [Ext.create('Ext.grid.plugin.RowEditing', {
-        	clicksToEdit: 1
-        })],
-        listeners: {
-            'selectionchange': function(view, records) {
-                grid.down('#removeEmployee').setDisabled(!records.length);
-            }
-        }
+        renderTo: 'table_editor',
+        width: 1000,
+        height: 400
     });
 });
