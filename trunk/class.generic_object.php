@@ -63,11 +63,44 @@ class GenericObject
 		$this->_modified = true;			
 	}
 	
-	public function remove() {
-		
+	/**
+	 * Сохраняет изменения в базу данных. Если изменен объект, который имеет id, то выполняется UPDATE соответствующей записи, если объект имеет "некорректный", то INSERT. 
+	 * @return bool 
+	 */
+	public function save() {
+		if (! $this->_id) {
+			$this->_loaded = false;
+		}
+		if (! $this->_loaded) {
+			// создаем новую запись в БД
+			$ar = $this->_dbFields;
+			foreach ($ar as $key => $value) {
+				if ($value == "") {
+					unset($ar[$key]);
+				}
+			}
+			try {
+				$this->_db->insert($this->_tableName, $ar);
+			}
+			catch (Exception $e) {
+				echo $e->getMessage();
+				return false;
+			}
+		}
+		else {
+			// обновляем существующую запись в БД
+			$arConds['id'] = $this->_id; // плохо, что название поля с идентификатором жестко забито
+			try {
+				$this->_db->update($this->_tableName, $this->_dbFields, $arConds);
+			}
+			catch (Exception $e) {
+				echo $e->getMessage();
+				return false;
+			}
+		}
 	}
 	
-	public function save() {
+	public function remove() {
 		
 	}
 }

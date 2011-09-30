@@ -37,8 +37,53 @@ class MySQLDBase extends AbstractDBase
     	while ($row = mysql_fetch_assoc($this->m_Result)) {
     		$arReturn[] = $row;
     	}
-    	
     	return $arReturn;
+    }
+    
+    public function insert($table, $arFieldVals) {
+    	$fields = array_keys($arFieldVals);
+    	$values = array_values($arFieldVals);
+    	
+    	$escVals = array();
+    	foreach ($values as $val) {
+    		if (! is_numeric($val)) {
+    			$val = "'".mysql_real_escape_string($val, $this->m_dbConn)."'";
+    		}
+    		$escVals[] = $val;
+    	}
+    	$query = "INSERT INTO $table (";
+    	$query .= join(', ', $fields);
+    	$query .= ') VALUES(';
+    	$query .= join(', ', $escVals);
+    	$query .= ')';
+    	
+    	$this->m_Result = mysql_query($query, $this->m_dbConn);
+    	if (! $this->m_Result) {
+    		throw new Exception("Ошибка при выполнении запроса.<br>".mysql_error($this->m_dbConn)."<br>");
+    	}
+    	return mysql_affected_rows($this->m_dbConn);
+    }
+    
+    public function update($table, $arFieldVals, $arConds) {
+    	$arUpdates = array();
+    	foreach ($arFieldVals as $field => $val) {
+    		if (! is_numeric($val)) {
+    			$val = "'".mysql_escape_string($val)."'";
+    		}
+    		if ($val == "") {
+    			$val = "NULL";
+    		}
+    		$arUpdates[] = "$field = $val";
+    	}
+    	$query = "UPDATE `$table` SET ";
+    	$query .= join(", ", $arUpdates);
+    	$query .= " WHERE ".join(" AND ", $arConds);
+    	
+    	$this->m_Result = mysql_query($query, $this->m_dbConn);
+    	if (! $this->m_Result) {
+    		throw new Exception(mysql_error($this->m_dbConn));
+    	}
+    	return mysql_affected_rows($this->m_dbConn);
     }
  
     /*

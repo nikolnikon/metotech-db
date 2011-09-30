@@ -32,6 +32,11 @@ Ext.onReady(function(){
             }
         }
     });
+    
+    var rowEditing = Ext.create('Ext.grid.plugin.RowEditing', {
+        clicksToMoveEditor: 1,
+        autoCancel: false
+    });
 
     // create the grid
     var grid = Ext.create('Ext.grid.Panel', {
@@ -53,6 +58,13 @@ Ext.onReady(function(){
         selType: 'rowmodel',
         renderTo: 'table_editor',
         width: 1000,
-        height: 400
+        height: 400,
+        selType: 'rowmodel',
+        plugins: [rowEditing],
+        listeners: {
+            'selectionchange': function(view, records) {
+                grid.down('#removeEmployee').setDisabled(!records.length);
+            }
+        }
     });
 });

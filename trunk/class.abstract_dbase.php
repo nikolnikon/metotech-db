@@ -27,13 +27,25 @@ abstract class AbstractDBase
     }
     
     /**
-     * Функция выполняет запрос SELECT и возвращает выбору в виде двумерного ассоциативного массива
+     * Функция выполняет запрос SELECT
      * @param string $query код запроса
-     * @return array двумерный массив, key -> № ряда, value - ассоциативный массив выборки
+     * @return array выборка в виде двумерного ассоциативного массива, key -> № ряда, value - ассоциативный массив выборки
      */
     abstract public function select($query);
-    //abstract public function insert();
-    //abstract public function update();
+    /**
+     * Функция выполняет запрос INSERT
+     * @param string $table название таблицы
+     * @param array $arFieldVals key -> имя поля, value -> значение поля
+     * @return int количество записей, над которыми была совершена операция
+     */
+    abstract public function insert($table, $arFieldVals);
+    /**
+     * Функция выполняет запрос UPDATE
+     * @param string $table название таблицы
+     * @param array $arFieldVals key -> имя поля, которое было изменено, value -> новое значение поля
+     * @param array $arConds задает условие WHERE, key-> имя поля, value -> значение поля
+     */
+    abstract public function update($table, $arFieldVals, $arConds);
     //abstract public function delete();
     
     //abstract function fetchRow();
