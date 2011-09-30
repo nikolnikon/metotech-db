@@ -3,7 +3,6 @@
 /**
  * Класс задает константы для типа продукции
  * @author nikonov
- *
  */
 class ProductType
 {
@@ -13,6 +12,13 @@ class ProductType
 	const PIPE = 4;
 	const OTHER = 5;
 }
+
+/**
+ * Константы, которые определяют, что нужно вернуть в виде строки - список ключей или 
+ * значений массива
+ */
+const VALUES = 0;
+const KEYS = 1;
 
 /**
  * Возвращает имя класса в зависимости от типа продукции
@@ -40,19 +46,31 @@ function getProductGenObject($db_row) {
 /**
  * Возвращает список значений массива, разделенных запятыми
  * @param array $array
+ * @param int $type определяет, что нужно вернуть в виде строки - список ключей или 
+ * значений массива
  * @return string $s
  */
-function getCommaSeparatedList($array) {
+function getCommaSeparatedList($array, $type = VALUES) {
 	$s = '';
 	if (empty($array)) {
 		return 'NULL';
 	}
-	foreach ($array as $value) {
-		if (is_numeric($value)) {
-			$s .= "$value,";
+	foreach ($array as $key => $value) {
+		switch ($type) {
+			case KEYS:
+				$v = $key;
+				break;
+			case VALUES:
+			default:
+				$v = $values;
+				break;
+		}
+		
+		if (is_numeric($v)) {
+			$s .= "$v,";
 		}
 		else {
-			$s .= "'$value',";
+			$s .= "'$v',"; // подумать над экранированием кавычек ' и "
 		}
 	}
 	$s = substr($s, 0, strlen($s) - 1);
