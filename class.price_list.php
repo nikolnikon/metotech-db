@@ -125,6 +125,35 @@ XML;
 		print $sx->asXML();
 	}
 	
+	/*public function updateItem($id, $arFieldVals) { // возможно, потребуется проверять, какие поля изменились, а какие нет
+		if (! array_key_exists($id, $this->_priceItemsArray)) {
+			return false;
+		}
+		$price_item = $this->_priceItemsArray[$id];
+		$alloy = $this->_alloysArray[$price_item->alloy_id];
+		$product = $this->_productArray[$price_item->product_id];
+		
+		$price_fields = $price_item->getFields();
+		$alloys_fields = $alloy->getFields();
+		$production_fields = $product->getFields();
+		foreach ($arFieldVals as $field => $value) {
+			if (array_key_exists($field, $price_fields)) {
+				$tmp = $price_item;
+			}
+			elseif (array_key_exists($field, $alloys_fields)) {
+				$tmp = $alloy;
+			}
+			else (array_key_exists($field, $production_fields)) {
+				$tmp = $product;
+			}
+			$tmp->$field = $value;
+		}
+		// сделать проверку возвращаемого значения
+		$alloy->save();
+		$product->save();
+		$price_item->save();
+	} */
+	
 	/**
 	 * Загружает из БД прайс-лист. Если задан параметр, то записи прайс-листа фильтруются
 	 * @param array $conditions массив, содержащий значения для фильтруемых полей, key -> фильтруемое поле, value -> значения

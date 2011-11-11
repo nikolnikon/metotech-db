@@ -38,6 +38,14 @@ class GenericObject
 		}
 	}
 	
+	/**
+	 * Возвращает имена полей БД, которые содержатся в объекте
+	 * @return array массив имен полей БД
+	 */
+	public function getFields() {
+		return array_keys($this->_dbFields);
+	}
+	
 	private function _load() {
 		$this->reload();
 		$this->_loaded = true;
