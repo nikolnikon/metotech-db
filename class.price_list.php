@@ -125,6 +125,71 @@ XML;
 		print $sx->asXML();
 	}
 	
+	/**
+	 * Осуществляет вставку новой записи в прайс-лист
+	 * @param array $arFieldVals массив с значениями полей; key->имя поля, value->значение
+	 * @return bool Возвращает успех или неудачу
+	 */
+	public function insertItem($arFieldVals) {
+		if (array_key_exists('alloy_name', $arFieldVals) && array_key_exists('grade', $arFieldVals)) {
+			$fields['alloy_name'] = $arFieldVals['alloy_name'];
+			$fields['grade'] = $arFieldVals['grade'];
+			$query = mysql_real_escape_string($this->_getFilterQuery('alloys', $fields, 'id'));
+			
+			try {
+				$ids = $this->_dbase->select($query);
+				$alloy_id = $ids[0]['id'];
+			} catch (Exception $e) {
+				print $e->getMessage();
+				return false;
+			}
+			
+		}
+		if (array_key_exists('prod_name', $arFieldVals) && array_key_exists('prod_type', $arFieldVals)) {
+			$fields['prod_name'] = $arFieldVals['prod_name'];
+			$fields['prod_type'] = $arFieldVals['prod_type'];
+			$fields['prod_note'] = $arFieldVals['prod_note'];
+			// сделать проверку на наличие требуемых размеров в http-запросе
+			switch ($arFieldVals['prod_type']) {
+				case ROUNDS:
+					$fields['diameter'] = $arFieldVals['diameter'];
+					break;
+				
+				case STRIP:
+					$fields['thickness'] = $arFieldVals['thickness'];
+					$fields['width'] = $arFieldVals['width'];
+					break;
+				
+				case SHEET:
+					$fields['thickness'] = $arFieldVals['thickness'];
+					$fields['width'] = $arFieldVals['width'];
+					$fields['length'] = $arFieldVals['length'];
+					break;
+				
+				case PIPE:
+					$fields['diameter'] = $arFieldVals['diameter'];
+					$fields['thickness'] = $arFieldVals['thickness'];
+					break;
+				
+				case OTHER:
+					$fields['other_dim'] = $arFieldVals['other_dim'];
+					break;
+				
+				default:
+					return false;
+			}
+			$query = mysql_real_escape_string($this->_getFilterQuery('production', $fields, 'id'));
+			try {
+				$ids = $this->_dbase->select($query);
+				$product_id = $ids[0]['id'];
+			} catch (Exception $e) {
+				print $e->getMessage();
+				return false;
+			}
+		}
+		return false;
+	}
+	
 	/*public function updateItem($id, $arFieldVals) { // возможно, потребуется проверять, какие поля изменились, а какие нет
 		if (! array_key_exists($id, $this->_priceItemsArray)) {
 			return false;
@@ -300,7 +365,9 @@ XML;
 	/**
 	 * Составляет запрос для фильтрации
 	 * @param string $table имя таблицы, для которой строится запрос
-	 * @param array $fields key -> фильтруемое поле, value -> значения
+	 * @param array $fields key -> фильтруемое поле, value -> значение
+	 * @param array $returned_fields имена полей, которые необходимо отобрать
+	 * @return string SQL-запрос
 	 */
 	private function _getFilterQuery($table, $fields, $returned_fields) {
 		$query = "SELECT ";
@@ -314,7 +381,7 @@ XML;
 			$query .= "`$field` IN ($s) AND ";
 		}
 		$query = substr($query, 0, strlen($query) - 5);
-		print "<br><br>query_2: $query<br><br>";
+		//print "<br><br>query_2: $query<br><br>";
 		return $query;	
 	}
 	
