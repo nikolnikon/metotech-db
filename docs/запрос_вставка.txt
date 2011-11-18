@@ -1,0 +1,1 @@
+?alloy_name=Никель&grade=Н3&prod_name=Проволока&diameter=8.0&mass=150&price=1500
