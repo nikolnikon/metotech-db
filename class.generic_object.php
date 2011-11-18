@@ -4,12 +4,40 @@ require_once 'class.mysql_dbase.php';
 
 class GenericObject
 {
+	/**
+	 * id соответствующей записи
+	 * @var int
+	 */
 	private $_id;
+	/**
+	 * Имя таблицы БД
+	 * @var string
+	 */
 	private $_tableName;
+	/**
+	 * Содержит пары key->имя поля, value->значение поля
+	 * @var array
+	 */
 	private $_dbFields = array();
+	/**
+	 * Показывает, загружены ли данные из БД в объект
+	 * @var bool
+	 */
 	private $_loaded;
+	/**
+	 * Показывает, модифицировалось ли поле. key -> имя поля, value -> модиф./не модиф.
+	 * @var array
+	 */
 	private $_modifiedFields = array();
+	/**
+	 * Истино, если с момента последней загрузки из БД что-либо было изменено.
+	 * @var bool
+	 */
 	private $_modified;
+	/**
+	 * БД
+	 * @var MySQLDBase
+	 */
 	private $_db;
 	
 	public function initialize($id, $table_name, $db) {
@@ -66,6 +94,11 @@ class GenericObject
 	}
 	
 	public function __set($field, $value) {
+		if (! $this->_loaded) {
+			if ($this->_id) {
+				$this->_load();
+			}
+		}
 		$this->_dbFields[$field] = $value;
 		$this->_modifiedFields[$field] = true;
 		$this->_modified = true;			
@@ -88,7 +121,8 @@ class GenericObject
 				}
 			}
 			try {
-				$this->_db->insert($this->_tableName, $ar);
+				$this->_id = $this->_db->insert($this->_tableName, $ar);
+				$this->_dbFields['id'] = $this->_id;
 			}
 			catch (Exception $e) {
 				echo $e->getMessage();
@@ -106,6 +140,12 @@ class GenericObject
 				return false;
 			}
 		}
+		foreach($this->_modifiedFields as $key => $value) {
+			$this->_modifiedFields[$key] = false;
+		}
+		$this->_modified = false;
+		$this->forceLoaded();
+		return true;
 	}
 	
 	public function remove() {

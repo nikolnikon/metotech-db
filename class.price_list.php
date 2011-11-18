@@ -5,6 +5,7 @@ require_once('class.generic_object_collection.php');
 require_once('class.price_item.php');
 require_once('class.alloy.php');
 require_once('class.product.php');
+require_once('class.general_price.php');
 require_once('class.other_product.php');
 require_once('class.sheet_product.php');
 require_once('class.strip_product.php');
@@ -37,6 +38,17 @@ class PriceList
 	 * @var array key -> название фильтруемого поля, value -> значения для списка фильтра
 	 */
 	private $_filterValues;
+	/**
+	 * Содержит имена столбцов таблицы alloys
+	 * @var array
+	 */
+	private $_alloysFieldsNamesArray;
+	/**
+	 * Содержит имена столбцов таблицы production
+	 * @var array
+	 */
+	private $_productFieldsNamesArray;
+	
 	
 	public function __construct($dbase, $price_name, $conditions = null) {
 		$this->_dbase = $dbase;
@@ -131,6 +143,7 @@ XML;
 	 * @return bool Возвращает успех или неудачу
 	 */
 	public function insertItem($arFieldVals) {
+		/*// Выбираем id записи из alloys, которая соответсвует полученным параметрам. Если такой записи не существует, то в дальнейшем она создается.
 		if (array_key_exists('alloy_name', $arFieldVals) && array_key_exists('grade', $arFieldVals)) {
 			$fields['alloy_name'] = $arFieldVals['alloy_name'];
 			$fields['grade'] = $arFieldVals['grade'];
@@ -143,8 +156,18 @@ XML;
 				print $e->getMessage();
 				return false;
 			}
-			
+			// если записи с полученными по http параметрами нет в таблице alloys, то создаем ее
+			if (! ($alloy_id > 0)) {
+				$alloy_gen_obj = new Alloy($alloy_id, $this->_dbase);
+				foreach ($fields as $field => $value) {
+					$alloy_gen_obj->__set($field, $value);
+				}
+				$alloy_gen_obj->save();
+				$alloy_id = $alloy_gen_obj->id;
+			}
 		}
+		$fields = array();
+		// Выбираем id записи из production, которая соответсвует полученным параметрам. Если такой записи не существует, то в дальнейшем она создается.
 		if (array_key_exists('prod_name', $arFieldVals) && array_key_exists('prod_type', $arFieldVals)) {
 			$fields['prod_name'] = $arFieldVals['prod_name'];
 			$fields['prod_type'] = $arFieldVals['prod_type'];
@@ -186,12 +209,105 @@ XML;
 				print $e->getMessage();
 				return false;
 			}
+			// если записи с полученными по http параметрами нет в таблице production, то создаем ее
+			if (!($product_id > 0)) {
+				$class_name = getProductGenObject($fields);
+				$s  = "\$product_gen_obj = new $class_name($product_id, \$this->_dbase);";
+				eval($s);
+				foreach ($fields as $field => $value) {
+					$product_gen_obj->__set($field, $value);
+				}
+				$product_gen_obj->save();
+				$product_id = $product_gen_obj->id;
+			}
+		}*/
+		$gprice_gen_obj = new GeneralPrice(0, $this->_dbase);
+		
+		if (! isset($this->_alloysFieldsNamesArray)) {
+			$this->_alloysFieldsNamesArray = $this->_dbase->getFieldsNames('alloys');
 		}
-		return false;
+		if (! isset($this->_productFieldsNamesArray)) {
+			$this->_productFieldsNamesArray = $this->_dbase->getFieldsNames('production');
+		}
+		// возможно, логичнее сделать проверку на необходимые размеры на клиенте
+		// составляем запросы для поучения id_alloys и id_production и заполняем некоторые поля general_price
+		foreach ($arFieldVals as $field => $value) {
+			if (in_array($field, $this->_alloysFieldsNamesArray)) {
+				$alloy_fields[$field] = array($arFieldVals[$field]); // array() ставим, чтобы корректно отработала функция _getFilterQuery()
+				continue;
+			}
+			elseif (in_array($field, $this->_productFieldsNamesArray)) {
+				$product_fields[$field] = array($arFieldVals[$field]); // array() ставим, чтобы корректно отработала функция _getFilterQuery()
+				continue;
+			}
+			else {
+				$gprice_gen_obj->__set($field, $value);
+			}
+		}
+		$alloy_query = $this->_getFilterQuery('alloys', $alloy_fields, array('id'));
+		$product_query = $this->_getFilterQuery('production', $product_fields, array('id'));
+		// проверяем наличие записей в alloys и production, удовлетворяющих заданным требованиям
+		try {
+			$ids = $this->_dbase->select($alloy_query);
+			$alloy_id = $ids[0]['id'];
+			$ids = $this->_dbase->select($product_query);
+			$product_id = $ids[0]['id'];
+		} catch (Exception $e) {
+			print $e->getMessage();
+			return false;
+		}
+		// если такой записи в alloys нет, то создаем ее и записываем полученный id
+		if (!($alloy_id > 0)) {
+			$alloy_gen_obj = new Alloy(0, $this->_dbase);
+			foreach ($alloy_fields as $field => $value) {
+				$alloy_gen_obj->__set($field, $value[0]);
+			}
+			if (! $alloy_gen_obj->save()) {
+				return false;
+			}
+			$alloy_id = $alloy_gen_obj->id;
+		}
+		// если такой записи в production нет, то создаем ее и записываем полученный id
+		if (!($product_id > 0)) {
+			$class_name = getProductGenObject($product_fields);
+			$s  = "\$product_gen_obj = new $class_name(0, \$this->_dbase);";
+			eval($s);
+			foreach ($product_fields as $field => $value) {
+				$product_gen_obj->__set($field, $value[0]);
+			}
+			if (! $product_gen_obj->save()) {
+				return false;
+			}
+			$product_id = $product_gen_obj->id;
+		}
+		// задаем недостающие поля для 
+		$gprice_gen_obj->alloy_id = $alloy_id;
+		$gprice_gen_obj->product_id = $product_id;
+		if (! $gprice_gen_obj->save()) {
+			return false;
+		}
+		$gprice_id = $gprice_gen_obj->id;
+		// получаем все необходимые записи общего прайс-листа из таблицы general_price
+		$query = "SELECT `id` FROM `metalls`.`special_prices` WHERE `price_name` = '".mysql_real_escape_string($this->_priceName)."'";
+		try {
+			$ids = $this->_dbase->select($query);
+			$sprice_id = $ids[0]['id'];
+		}
+		catch (Exception $e) {
+			print $e->getMessage();
+			return false;
+		}
+		$mapping_gen_obj = new GenericObject();
+		$mapping_gen_obj->initialize(0, 'prices_mapping', $this->_dbase);
+		$mapping_gen_obj->sprice_id = $sprice_id;
+		$mapping_gen_obj->gprice_id = $gprice_id;
+		if (! $mapping_gen_obj->save()) {
+			return false;
+		}
 	}
 	
-	/*public function updateItem($id, $arFieldVals) { // возможно, потребуется проверять, какие поля изменились, а какие нет
-		if (! array_key_exists($id, $this->_priceItemsArray)) {
+	public function updateItem($id, $arFieldVals) { // возможно, потребуется проверять, какие поля изменились, а какие нет
+		/*if (! array_key_exists($id, $this->_priceItemsArray)) {
 			return false;
 		}
 		$price_item = $this->_priceItemsArray[$id];
@@ -216,8 +332,8 @@ XML;
 		// сделать проверку возвращаемого значения
 		$alloy->save();
 		$product->save();
-		$price_item->save();
-	} */
+		$price_item->save();*/
+	} 
 	
 	/**
 	 * Загружает из БД прайс-лист. Если задан параметр, то записи прайс-листа фильтруются
@@ -321,7 +437,7 @@ XML;
 	 * Заполняет массивы, содержащие GenericObject 
 	 * @param string $table_name
 	 * @param string $class_name
-	 * @param array $array ссылка массив, содержащий GenericObject
+	 * @param array $array ссылка на массив, содержащий GenericObject
 	 * @param array $ids ссылка на массив, содержащий идентификаторы записей, которые надо получить из БД
 	 * @param string $func_name имя функции, необходимое классу GenericObjectCollection
 	 */
