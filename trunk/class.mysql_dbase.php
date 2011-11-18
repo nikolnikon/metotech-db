@@ -61,7 +61,8 @@ class MySQLDBase extends AbstractDBase
     	if (! $this->m_Result) {
     		throw new Exception("Ошибка при выполнении запроса.<br>".mysql_error($this->m_dbConn)."<br>");
     	}
-    	return mysql_affected_rows($this->m_dbConn);
+    	//return mysql_affected_rows($this->m_dbConn);
+    	return mysql_insert_id($this->m_dbConn);
     }
     
     public function update($table, $arFieldVals, $arConds) {
@@ -84,6 +85,22 @@ class MySQLDBase extends AbstractDBase
     		throw new Exception(mysql_error($this->m_dbConn));
     	}
     	return mysql_affected_rows($this->m_dbConn);
+    }
+    
+    public function getFieldsNames($table)
+    {
+    	$query = "SELECT * FROM `$table` LIMIT 1;";
+    	$this->m_Result = mysql_query($query, $this->m_dbConn);
+    	if (! $this->m_Result) {
+    		throw new Exception("Ошибка при выполнении запроса.<br>".mysql_error($this->m_dbConn)."<br>");
+    	}
+    	$arReturn = array();
+    	for ($i = 0; $i < mysql_num_fields($this->m_Result); ++$i) {
+    		$meta = mysql_fetch_field($this->m_Result, $i);
+    		$arReturn[] = $meta->name;
+    	}
+    	
+    	return $arReturn;
     }
  
     /*

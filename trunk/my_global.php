@@ -62,7 +62,7 @@ function getCommaSeparatedList($array, $type = VALUES) {
 				break;
 			case VALUES:
 			default:
-				$v = $values;
+				$v = $value;
 				break;
 		}
 		

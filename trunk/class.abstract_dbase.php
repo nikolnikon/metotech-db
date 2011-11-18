@@ -36,7 +36,7 @@ abstract class AbstractDBase
      * Функция выполняет запрос INSERT
      * @param string $table название таблицы
      * @param array $arFieldVals key -> имя поля, value -> значение поля
-     * @return int количество записей, над которыми была совершена операция
+     * @return int id, присвоенный вставленной записи
      */
     abstract public function insert($table, $arFieldVals);
     /**
@@ -47,6 +47,13 @@ abstract class AbstractDBase
      */
     abstract public function update($table, $arFieldVals, $arConds);
     //abstract public function delete();
+    
+    /**
+     * Функция возвращает список столбцов таблицы $table
+     * @param string имя таблицы
+     * @return array массив с именами столбцов
+     */
+    abstract public function getFieldsNames($table);
     
     //abstract function fetchRow();
     //abstract function fetchAll();
