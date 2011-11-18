@@ -1,4 +1,6 @@
 #labels Deprecated,Phase-Design
+<wiki:toc max_depth="4" />
+
 = Логика управления прайс-листами =
 
 == Вставка новых записей ==
