@@ -40,6 +40,11 @@ class GenericObject
 	 */
 	private $_db;
 	
+	public function print_state() {
+		echo '_modifiedFields: '; print_r($this->_modifiedFields); echo '<br>';
+		echo '_modified: '; echo $this->_modified; echo '<br>';
+	}
+	
 	public function initialize($id, $table_name, $db) {
 		$this->_id = $id;
 		$this->_tableName = $table_name;
@@ -58,6 +63,7 @@ class GenericObject
 						$this->_modifiedFields[$key] = false;
 					}
 				}
+				$this->_modified = false;
 			}
 		}
 		catch(Exception $e) {
@@ -81,6 +87,16 @@ class GenericObject
 	
 	public function forceLoaded() {
 		$this->_loaded = true;
+	}
+	
+	/**
+	 * Устанавливает объект в сохраненное состояние, не сохраняя изменения в БД. 
+	 */
+	public function forceSaved() {
+		foreach ($this->_modifiedFields as $field => $value) {
+			$this->_modifiedFields[$field] = false;
+		}
+		$this->_modified = false;
 	}
 	
 	public function __get($field) {
@@ -114,10 +130,9 @@ class GenericObject
 		}
 		if (! $this->_loaded) {
 			// создаем новую запись в БД
-			$ar = $this->_dbFields;
-			foreach ($ar as $key => $value) {
-				if ($value == "") {
-					unset($ar[$key]);
+			foreach ($this->_dbFields as $field => $value) {
+				if ($value != "") {
+					$ar[$field] = $value;
 				}
 			}
 			try {
@@ -132,8 +147,18 @@ class GenericObject
 		else {
 			// обновляем существующую запись в БД
 			$arConds['id'] = $this->_id; // плохо, что название поля с идентификатором жестко забито
+			foreach ($this->_dbFields as $field => $value) {
+				if ($this->_modifiedFields[$field] == true) {
+					if ($value == "") {
+						$ar[$field] = 'NULL';
+					}
+					else {
+						$ar[$field] = $value;
+					}
+				}
+			}
 			try {
-				$this->_db->update($this->_tableName, $this->_dbFields, $arConds);
+				$this->_db->update($this->_tableName, $ar, $arConds);
 			}
 			catch (Exception $e) {
 				echo $e->getMessage();

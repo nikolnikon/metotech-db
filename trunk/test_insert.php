@@ -18,7 +18,8 @@
 	$array['diameter'] = 1.2;
 	$array['mass'] = 100;
 	$array['price'] = 1500;*/
-	$result = $price->insertItem($_GET);
+	//$result = $price->insertItem($_GET);
+	$result = $price->updateItem(6, $_GET);
 	echo $result;
 ?>
 </body>

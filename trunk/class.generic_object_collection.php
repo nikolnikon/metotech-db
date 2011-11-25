@@ -56,6 +56,7 @@ class GenericObjectCollection
 								$robj->__set($key, $value);
 							}
 						}
+						$robj->forceSaved();
 					}
 				}
 			}

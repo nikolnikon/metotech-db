@@ -143,84 +143,6 @@ XML;
 	 * @return bool Возвращает успех или неудачу
 	 */
 	public function insertItem($arFieldVals) {
-		/*// Выбираем id записи из alloys, которая соответсвует полученным параметрам. Если такой записи не существует, то в дальнейшем она создается.
-		if (array_key_exists('alloy_name', $arFieldVals) && array_key_exists('grade', $arFieldVals)) {
-			$fields['alloy_name'] = $arFieldVals['alloy_name'];
-			$fields['grade'] = $arFieldVals['grade'];
-			$query = mysql_real_escape_string($this->_getFilterQuery('alloys', $fields, 'id'));
-			
-			try {
-				$ids = $this->_dbase->select($query);
-				$alloy_id = $ids[0]['id'];
-			} catch (Exception $e) {
-				print $e->getMessage();
-				return false;
-			}
-			// если записи с полученными по http параметрами нет в таблице alloys, то создаем ее
-			if (! ($alloy_id > 0)) {
-				$alloy_gen_obj = new Alloy($alloy_id, $this->_dbase);
-				foreach ($fields as $field => $value) {
-					$alloy_gen_obj->__set($field, $value);
-				}
-				$alloy_gen_obj->save();
-				$alloy_id = $alloy_gen_obj->id;
-			}
-		}
-		$fields = array();
-		// Выбираем id записи из production, которая соответсвует полученным параметрам. Если такой записи не существует, то в дальнейшем она создается.
-		if (array_key_exists('prod_name', $arFieldVals) && array_key_exists('prod_type', $arFieldVals)) {
-			$fields['prod_name'] = $arFieldVals['prod_name'];
-			$fields['prod_type'] = $arFieldVals['prod_type'];
-			$fields['prod_note'] = $arFieldVals['prod_note'];
-			// сделать проверку на наличие требуемых размеров в http-запросе
-			switch ($arFieldVals['prod_type']) {
-				case ROUNDS:
-					$fields['diameter'] = $arFieldVals['diameter'];
-					break;
-				
-				case STRIP:
-					$fields['thickness'] = $arFieldVals['thickness'];
-					$fields['width'] = $arFieldVals['width'];
-					break;
-				
-				case SHEET:
-					$fields['thickness'] = $arFieldVals['thickness'];
-					$fields['width'] = $arFieldVals['width'];
-					$fields['length'] = $arFieldVals['length'];
-					break;
-				
-				case PIPE:
-					$fields['diameter'] = $arFieldVals['diameter'];
-					$fields['thickness'] = $arFieldVals['thickness'];
-					break;
-				
-				case OTHER:
-					$fields['other_dim'] = $arFieldVals['other_dim'];
-					break;
-				
-				default:
-					return false;
-			}
-			$query = mysql_real_escape_string($this->_getFilterQuery('production', $fields, 'id'));
-			try {
-				$ids = $this->_dbase->select($query);
-				$product_id = $ids[0]['id'];
-			} catch (Exception $e) {
-				print $e->getMessage();
-				return false;
-			}
-			// если записи с полученными по http параметрами нет в таблице production, то создаем ее
-			if (!($product_id > 0)) {
-				$class_name = getProductGenObject($fields);
-				$s  = "\$product_gen_obj = new $class_name($product_id, \$this->_dbase);";
-				eval($s);
-				foreach ($fields as $field => $value) {
-					$product_gen_obj->__set($field, $value);
-				}
-				$product_gen_obj->save();
-				$product_id = $product_gen_obj->id;
-			}
-		}*/
 		$gprice_gen_obj = new GeneralPrice(0, $this->_dbase);
 		
 		if (! isset($this->_alloysFieldsNamesArray)) {
@@ -304,35 +226,31 @@ XML;
 		if (! $mapping_gen_obj->save()) {
 			return false;
 		}
+		return true;
 	}
 	
-	public function updateItem($id, $arFieldVals) { // возможно, потребуется проверять, какие поля изменились, а какие нет
-		/*if (! array_key_exists($id, $this->_priceItemsArray)) {
+	/**
+	 * Осуществляет изменение записи в прайс-листе
+	 * @param integer $id идентификатор изменяемой записи
+	 * @param array $arFieldVals массив с значениями полей; key->имя поля, value->значение
+	 * @return bool Возвращает успех или неудачу
+	 */
+	public function updateItem($id, $arFieldVals) { // возможно, потребуется проверять, чтобы в запросе не содержались посторонние поля (те, которые не могут изменяться)
+		if (! array_key_exists($id, $this->_priceItemsArray)) {
 			return false;
 		}
-		$price_item = $this->_priceItemsArray[$id];
-		$alloy = $this->_alloysArray[$price_item->alloy_id];
-		$product = $this->_productArray[$price_item->product_id];
+		$gprice_gen_obj = $this->_priceItemsArray[$id];
 		
-		$price_fields = $price_item->getFields();
-		$alloys_fields = $alloy->getFields();
-		$production_fields = $product->getFields();
+		$price_fields = $gprice_gen_obj->getFields();
 		foreach ($arFieldVals as $field => $value) {
-			if (array_key_exists($field, $price_fields)) {
-				$tmp = $price_item;
+			if (in_array($field, $price_fields)) {
+				$gprice_gen_obj->$field = $value;
 			}
-			elseif (array_key_exists($field, $alloys_fields)) {
-				$tmp = $alloy;
-			}
-			else (array_key_exists($field, $production_fields)) {
-				$tmp = $product;
-			}
-			$tmp->$field = $value;
 		}
-		// сделать проверку возвращаемого значения
-		$alloy->save();
-		$product->save();
-		$price_item->save();*/
+		if (! $gprice_gen_obj->save()){
+			return false;
+		}
+		return true;
 	} 
 	
 	/**
