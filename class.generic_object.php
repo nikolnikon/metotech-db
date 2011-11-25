@@ -174,7 +174,16 @@ class GenericObject
 	}
 	
 	public function remove() {
-		
+		if ($this->_id) {
+			try {
+				$this->_db->delete();	
+			}
+		catch (Exception $e) {
+				echo $e->getMessage();
+				return false;
+			}
+		}
+		return true;
 	}
 }
 ?>
