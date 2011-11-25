@@ -46,7 +46,12 @@ abstract class AbstractDBase
      * @param array $arConds задает условие WHERE, key-> имя поля, value -> значение поля
      */
     abstract public function update($table, $arFieldVals, $arConds);
-    //abstract public function delete();
+    
+    /**
+     * Функция выполняет запрос DELETE
+     * @param string $table название таблицы
+     */
+    abstract public function delete($table);
     
     /**
      * Функция возвращает список столбцов таблицы $table

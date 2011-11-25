@@ -99,6 +99,10 @@ class MySQLDBase extends AbstractDBase
     	return mysql_affected_rows($this->m_dbConn);
     }
     
+    public function delete($table) {
+    	$query = "DELETE FROM ".mysql_real_escape_string($table)." WHERE";
+    }
+    
     public function getFieldsNames($table)
     {
     	$query = "SELECT * FROM `$table` LIMIT 1;";
