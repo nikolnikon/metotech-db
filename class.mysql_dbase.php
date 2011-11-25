@@ -74,11 +74,23 @@ class MySQLDBase extends AbstractDBase
     		if ($val == "") {
     			$val = "NULL";
     		}
-    		$arUpdates[] = "$field = $val";
+    		$arUpdates[] = "`$field` = $val";
+    	}
+    	
+    	foreach ($arConds as $field => $val) {
+    	if (! is_numeric($val)) {
+    			$val = "'".mysql_escape_string($val)."'";
+    		}
+    		if ($val == "") {
+    			$val = "NULL";
+    		}
+    		$arStringConds[] = "`$field` = $val";
     	}
     	$query = "UPDATE `$table` SET ";
     	$query .= join(", ", $arUpdates);
-    	$query .= " WHERE ".join(" AND ", $arConds);
+    	$query .= " WHERE ".join(" AND ", $arStringConds);
+    	
+    	echo $query.'<br>';
     	
     	$this->m_Result = mysql_query($query, $this->m_dbConn);
     	if (! $this->m_Result) {
