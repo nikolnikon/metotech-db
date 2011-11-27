@@ -175,8 +175,9 @@ class GenericObject
 	
 	public function remove() {
 		if ($this->_id) {
+			$arConds['id'] = $this->_id;
 			try {
-				$this->_db->delete();	
+				$this->_db->delete($this->_tableName, $arConds);	
 			}
 		catch (Exception $e) {
 				echo $e->getMessage();

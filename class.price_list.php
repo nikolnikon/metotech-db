@@ -236,6 +236,9 @@ XML;
 	 * @return bool Возвращает успех или неудачу
 	 */
 	public function updateItem($id, $arFieldVals) { // возможно, потребуется проверять, чтобы в запросе не содержались посторонние поля (те, которые не могут изменяться)
+		if ($id <= 0){
+			return false;
+		}
 		if (! array_key_exists($id, $this->_priceItemsArray)) {
 			return false;
 		}
@@ -251,7 +254,21 @@ XML;
 			return false;
 		}
 		return true;
-	} 
+	}
+
+	public function removeItem($id) {
+		if ($id <= 0) {
+			return false;
+		}
+		if (! array_key_exists($id, $this->_priceItemsArray)) {
+			return false;
+		}
+		$gprice_gen_obj = $this->_priceItemsArray[$id];
+		if (! $gprice_gen_obj->remove()) {
+			return false;
+		}
+		return true;
+	}
 	
 	/**
 	 * Загружает из БД прайс-лист. Если задан параметр, то записи прайс-листа фильтруются

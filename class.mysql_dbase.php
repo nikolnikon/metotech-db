@@ -99,8 +99,18 @@ class MySQLDBase extends AbstractDBase
     	return mysql_affected_rows($this->m_dbConn);
     }
     
-    public function delete($table) {
+    public function delete($table, $arConds) {
     	$query = "DELETE FROM ".mysql_real_escape_string($table)." WHERE";
+    	$arStringConds = $this->_getEqualityStrArray($arConds);
+    	$query .= join(" AND ", $arStringConds);
+    	
+    	echo $query.'<br>';
+    	
+    	$this->m_Result = mysql_query($query, $this->m_dbConn);
+    	if (! $this->m_Result) {
+    		throw new Exception(mysql_error($this->m_dbConn));
+    	}
+    	return mysql_affected_rows($this->m_dbConn);
     }
     
     public function getFieldsNames($table)
@@ -117,6 +127,25 @@ class MySQLDBase extends AbstractDBase
     	}
     	
     	return $arReturn;
+    }
+    
+    /**
+     * Возвращает массив строк вида `field` = value, которые используются в запросах к БД (update, delete)
+     * @param unknown_type $ar
+     * @return multitype:string 
+     */
+    private function _getEqualityStrArray($ar) {
+    	$arEqualityStrings = array();
+    	foreach ($ar as $field => $val) {
+    		if (! is_numeric($val)) {
+    			$val = "'".mysql_escape_string($val)."'";
+    		}
+    		if ($val == "") {
+    			$val = "NULL";
+    		}
+    		$arEqualityStrings[] = "`$field` = $val";
+    	}
+    	return $arEqualityStrings;
     }
  
     /*

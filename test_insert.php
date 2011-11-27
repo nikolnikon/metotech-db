@@ -12,14 +12,9 @@
 		echo "Ошибка\n".$e->getMessage();
 	}
 	$price = new PriceList($db, "nikel-price");
-	/*$array['alloy_name'] = "Никель";
-	$array['grade'] = "НПА1";
-	$array['prod_name'] = "Проволока";
-	$array['diameter'] = 1.2;
-	$array['mass'] = 100;
-	$array['price'] = 1500;*/
 	//$result = $price->insertItem($_GET);
-	$result = $price->updateItem(6, $_GET);
+	//$result = $price->updateItem(6, $_GET);
+	$result = $price->removeItem(6);
 	echo $result;
 ?>
 </body>

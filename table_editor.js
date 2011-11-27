@@ -1,4 +1,4 @@
-﻿Ext.require([
+Ext.require([
     'Ext.data.*',
     'Ext.grid.*'
 ]);
