@@ -21,14 +21,22 @@ Ext.onReady(function(){
         proxy: {
             // load using HTTP
             type: 'ajax',
-            url: 'test_xml_gen.php',
-            //url: 'price_list_items.xml',
-            //url: 'test.xml',
-            // the return will be XML, so lets set up a reader
+            //url: 'test_xml_gen.php',
+            api: {
+                read: 'test_xml_gen.php',
+                create: 'test_editor.php',
+                update: 'test_editor.php',
+                destroy: 'test_editor.php'
+            },
             reader: {
                 type: 'xml',
                 root: 'items',
                 record: 'item'
+            },
+            writer: {
+            	type: 'xml',
+            	root: 'data',
+            	writeAllFields: false
             }
         }
     });
