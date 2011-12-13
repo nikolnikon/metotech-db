@@ -9,7 +9,7 @@ Ext.onReady(function(){
         fields: [
             // set up the fields mapping into the xml doc
             // The first needs mapping, the others are very basic
-            'alloy_name', 'grade', 'prod_name', 'note', 'diameter', 'length',
+            'id', 'alloy_name', 'grade', 'prod_name', 'note', 'diameter', 'length',
             'width', 'thickness', 'other_dim', 'quantity', 'mass', 'price', 'order'
         ]
     });
@@ -36,10 +36,10 @@ Ext.onReady(function(){
                 successProperty: 'success',
                 messageProperty: 'message'
             },
-            writer: {
+            writer: { // посылает на сервер POST-запрос, содержащий xml
             	type: 'xml',
-            	//root: 'data',
-            	documentRoot: 'response',
+            	header: '<?xml version=\'1.0\' encoding=\'utf-8\'?>',
+            	documentRoot: 'request',
             	record: 'item',
             	writeAllFields: false
             },
@@ -56,9 +56,9 @@ Ext.onReady(function(){
         },
         listeners: {
             write: function(proxy, operation){
-                /*if (operation.action == 'destroy') {
+                if (operation.action == 'destroy') {
                     main.child('#form').setActiveRecord(null);
-                }*/
+                }
                 Ext.example.msg(operation.action, operation.resultSet.message);
             }
         }
@@ -73,6 +73,7 @@ Ext.onReady(function(){
     var grid = Ext.create('Ext.grid.Panel', {
         store: store,
         columns: [
+            {text: "ID", width: 40, dataIndex: 'id'},
             {text: "Материал", width: 110, dataIndex: 'alloy_name', sortable: true},
             {text: "Марка", width: 180, dataIndex: 'grade', sortable: true},
             {text: "Тип проката", width: 115, dataIndex: 'prod_name', sortable: true},

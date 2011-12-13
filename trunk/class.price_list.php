@@ -119,6 +119,7 @@ XML;
 			$alloy = $this->_alloysArray[$price_item->alloy_id];
 			$product = $this->_productArray[$price_item->product_id];
 			$item = $sx->data->addChild('item');
+			$item->addChild('id', $price_item->id);
 			$item->addChild('alloy_name', $alloy->alloy_name);
 			$item->addChild('grade', $alloy->grade);
 			$item->addChild('prod_name', $product->prod_name);
