@@ -8,10 +8,11 @@
 	file_put_contents("test_txt.txt", $str);
 	
 	$sx_1 = new SimpleXMLElement($str);
-	$sx_1->addChild("success", "false");
+	$sx_1->addChild("success", "true");
 	$sx_1->addChild("message", "GOOD BYE");
 	$sx_1->addChild("data");
 	$item = $sx_1->data->addChild("item");
+	$item->addChild("id", 6);
 	$item->addChild("alloy_name", "Никель");
 	$item->addChild("grade", "НП2");
 	$item->addChild("prod_name", "Проволока");
@@ -21,7 +22,7 @@
 	$item->addChild("width");
 	$item->addChild("thickness");
 	$item->addChild("other_dim");
-	$item->addChild("quantity");
+	$item->addChild("quantity", 3);
 	$item->addChild("mass", "250");
 	$item->addChild("price", "1300");
 	$item->addChild("order", "0");
