@@ -8,22 +8,23 @@
 	file_put_contents("test_txt.txt", $str);
 	
 	$sx_1 = new SimpleXMLElement($str);
-	$sx_1->addChild("success", true);
-	$sx_1->addChild("message", "HELLO");
+	$sx_1->addChild("success", "false");
+	$sx_1->addChild("message", "GOOD BYE");
 	$sx_1->addChild("data");
-	$sx_1->data->addChild("alloy_name", "Никель");
-	$sx_1->data->addChild("grade", "НП2");
-	$sx_1->data->addChild("prod_name", "Проволока");
-	$sx_1->data->addChild("note");
-	$sx_1->data->addChild("diameter", "1.2");
-	$sx_1->data->addChild("length");
-	$sx_1->data->addChild("width");
-	$sx_1->data->addChild("thickness");
-	$sx_1->data->addChild("other_dim");
-	$sx_1->data->addChild("quantity");
-	$sx_1->data->addChild("mass", "250");
-	$sx_1->data->addChild("price", "1300");
-	$sx_1->data->addChild("order", "0");
+	$item = $sx_1->data->addChild("item");
+	$item->addChild("alloy_name", "Никель");
+	$item->addChild("grade", "НП2");
+	$item->addChild("prod_name", "Проволока");
+	$item->addChild("note");
+	$item->addChild("diameter", "1.2");
+	$item->addChild("length");
+	$item->addChild("width");
+	$item->addChild("thickness");
+	$item->addChild("other_dim");
+	$item->addChild("quantity");
+	$item->addChild("mass", "250");
+	$item->addChild("price", "1300");
+	$item->addChild("order", "0");
 	
 	print $sx_1->asXML();
 	file_put_contents("test_sx.xml", $sx_1->asXML());

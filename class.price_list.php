@@ -109,16 +109,16 @@ class PriceList
 		$string = <<<XML
 <?xml version='1.0' encoding='utf-8'?>
 <price_list>
-        <items>
-        </items>
 </price_list>
 XML;
 
 		$sx = new SimpleXMLElement($string);
+		$sx->addChild("success", "true");
+		$sx->addChild("data");
 		foreach ($this->_priceItemsArray as $price_item) {
 			$alloy = $this->_alloysArray[$price_item->alloy_id];
 			$product = $this->_productArray[$price_item->product_id];
-			$item = $sx->items->addChild('item');
+			$item = $sx->data->addChild('item');
 			$item->addChild('alloy_name', $alloy->alloy_name);
 			$item->addChild('grade', $alloy->grade);
 			$item->addChild('prod_name', $product->prod_name);
