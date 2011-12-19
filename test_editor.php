@@ -25,7 +25,7 @@
 	$item->addChild("quantity", 3);
 	$item->addChild("mass", "250");
 	$item->addChild("price", "1300");
-	$item->addChild("order", "0");
+	//$item->addChild("order", "0");
 	
 	print $sx_1->asXML();
 	file_put_contents("test_sx.xml", $sx_1->asXML());
