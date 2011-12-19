@@ -114,6 +114,7 @@ XML;
 
 		$sx = new SimpleXMLElement($string);
 		$sx->addChild("success", "true");
+		$sx->addChild("message", "Loaded data");
 		$sx->addChild("data");
 		foreach ($this->_priceItemsArray as $price_item) {
 			$alloy = $this->_alloysArray[$price_item->alloy_id];
@@ -132,7 +133,7 @@ XML;
 			$item->addChild('quantity', $product->quantity);
 			$item->addChild('mass', $price_item->mass);
 			$item->addChild('price', $price_item->price);
-			$item->addChild('order', 0);
+			//$item->addChild('order', 0);
 		}
 		file_put_contents('test.xml', $sx->asXML());
 		print $sx->asXML();
