@@ -6,14 +6,14 @@ Ext.define('Price', {
         name: 'id',
         type: 'int',
         useNull: true
-    }, 'alloy_name', 'grade', 'prod_name', 'note', 'diameter', 'length', 'width', 'thickness', 'other_dim', 'quantity', 'mass', 'price', 'order']
+    }, 'alloy_name', 'grade', 'prod_name', 'note', 'diameter', 'length', 'width', 'thickness', 'other_dim', 'quantity', 'mass', 'price']
 });
 
 Ext.onReady(function(){
 
     var store = Ext.create('Ext.data.Store', {
         autoLoad: true,
-        autoSync: true,
+        autoSync: false,
         model: 'Price',
         proxy: {
             type: 'ajax',
@@ -63,22 +63,27 @@ Ext.onReady(function(){
                     verb = name + 'd';
                 }
                 Ext.example.msg(name, Ext.String.format("{0} user: {1}", verb, record.getId())); // возможно, убрать example
-                var ar = operation.getRecords();
-                for (i=0; i <= ar.length; i++) {
-                	ar[i].commit();
-                }
             }
         }
     });
     
     var rowEditing = Ext.create('Ext.grid.plugin.RowEditing', {
     		clicksToMoveEditor: 1,
-            autoCancel: false/*,
+            autoCancel: false,
             listeners: {
+            	'beforeedit': function(editor, e) {
+            		//var r = editor.record.fields['alloy_name'];
+            		//r.setDisabled(false);
+            		/*for (i = 0; i<=r.length; i++) {
+            			r[i].setDisabled(true);
+            		}*/
+            		
+            	},
                 'edit': function(editor, e) {
+                	editor.store.sync();
                     editor.record.commit();
                 }
-            }*/
+            }
 });
     
     var grid = Ext.create('Ext.grid.Panel', {
@@ -94,15 +99,15 @@ Ext.onReady(function(){
             width: 40,
             sortable: true,
             dataIndex: 'id'
-        }, {text: "Материал", width: 110, dataIndex: 'alloy_name', sortable: true},
-        {text: "Марка", width: 180, dataIndex: 'grade', sortable: true},
-        {text: "Тип проката", width: 115, dataIndex: 'prod_name', sortable: true},
-        {text: "Примечание", width: 100, dataIndex: 'note', sortable: true},
-        {text: "Диаметр", width: 100, dataIndex: 'diameter', sortable: true},
-        {text: "Длина", width: 100, dataIndex: 'length', sortable: true},
-        {text: "Ширина", width: 100, dataIndex: 'width', sortable: true},
-        {text: "Толщина", width: 100, dataIndex: 'thickness', sortable: true},
-        {text: "Другой размер", width: 100, dataIndex: 'other_dim', sortable: true},
+        }, {text: "Материал", width: 110, dataIndex: 'alloy_name', sortable: true, field: {xtype: 'textfield'}},
+        {text: "Марка", width: 180, dataIndex: 'grade', sortable: true, field: {xtype: 'textfield'}},
+        {text: "Тип проката", width: 115, dataIndex: 'prod_name', sortable: true, field: {xtype: 'textfield'}},
+        {text: "Примечание", width: 100, dataIndex: 'note', sortable: true, field: {xtype: 'textfield'}},
+        {text: "Диаметр", width: 100, dataIndex: 'diameter', sortable: true, field: {xtype: 'textfield'}},
+        {text: "Длина", width: 100, dataIndex: 'length', sortable: true, field: {xtype: 'textfield'}},
+        {text: "Ширина", width: 100, dataIndex: 'width', sortable: true, field: {xtype: 'textfield'}},
+        {text: "Толщина", width: 100, dataIndex: 'thickness', sortable: true, field: {xtype: 'textfield'}},
+        {text: "Другой размер", width: 100, dataIndex: 'other_dim', sortable: true, field: {xtype: 'textfield'}},
         {text: "Количество", width: 100, dataIndex: 'quantity', sortable: true, editor: {xtype: 'numberfield', allowBlank: true, minValue: 1, maxValue: 150000}},
         {text: "Масса", width: 100, dataIndex: 'mass', sortable: true, field: {xtype: 'textfield'}},
         {text: "Цена", width: 100, dataIndex: 'price', sortable: true, field: {xtype: 'textfield'}}
