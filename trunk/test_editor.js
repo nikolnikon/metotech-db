@@ -20,7 +20,7 @@ Ext.onReady(function(){
             api: {
                 read: 'test_xml_gen.php',
                 create: 'test_editor.php',
-                update: 'test_editor.php',
+                update: 'test_editor.php?action=update&price=nikel',
                 destroy: 'test_editor.php'
             },
             reader: {
@@ -62,7 +62,7 @@ Ext.onReady(function(){
                 } else {
                     verb = name + 'd';
                 }
-                Ext.example.msg(name, Ext.String.format("{0} user: {1}", verb, record.getId())); // возможно, убрать example
+                //Ext.example.msg(name, Ext.String.format("{0} user: {1}", verb, record.getId())); // возможно, убрать example
             }
         }
     });
@@ -71,20 +71,33 @@ Ext.onReady(function(){
     		clicksToMoveEditor: 1,
             autoCancel: false,
             listeners: {
-            	'beforeedit': function(editor, e) {
-            		//var r = editor.record.fields['alloy_name'];
-            		//r.setDisabled(false);
-            		/*for (i = 0; i<=r.length; i++) {
-            			r[i].setDisabled(true);
-            		}*/
-            		
-            	},
-                'edit': function(editor, e) {
+            	edit: function(editor, e) {
                 	editor.store.sync();
                     editor.record.commit();
-                }
+                },
+            	beforeedit: function(editor, e) {
+            		var id = editor.record.get('id');
+            		if (id > 0) {
+            			alert("in");
+            			//editor.grid.columns[2].disable(); //работает, но не то
+            			//editor.field.setValue('Hello');
+            		}
+            		alert(id);
+            	}
             }
 });
+    
+    /*var ed = Ext.create('Ext.Editor', {
+    	xtype: 'textfield',
+    	listners: {
+    		beforestartedit: function(th, boundEl, value) {
+    			alert('yes');
+    			alert(value);
+    			th.setDisabled(true);
+    		}
+    	}
+    	
+    });*/
     
     var grid = Ext.create('Ext.grid.Panel', {
         renderTo: 'test_editor',
@@ -99,7 +112,15 @@ Ext.onReady(function(){
             width: 40,
             sortable: true,
             dataIndex: 'id'
-        }, {text: "Материал", width: 110, dataIndex: 'alloy_name', sortable: true, field: {xtype: 'textfield'}},
+        }, {text: "Материал", width: 110, dataIndex: 'alloy_name', sortable: true, editor: {xtype: 'numberfield',
+        	listeners: {
+        		'beforestartedit': function(th, boundEl, value, eOpts) {
+        			alert('yes');
+        			alert(value);
+        			th.setDisabled(true);
+        			return false;
+        		}
+        	}}},
         {text: "Марка", width: 180, dataIndex: 'grade', sortable: true, field: {xtype: 'textfield'}},
         {text: "Тип проката", width: 115, dataIndex: 'prod_name', sortable: true, field: {xtype: 'textfield'}},
         {text: "Примечание", width: 100, dataIndex: 'note', sortable: true, field: {xtype: 'textfield'}},
