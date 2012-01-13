@@ -7,7 +7,7 @@ abstract class AbstractDBase
     private $m_dbName;    /* Initial database */
  
     /* Base constructor */
-    public function __construct($address, $account, $pwd, $name) {
+    private function __construct($address, $account, $pwd, $name) {
         $this->m_dbAddress = $address;
         $this->m_dbUser = $account;
         $this->m_dbPwd = $pwd;
@@ -20,6 +20,14 @@ abstract class AbstractDBase
     /* Let the child disconnect when the object is destroyed */
     public function __destruct() {
         $this->disconnect();
+    }
+    
+    static public function instance() {
+    	static $db;
+    	
+    	if (! isset($db)) {
+    		
+    	}	
     }
     
     public function getDBName() {
