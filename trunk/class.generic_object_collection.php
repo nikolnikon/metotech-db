@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Класс, который создает массив объектов GenericObject
+ * Для корректной работы кода необходимо в файл, откуда вызывается метод GenericObjectCollection::populateObjectArray(), включать файл, содержащий определение класса, объекты которого создаются в массиве
+ * @author nikonov
+ *
+ */
 class GenericObjectCollection
 {
 	private $_tableName;
@@ -38,6 +44,7 @@ class GenericObjectCollection
 	public function populateObjectArray() {
 		if ($this->_itemsCount > 0) {
 			$query = "SELECT * FROM `".$this->_db->getDBName()."`.`$this->_tableName` WHERE `id` IN (".$this->_getCommaSeparatedIdList().")";
+			//echo $query."<br>";
 			try {
 				$res = $this->_db->select($query);
 				foreach ($res as $row) {

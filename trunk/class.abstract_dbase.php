@@ -1,4 +1,6 @@
 <?php
+require_once 'db_config.php';
+
 abstract class AbstractDBase
 {
     private $m_dbAddress; /* Address of SQL server */
@@ -7,11 +9,17 @@ abstract class AbstractDBase
     private $m_dbName;    /* Initial database */
  
     /* Base constructor */
-    private function __construct($address, $account, $pwd, $name) {
-        $this->m_dbAddress = $address;
+    protected function __construct() {
+        /*$this->m_dbAddress = $address;
         $this->m_dbUser = $account;
         $this->m_dbPwd = $pwd;
-        $this->m_dbName = $name;
+        $this->m_dbName = $name;*/
+    	
+    	global $cfg;
+    	$this->m_dbAddress = $cfg['db']['host'];
+    	$this->m_dbUser = $cfg['db']['user'];
+    	$this->m_dbPwd = $cfg['db']['password'];
+    	$this->m_dbName = $cfg['db']['name'];
  
         /* Call the connect method in the child class */
         $this->connect($this->m_dbAddress, $this->m_dbUser, $this->m_dbPwd, $this->m_dbName);
@@ -22,13 +30,7 @@ abstract class AbstractDBase
         $this->disconnect();
     }
     
-    static public function instance() {
-    	static $db;
-    	
-    	if (! isset($db)) {
-    		
-    	}	
-    }
+    static abstract public function instance();
     
     public function getDBName() {
     	return $this->m_dbName;

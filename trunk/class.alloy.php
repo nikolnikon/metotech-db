@@ -9,8 +9,8 @@ class Alloy extends GenericObject
 	}
 	
 	public function __toString() {
-		$str .= $this->name;
-		$str .= ':';
+		$str .= $this->alloy_name;
+		$str .= ' ';
 		$str .= $this->grade;
 		return $str;
 	}
