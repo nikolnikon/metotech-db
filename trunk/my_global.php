@@ -3,6 +3,7 @@
 require_once 'class.mysql_dbase.php';
 require_once 'class.generic_object_collection.php';
 require_once 'class.alloy.php';
+require_once 'class.rad_eff_coef.php';
 
 /**
  * Класс задает константы для типа продукции
@@ -15,6 +16,13 @@ class ProductType
 	const SHEET = 3;
 	const PIPE = 4;
 	const OTHER = 5;
+}
+
+class SimpleGenericObject extends GenericObject
+{
+	public function __construct($id, $table_name, $db) {
+		$this->initialize($id, $table_name, $db);
+	}
 }
 
 /**
@@ -83,24 +91,27 @@ function getCommaSeparatedList($array, $type = VALUES) {
 
 /**
  * Составляет запрос для фильтрации
- * @param string $table имя таблицы, для которой строится запрос
- * @param array $fields key -> фильтруемое поле, value -> массив значений для поля
- * @param array $returned_fields имена полей, которые необходимо отобрать
+ * @param string $table Имя таблицы, для которой строится запрос
+ * @param array $returned_fields Имена полей, которые необходимо отобрать
+ * @param array $conds key -> фильтруемое поле, value -> массив значений для поля. Если null, то условие не включается в запрос.
  * @return string SQL-запрос
  */
-function getFilterQuery($table, $fields, $returned_fields) {
+function getFilterQuery($table, $returned_fields, $conds=null) {
 	$query = "SELECT ";
 	foreach ($returned_fields as $returned_field) {
 		$query .= "`$returned_field`, ";
 	}
 	$query = substr($query, 0, strlen($query) - 2);
-	$query .= " FROM `metalls`.`$table` WHERE ";
-	foreach ($fields as $field => $values) {
-		$s = getCommaSeparatedList($values);
-		$query .= "`$field` IN ($s) AND ";
+	$query .= " FROM `metalls`.`$table`";
+	if (! is_null($conds)) {
+		$query .= " WHERE ";
+		foreach ($conds as $cond => $values) {
+			$s = getCommaSeparatedList($values);
+			$query .= "`$cond` IN ($s) AND ";
+		}
+		$query = substr($query, 0, strlen($query) - 5);
 	}
-	$query = substr($query, 0, strlen($query) - 5);
-	//print "<br><br>query_2: $query<br><br>";
+	echo "<br><br>query_2: $query<br><br>";
 	return $query;	
 }
 
@@ -168,28 +179,42 @@ function calc_heater($params, $calc_res) {
 
 function get_materials_content($param) {
 	if ($param == "material") {
-		try {
-			$db = MySQLDBase::instance();
-		} catch (Exception $e) {
-			print $e->getMessage();
-			// обработка исключения
-		};
-		$query = getFilterQuery('alloys', array('heater' => array(1)), array('id'));//"SELECT `id` FROM `metalls`.`alloys` WHERE `heater` = 1";
-		try {
-			$rows = $db->select($query);
-			foreach ($rows as $row) {
-				$ids[] = $row[id];
-			}
-			fillGenericArray('alloys', 'Alloy', $materials, $ids); // что будет в случае неудачи?
-			foreach ($materials as $material) {
-				$html_code .= "<option value=".$material->id.">";
-				$html_code .= $material->__toString();
-				$html_code .= "</option>\n";
-			}
-			print $html_code;
-		} catch (Exception $e) {
-			// обработка исключения
+		$table_name = 'alloys';
+		$class_name = 'Alloy';
+		$conds = array('heater' => array(1));
+		$selected_fields = array('id');
+	}
+	elseif ($param == "placement") {
+		$table_name = 'rad_eff_coef';
+		$class_name = 'RadEffCoef';
+		$conds = null;
+		$selected_fields = array('id');
+	}
+	try {
+		$db = MySQLDBase::instance();
+	} catch (Exception $e) {
+		print $e->getMessage();
+		// обработка исключения
+	};
+	$query = getFilterQuery($table_name, $selected_fields, $conds);
+	try {
+		$rows = $db->select($query);
+		foreach ($rows as $row) {
+			$ids[] = $row[id];
 		}
+		echo "<br>ids: "; print_r($ids); echo "<br>";
+		$options = array();
+		fillGenericArray($table_name, $class_name, $options, $ids); // что будет в случае неудачи?
+		//echo "<br>options: "; print_r($options); echo "<br>";
+		foreach ($options as $option) {
+			//echo "<br>".$option->id."<br>";
+			$html_code .= "<option value=".$option->id.">";
+			$html_code .= $option->__toString();
+			$html_code .= "</option>\n";
+		}
+		print $html_code;
+	} catch (Exception $e) {
+		// обработка исключения
 	}
 }
 
