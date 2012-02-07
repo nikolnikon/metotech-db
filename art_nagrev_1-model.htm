@@ -35,12 +35,38 @@ $(function() {
 
 <script>
 $(function() {
-	$("[name=material]").load("prepare_heater_form.php", {select_name: "material"}, function(response, status, xhr) {
-		  if (status == "error") {
-			    var msg = "Sorry but there was an error: ";
-			    alert(msg + xhr.status + " " + xhr.statusText);
-		  }
-	});
+	// заполнение combobox "Материал" и "Размещение"
+	var clbck = function (response, status, xhr) {
+		if (status == "error") {
+		    var msg = "Sorry but there was an error: ";
+		    alert(msg + xhr.status + " " + xhr.statusText);
+	  }
+	};
+	$("[name=material]").load("prepare_heater_form.php", {select_name: "material"}, clbck);
+	$("[name=placement]").load("prepare_heater_form.php", {select_name: "placement"}, clbck);
+	
+	// обработка выбора однонофазного/трехфазного подключения
+	$("[name = pgrid]").change(function() {
+		var pgrid_type = $("select[name = pgrid] option:selected").val();
+		if (pgrid_type == 3) { // если трехфазное подключение
+			$("p#conn").css("display", "block");
+			$("[name = conn]").change(function() {
+				var conn_type = $("input[name = conn]:checked").val();
+				if (conn_type == "STAR") {
+					$("input[name = voltage]").val("220");
+				}
+				else {
+					$("input[name = voltage]").val("380");
+				}
+			})
+			.change();
+		}
+		else if (pgrid_type == 1) { // если однофазное подключение
+			$("p#conn").css("display", "none");
+			$("input[name = voltage]").val("220");
+		}
+	})
+	.change();
 });
 </script>
 </head>
@@ -80,28 +106,30 @@ $(function() {
 		</div>
 		<div class="art_calc">
 			<h1>Рассчитать нагреватель</h1>
-			<form method="POST" action="">
-				<p>Мощность печи, Вт <input type="number" name="power" required></p>
-				<p>Напряжение на концах нагревателя, В <input type="number" name="voltage" value="220" required></p>
+			<form method="POST" action="calc_heater.php">
+				<p>Мощность печи, Вт <br><input type="number" name="power" required></p>
+				<p>Напряжение на концах нагревателя, В <br><input type="number" name="voltage" value="220" readonly required></p>
 				<p>Тип электросети
-					<select name="pgrid" required>
-						<option>Однофазная</option>
-						<option>Трехфазная</option>
+					<br><select name="pgrid" required>
+						<option value="1" selected="selected">Однофазная</option>
+						<option value="3">Трехфазная</option>
 					</select>
+				</p>
+				<p id="conn" style="display: none;">Тип подключения нагревателей
+					<br><input type="radio" name="conn" value="STAR" checked="checked">Звезда
+					<br><input type="radio" name="conn" value="TRIANGLE">Треугольник
 				</p>
 				<p>Материал нагревателя
-					<select name="material" required>
+					<br><select name="material" required>
 					</select>
 				</p>
-				<p>Температура нагреваемого тела, °C <input type="number" name="temp_heating" required></p>
-				<p>Температура нагревателя, °C <input type="number" name="temp_heater" required></p>
+				<p>Температура нагреваемого тела, °C <br><input type="number" name="temp_heating" required></p>
+				<p>Температура нагревателя, °C <br><input type="number" name="temp_heater" required></p>
 				<p>Размещение нагревателей
-					<select name="placement" required>
-						<option>Проволочные спирали, полузакрытые в пазах футеровки</option>
-						<option>Проволочные спирали на полочках в трубках</option>
-						<option>Проволочные зигзагообразные (стержневые) нагреватели</option>
+					<br><select name="placement" required>
 					</select>
 				</p>
+				<p><input type="submit" name="calc"></p>
 			</form>
 		</div>
 		<p style="height: 24px">&nbsp;</p></td>
