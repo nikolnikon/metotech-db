@@ -6,6 +6,15 @@ class MySQLDBase extends AbstractDBase
 {
 	private $m_dbConn;
     private $m_Result;
+    
+	static public function instance() {
+    	static $db;
+
+    	if (! isset($db)) {
+    		$db = new MySQLDBase();
+    	}
+    	return $db;
+	}
  
     /* 
      * Connect function, also selects correct database
