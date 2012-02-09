@@ -207,10 +207,16 @@ function get_materials_content($param) {
 		fillGenericArray($table_name, $class_name, $options, $ids); // что будет в случае неудачи?
 		//echo "<br>options: "; print_r($options); echo "<br>";
 		foreach ($options as $option) {
-			//echo "<br>".$option->id."<br>";
-			$html_code .= "<option value=".$option->id.">";
-			$html_code .= $option->__toString();
-			$html_code .= "</option>\n";
+			if ($param == "material") {
+				$html_code .= "<option value=\"".$option->id."\" data-temperature=\"".$option->max_heater_temp."\">";
+				$html_code .= $option->__toString();
+				$html_code .= "</option>\n";
+			}
+			elseif ($param == "placement") {
+				$html_code .= "<option value=\"".$option->id."\">";
+				$html_code .= $option->__toString();
+				$html_code .= "</option>\n";
+			}
 		}
 		print $html_code;
 	} catch (Exception $e) {
