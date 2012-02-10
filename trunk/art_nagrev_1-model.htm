@@ -52,9 +52,9 @@ $(function() {
 	$("[name = 'pgrid']").change(function() {
 		var pgrid_type = $("select[name = 'pgrid'] option:selected").val();
 		if (pgrid_type == 3) { // если трехфазное подключение
-			$("p#conn").css("display", "block");
-			$("[name = 'conn']").change(function() {
-				var conn_type = $("input[name = 'conn']:checked").val();
+			$("p#pgrid_conn").css("display", "block");
+			$("[name = 'pgrid_conn']").change(function() {
+				var conn_type = $("input[name = 'pgrid_conn']:checked").val();
 				if (conn_type == "STAR") {
 					$("input[name = 'voltage']").val("220");
 				}
@@ -65,7 +65,7 @@ $(function() {
 			.change();
 		}
 		else if (pgrid_type == 1) { // если однофазное подключение
-			$("p#conn").css("display", "none");
+			$("p#pgrid_conn").css("display", "none");
 			$("input[name = 'voltage']").val("220");
 		}
 	})
@@ -74,18 +74,29 @@ $(function() {
 	// обработка выбора материала нагревателя
 	$("select[name = 'material']").change(function() {
 		var max_temp = $("select[name = 'material'] option:selected").data("temperature");
+		var resistivity = $("select[name = 'material'] option:selected").data("resistivity");
 		if (max_temp === undefined) {
 			max_temp = "";
 		}
+		if (resistivity === undefined) {
+			resistivity = "";
+		}
 		$("[name = 'max_temp']").val(max_temp);
+		$("[name = 'resistivity']").val(resistivity);
 	})
 	.change();
 	
+	// отправка данных на сервер
 	$("form[name='heater_calc']").submit(function() {
 		if ($("[name='temp_heating']").val() >= $("[name = 'max_temp']").val()) {
 			alert("Максимальная температура в печи не может быть больше или равна максимальной рабочей температуре нагревателя. \n Выберите другой материал или уменьшите температуру в печи");
 			return false;
 		}
+		var params = $("form[name='heater_calc'] > [name!='pgrid']").size();
+		
+		//var params = $("[name='power']").serialize();
+		console.log(params);
+		return false;
 	});
 });
 --></script>
@@ -135,9 +146,9 @@ $(function() {
 						<option value="3">Трехфазная</option>
 					</select>
 				</p>
-				<p id="conn" style="display: none;">Тип подключения нагревателей
-					<br><input type="radio" name="conn" value="STAR" checked="checked">Звезда
-					<br><input type="radio" name="conn" value="TRIANGLE">Треугольник
+				<p id="pgrid_conn" style="display: none;">Тип подключения нагревателей
+					<br><input type="radio" name="pgrid_conn" value="STAR" checked="checked">Звезда
+					<br><input type="radio" name="pgrid_conn" value="TRIANGLE">Треугольник
 				</p>
 				<p>Материал нагревателя
 					<br><select name="material" required>
@@ -146,6 +157,7 @@ $(function() {
 				<p>Максимальная рабочая температура нагревателя, °C
 					<br><input type="number" name="max_temp" value="1200" readonly>
 				</p>
+				<input type="hidden" name="resistivity" value="1.13">
 				<p>Максимальная температура в печи, °C <br><input type="number" name="temp_heating" required></p>
 				<p>Размещение нагревателей
 					<br><select name="placement" required>
