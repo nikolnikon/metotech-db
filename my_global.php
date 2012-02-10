@@ -208,7 +208,7 @@ function get_materials_content($param) {
 		//echo "<br>options: "; print_r($options); echo "<br>";
 		foreach ($options as $option) {
 			if ($param == "material") {
-				$html_code .= "<option value=\"".$option->id."\" data-temperature=\"".$option->max_heater_temp."\">";
+				$html_code .= "<option value=\"".$option->id."\" data-temperature=\"".$option->max_heater_temp."\" data-resistivity=\"".$option->resistivity."\">";
 				$html_code .= $option->__toString();
 				$html_code .= "</option>\n";
 			}
