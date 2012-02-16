@@ -137,7 +137,7 @@ function fillGenericArray($table_name, $class_name, &$array, &$ids, $func_name =
 	}	
 }
 
-function calc_heater($params, $calc_res) {
+function calc_heater($params, &$calc_res) {
 	// Расчет силы тока и сопротивления
 	$U = $params['U'];
 	$P = $params['P'];
@@ -165,8 +165,10 @@ function calc_heater($params, $calc_res) {
 	
 	// Расчет диаметра и длины
 	$exp_1 = 4 * $RO_T * pow($P, 2);
+	echo '<br><br> exp_1: '.$exp_1.'<br><br>';
 	$exp_2 = pow(M_PI, 2) * pow($U, 2) * $B_DOP;
-	$D = pow(exp_1/exp2, 1/3);
+	echo '<br><br> exp_2: '.$exp_2.'<br><br>';
+	$D = pow($exp_1/$exp_2, 1/3);
 	
 	$exp_1 = $P * pow($U, 2);
 	$exp_2 = 4 * M_PI * $RO_T * pow($B_DOP, 2);
@@ -208,12 +210,20 @@ function get_materials_content($param) {
 		//echo "<br>options: "; print_r($options); echo "<br>";
 		foreach ($options as $option) {
 			if ($param == "material") {
-				$html_code .= "<option value=\"".$option->id."\" data-temperature=\"".$option->max_heater_temp."\" data-resistivity=\"".$option->resistivity."\">";
+				$query = "SELECT DISTINCT `temp_solid` FROM `metalls`.`heater_surface_power` WHERE `temp_heater` < ".$option->max_heater_temp;
+				$temps = $db->select($query);
+				foreach ($temps as $temp) {
+					$arr[] = $temp['temp_solid'];
+				}
+				$t = getCommaSeparatedList($arr);
+				$html_code .= "<option value=\"".$option->id."\" data-maxtemp=\"".$option->max_heater_temp."\" data-resistivity=\"".$option->resistivity."\" data-temps=\"".$t."\">";
 				$html_code .= $option->__toString();
 				$html_code .= "</option>\n";
+				unset($arr);
 			}
 			elseif ($param == "placement") {
-				$html_code .= "<option value=\"".$option->id."\">";
+				$av_coef = ($option->min_coef + $option->max_coef) / 2;
+				$html_code .= "<option value=\"".$av_coef."\">";
 				$html_code .= $option->__toString();
 				$html_code .= "</option>\n";
 			}

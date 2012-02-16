@@ -9,16 +9,24 @@
 abstract class AbstractCalculator
 {
 	/**
+	 * Содержит параметры, необходимые для вычисления значения
+	 * @var array $_parameters
+	 */
+	protected $_parameters;
+	/**
 	 * Имя функции, которая выполняет вычисления
+	 * @var array $_calcFuncName
 	 */
 	private $_calcFuncName;
 	/**
-	 * Содержит параметры, необходимые для вычисления значения
+	 * Содержит успех или неудачу загрузки данных
+	 * @var boolean $_loaded
 	 */
-	private $_parameters;
+	private $_loaded;
 
 	public function __construct($form_parameters, $calc_func_name) {
 		$this->_loadParameters($form_parameters);
+		$this->_calcFuncName = $calc_func_name;
 	}
 	
 	/**
@@ -27,14 +35,16 @@ abstract class AbstractCalculator
 	 * @param array $result Результат вычислений
 	 * @return boolean Возвращает успех или неудачу
 	 */
-	public function calc($result) {
-		$success = call_user_func_array($this->_calcFuncName, array($this->_parameters));
+	public function calc(&$result) {
+		$success = call_user_func_array($this->_calcFuncName, array($this->_parameters, &$result));
+		//echo '<br><br> result: '; print_r($result); echo '<br><br>';
 	}
 
 	/**
-	 * Получает параметры, необходимые для вычислений
+	 * Загружает параметры, необходимые для вычислений
+	 * @param array $form_parameters Данные, полученные от формы
 	 * @return boolean Возвращает успех или неудачу
 	 */
-	abstract private function _loadParameters($form_parameters);
+	protected abstract function _loadParameters($form_parameters);
 }
 ?>
