@@ -6,8 +6,27 @@
 </head>
 <body>
 <?php
+	require_once 'class.heater_calculator.php';
 	require_once 'my_global.php';
-	get_materials_content("material");
+
+	$form_params = array();
+	$form_params['power'] = $_GET['power'];
+	$form_params['voltage'] = $_GET['voltage'];
+	$form_params['pgrid'] = $_GET['pgrid'];
+	$form_params['material'] = $_GET['material'];
+	$form_params['max_temp'] = $_GET['max_temp'];
+	$form_params['resistivity'] = $_GET['resistivity'];
+	$form_params['temp_heating'] = $_GET['temp_heating'];
+	$form_params['placement'] = $_GET['placement'];
+
+	echo '<br><br> _GET: '; print_r($_GET); echo '<br><br>';
+	echo '<br><br> form_params: '; print_r($form_params); echo '<br><br>';
+	
+	$hcalc = new HeaterCalculator($form_params, "calc_heater");
+	$result = array();
+	$hcalc->calc($result);
+	echo '<br><br>result: '; print_r($result); echo '<br><br>';
+	// отправка результатов клиенту
 ?>
 </body>
 </html>

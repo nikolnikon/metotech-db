@@ -1,37 +1,59 @@
 <?php
 require_once ('class.abstract_calculator.php');
+require_once ('class.mysql_dbase.php');
 
 /**
- *  ‡Î¸ÍÛÎˇÚÓ Ì‡„Â‚‡ÚÂÎÂÈ
+ * ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ
  * @author nikolnikon
  * @version 1.0
- * @created 07-ˇÌ‚-2012 16:28:21
+ * @created 07-ÔøΩÔøΩÔøΩ-2012 16:28:21
  */
 class HeaterCalculator extends AbstractCalculator
 {
-
-	function HeaterCalculator()
+	protected function _loadParameters($form_params)
 	{
+		$this->_parameters['U'] = $form_params['voltage'];
+		$this->_parameters['P'] = $form_params['power'];
+		$this->_parameters['RO_20'] = $form_params['resistivity'];
+		$this->_parameters['A'] = $form_params['placement'];
+		
+		$ts = $form_params['temp_heating']; // —Ç–µ–º–ø–µ—Ä–∞—Ç—É—Ä–∞ —Ç–µ–ª–∞
+		$th = $form_params['max_temp']; // –º–∞–∫—Å–∏–º–∞–ª—å–Ω–∞—è —Ä–∞–±–æ—á–∞—è —Ç–µ–º–ø–µ—Ä–∞—Ç—É—Ä–∞ –Ω–∞–≥—Ä–µ–≤–∞—Ç–µ–ª—è
+		echo '<br><br> th: '.$th.'<br><br>';
+		
+		try {
+			$db = MySqlDBase::instance();
+			
+			$query = "SELECT MIN(`temp_heater`) FROM `metalls`.`heater_surface_power` WHERE `temp_heater` > ".mysql_real_escape_string($ts)." AND temp_heater <= ".mysql_real_escape_string($th);
+			$res = $db->select($query);
+			echo '<br><br> res: '; print_r($res); echo '<br><br>';
+			if (! isset($res)) {
+				;// –Ω–µ—É–¥–∞—á–Ω–∞—è –ø–æ–ø—ã—Ç–∫–∞ –∑–∞–≥—Ä—É–∑–∫–∏... –≤ –ë–î –Ω–µ—Ç —Å–æ–æ—Ç–≤–µ—Ç—Å—Ç–≤—É—é—â–∏—Ö –¥–∞–Ω–Ω—ã—Ö
+			}
+			$rth = $res[0]['MIN(`temp_heater`)']; // —Ç–µ–º–ø–µ—Ä–∞—Ç—É—Ä–∞ –Ω–∞–≥—Ä–µ–≤–∞—Ç–µ–ª—è, –∫–æ—Ç–æ—Ä–∞—è –ø—Ä–∏–Ω–∏–º–∞–µ—Ç—Å—è –ø—Ä–∏ —Ä–∞—Å—á–µ—Ç–∞—Ö
+			
+			$query = "SELECT `surface_power` FROM `metalls`.`heater_surface_power` WHERE `temp_solid` = ".mysql_real_escape_string($ts)." AND temp_heater = ".mysql_real_escape_string($rth);
+			unset($res);
+			$res = $db->select($query);
+			if (! isset($res)) {
+				;// –Ω–µ—É–¥–∞—á–Ω–∞—è –ø–æ–ø—ã—Ç–∫–∞ –∑–∞–≥—Ä—É–∑–∫–∏... –≤ –ë–î –Ω–µ—Ç —Å–æ–æ—Ç–≤–µ—Ç—Å—Ç–≤—É—é—â–∏—Ö –¥–∞–Ω–Ω—ã—Ö
+			}
+			$this->_parameters['B_EF'] = $res[0]['surface_power'];
+			
+			$id_mat = $form_params['material'];
+			$query = "SELECT `correction_coef` FROM `metalls`.`var_resistent_coef` WHERE `alloy_id` = ".mysql_real_escape_string($id_mat)." AND temp = (SELECT MIN(`temp`) FROM `metalls`.`var_resistent_coef` WHERE `temp` >= ".mysql_real_escape_string($rth).")";
+			unset($res);
+			$res = $db->select($query);
+			if (! isset($res)) {
+				;// –Ω–µ—É–¥–∞—á–Ω–∞—è –ø–æ–ø—ã—Ç–∫–∞ –∑–∞–≥—Ä—É–∑–∫–∏... –≤ –ë–î –Ω–µ—Ç —Å–æ–æ—Ç–≤–µ—Ç—Å—Ç–≤—É—é—â–∏—Ö –¥–∞–Ω–Ω—ã—Ö
+			}
+			$this->_parameters['K'] = $res[0]['correction_coef'];
+			
+			echo '<br><br> _parameters: '; print_r($this->_parameters); echo '<br><br>';
+		} catch (Exception $e) {
+			echo '<br><br>'.$e->getMessage().'<br>';
+		}
+		// return true;
 	}
-
-
-
-	/**
-	 * œÓÎÛ˜‡ÂÚ Ô‡‡ÏÂÚ˚, ÌÂÓ·ıÓ‰ËÏ˚Â ‰Îˇ ‚˚˜ËÒÎÂÌËÈ
-	 */
-	function _loadParameters()
-	{
-	}
-
-	/**
-	 * ¬˚ÔÓÎÌˇÂÚ ‚˚˜ËÒÎÂÌËˇ, ËÒÔÓÎ¸ÁÛˇ parameters Ë ‚ÓÁ‚‡˘‡ÂÚ ÂÁÛÎ¸Ú‡Ú ‚ reult
-	 * 
-	 * @param parameters    œ‡‡ÏÂÚ˚, ÌÂÓ·ıÓ‰ËÏ˚Â ‰Îˇ ‚˚˜ËÒÎÂÌËÈ
-	 * @param result
-	 */
-	function calc($parameters, $result)
-	{
-	}
-
 }
 ?>
