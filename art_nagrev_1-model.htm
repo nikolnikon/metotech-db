@@ -109,7 +109,13 @@ $(function() {
 		var params = $("form[name='heater_calc'] input[name!='pgrid_conn'], form[name='heater_calc'] select[name!='pgrid_conn']").serialize();
 		console.log(params);
 		$.getJSON("calc_heater.php", params, function(result, textStatus, jqXHR){
-			
+			html_res = "<p>Диаметр нагревателя: <br><input type=\"number\" name=\"diameter\" value=\"";
+			html_res += result.D;
+			html_res += "\"></p> \n <p>Длина нагревателя: <br><input type=\"number\" name=\"length\" value=\"";
+			html_res += result.L;
+			html_res += "\"></p>";
+			$("form[name = heater_calc_res']").empty();
+			$("form[name='heater_calc_res']").append(html_res);
 		});
 		return false;
 	});
@@ -152,7 +158,7 @@ $(function() {
 		</div>
 		<div class="art_calc">
 			<h1>Рассчитать нагреватель</h1>
-			<form method="POST" name="heater_calc">
+			<form name="heater_calc">
 				<p>Мощность печи, Вт <br><input type="number" name="power" required></p>
 				<p>Напряжение на концах нагревателя, В <br><input type="number" name="voltage" value="220" readonly required></p>
 				<p>Тип электросети
@@ -184,6 +190,8 @@ $(function() {
 				<p><input type="submit" name="calc"></p>
 			</form>
 		</div>
+		<form name="heater_calc_res">
+		</form>
 		<p style="height: 24px">&nbsp;</p></td>
 		<td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
 			<tr>
