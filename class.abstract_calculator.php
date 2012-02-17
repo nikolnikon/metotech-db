@@ -14,6 +14,11 @@ abstract class AbstractCalculator
 	 */
 	protected $_parameters;
 	/**
+	 * Содержит результаты вычислений
+	 * @var array
+	 */
+	protected $_result;
+	/**
 	 * Имя функции, которая выполняет вычисления
 	 * @var array $_calcFuncName
 	 */
@@ -22,7 +27,7 @@ abstract class AbstractCalculator
 	 * Содержит успех или неудачу загрузки данных
 	 * @var boolean $_loaded
 	 */
-	private $_loaded;
+	private $_loaded = false;
 
 	public function __construct($form_parameters, $calc_func_name) {
 		$this->_loadParameters($form_parameters);
@@ -35,9 +40,24 @@ abstract class AbstractCalculator
 	 * @param array $result Результат вычислений
 	 * @return boolean Возвращает успех или неудачу
 	 */
-	public function calc(&$result) {
-		$success = call_user_func_array($this->_calcFuncName, array($this->_parameters, &$result));
+	public function calc() {
+		$success = call_user_func_array($this->_calcFuncName, array($this->_parameters, &$this->_result));
+		$this->_handleCalc();
 		//echo '<br><br> result: '; print_r($result); echo '<br><br>';
+	}
+	
+	/**
+	 * Возвращает результаты вычислений в виде json-строки
+	 * @return sting Результат вычислений в виде json-строки
+	 */
+	public function getJSONResult() {
+		$jsn = json_encode($this->_result);
+		if (json_last_error() == JSON_ERROR_NONE) {
+			return $jsn;
+		}
+		else {
+			// обработать ошибку кодирования в json
+		}
 	}
 
 	/**
@@ -46,5 +66,10 @@ abstract class AbstractCalculator
 	 * @return boolean Возвращает успех или неудачу
 	 */
 	protected abstract function _loadParameters($form_parameters);
+	
+	/**
+	 * Выполняет необходимые действия после выполнения расчетов
+	 */
+	protected abstract function _handleCalc();
 }
 ?>
