@@ -24,8 +24,10 @@
 	
 	$hcalc = new HeaterCalculator($form_params, "calc_heater");
 	$result = array();
-	$hcalc->calc($result);
-	echo '<br><br>result: '; print_r($result); echo '<br><br>';
+	$hcalc->calc();
+	$res = $hcalc->getJSONResult();
+	echo '<br><br>json-ответ: '.$res.'<br><br>';
+	//echo '<br><br>result: '; print_r($result); echo '<br><br>';
 	// отправка результатов клиенту
 ?>
 </body>

@@ -33,7 +33,7 @@ $(function() {
 </script>
 <!--Аккордион меню end-->
 
-<script>
+<script><!--
 $(function() {
 	// заполнение combobox "Материал" и "Размещение"
 	var clbck = function (response, status, xhr) {
@@ -102,12 +102,15 @@ $(function() {
 	
 	// отправка данных на сервер
 	$("form[name='heater_calc']").submit(function() {
-		if ($("[name='temp_heating']").val() >= $("[name = 'max_temp']").val()) {
+		/*if ($("[name='temp_heating']").val() >= $("[name = 'max_temp']").val()) {
 			alert("Максимальная температура в печи не может быть больше или равна максимальной рабочей температуре нагревателя. \n Выберите другой материал или уменьшите температуру в печи");
 			return false;
-		}
+		}*/
 		var params = $("form[name='heater_calc'] input[name!='pgrid_conn'], form[name='heater_calc'] select[name!='pgrid_conn']").serialize();
 		console.log(params);
+		$.getJSON("calc_heater.php", params, function(result, textStatus, jqXHR){
+			
+		});
 		return false;
 	});
 });
@@ -1229,7 +1232,7 @@ $(function() {
 						<li>Жуков Л.Л., Племянникова И.М., Миронова М.Н., Баркая Д.С., Шумков Ю.В. <b>"Сплавы для нагревателей"</b>.</li>
 						<li>Сокунов Б.А., Гробова Л.С. <b>"Электротермические установки (электрические печи сопротивления)"</b>.</li>
 						<li>Фельдман И.А., Гутман М.Б., Рубин Г.К., Шадрич Н.И. <b>"Расчет и конструирование нагревателей электропечей сопротивления"</b>.</li>
-						<li>http://www.horss.ru/h6.php?p=45</li>
+						<li>http://www.horss.ru/index.php/goods/osnovnye-svedeniya/76-pechi/677-raschetnagrevatelei</li>
 						<li>http://www.electromonter.info/advice/nichrom.html</li>
 					</ul>
 				</div>

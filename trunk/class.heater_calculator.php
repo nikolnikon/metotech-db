@@ -13,7 +13,13 @@ class HeaterCalculator extends AbstractCalculator
 	protected function _loadParameters($form_params)
 	{
 		$this->_parameters['U'] = $form_params['voltage'];
-		$this->_parameters['P'] = $form_params['power'];
+		$this->_parameters['GRD'] = $form_params['pgrid'];
+		if ($form_params['pgrid'] == 1) {
+			$this->_parameters['P'] = $form_params['power'];
+		}
+		elseif ($form_params['pgrid'] == 3) {
+			$this->_parameters['P'] = $form_params['power'] / 3;
+		}
 		$this->_parameters['RO_20'] = $form_params['resistivity'];
 		$this->_parameters['A'] = $form_params['placement'];
 		
@@ -54,6 +60,13 @@ class HeaterCalculator extends AbstractCalculator
 			echo '<br><br>'.$e->getMessage().'<br>';
 		}
 		// return true;
+	}
+	
+	/**
+	 * Выполняет расчет массы проволоки (в том числе общей массы для трехфазного подключения) 
+	 */
+	protected function _handleCalc() {
+		
 	}
 }
 ?>

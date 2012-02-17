@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 10, 2012 at 05:07 PM
+-- Generation Time: Feb 17, 2012 at 04:50 PM
 -- Server version: 5.1.40
 -- PHP Version: 5.3.3
 
@@ -84,6 +84,51 @@ INSERT INTO `general_price` (`id`, `alloy_id`, `product_id`, `quantity`, `mass`,
 (5, 5, 5, NULL, 300, 1450, NULL),
 (6, 7, 1, NULL, 150, 2800, 'NULL'),
 (7, 6, 1, NULL, 100, 1500, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `heater_surface_power`
+--
+
+DROP TABLE IF EXISTS `heater_surface_power`;
+CREATE TABLE IF NOT EXISTS `heater_surface_power` (
+  `id` double NOT NULL AUTO_INCREMENT,
+  `temp_solid` double NOT NULL COMMENT 'Температура нагреваемого тела (тепловоспринимающей поверхности), °С',
+  `temp_heater` double NOT NULL COMMENT 'Температура нагревателя, °С',
+  `surface_power` double NOT NULL COMMENT 'Удельная поверхностная мощность нагревателя, Вт/м^2 * 10^4',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Удельная поверхностная мощность нагревателей в зависимости о' AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `heater_surface_power`
+--
+
+INSERT INTO `heater_surface_power` (`id`, `temp_solid`, `temp_heater`, `surface_power`) VALUES
+(1, 100, 800, 6.1),
+(2, 200, 800, 5.9),
+(3, 300, 800, 5.65),
+(4, 400, 800, 5.2),
+(5, 500, 800, 4.5),
+(6, 600, 800, 3.5),
+(7, 700, 800, 2),
+(8, 100, 850, 7.3),
+(9, 200, 850, 7.15),
+(10, 300, 850, 6.85),
+(11, 400, 850, 6.45),
+(12, 500, 850, 5.7),
+(13, 600, 850, 4.7),
+(14, 700, 850, 3.2),
+(15, 800, 850, 1.25),
+(16, 100, 900, 8.7),
+(17, 200, 900, 8.55),
+(18, 300, 900, 8.3),
+(19, 400, 900, 7.85),
+(20, 500, 900, 7.15),
+(21, 600, 900, 6.1),
+(22, 700, 900, 4.6),
+(23, 800, 900, 2.65),
+(24, 850, 900, 1.4);
 
 -- --------------------------------------------------------
 
@@ -198,6 +243,53 @@ INSERT INTO `special_prices` (`id`, `price_name`) VALUES
 (4, 'titan-price'),
 (2, 'volfram-price');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `var_resistent_coef`
+--
+
+DROP TABLE IF EXISTS `var_resistent_coef`;
+CREATE TABLE IF NOT EXISTS `var_resistent_coef` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `alloy_id` int(11) NOT NULL COMMENT 'Ссылка на сплав',
+  `temp` double NOT NULL COMMENT 'Температура проволоки, °С',
+  `correction_coef` double NOT NULL COMMENT 'Поправочный коэффициент',
+  PRIMARY KEY (`id`),
+  KEY `var_res_coef_alloy_fk` (`alloy_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Поправочный коэффициент для расчета изменения электрического' AUTO_INCREMENT=38 ;
+
+--
+-- Dumping data for table `var_resistent_coef`
+--
+
+INSERT INTO `var_resistent_coef` (`id`, `alloy_id`, `temp`, `correction_coef`) VALUES
+(1, 1, 20, 1),
+(2, 1, 100, 1.006),
+(3, 1, 200, 1.015),
+(4, 1, 300, 1.022),
+(5, 1, 400, 1.029),
+(6, 1, 500, 1.032),
+(7, 1, 600, 1.023),
+(8, 1, 700, 1.016),
+(9, 1, 800, 1.015),
+(10, 1, 900, 1.017),
+(11, 1, 1000, 1.025),
+(12, 1, 1100, 1.033),
+(13, 1, 1200, 1.04),
+(26, 2, 20, 1),
+(27, 2, 100, 1.013),
+(28, 2, 200, 1.029),
+(29, 2, 300, 1.046),
+(30, 2, 400, 1.062),
+(31, 2, 500, 1.074),
+(32, 2, 600, 1.083),
+(33, 2, 700, 1.083),
+(34, 2, 800, 1.089),
+(35, 2, 900, 1.097),
+(36, 2, 1000, 1.105),
+(37, 2, 1100, 1.114);
+
 --
 -- Constraints for dumped tables
 --
@@ -215,3 +307,9 @@ ALTER TABLE `general_price`
 ALTER TABLE `prices_mapping`
   ADD CONSTRAINT `qprice_fkey` FOREIGN KEY (`gprice_id`) REFERENCES `general_price` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `sprice_fkey` FOREIGN KEY (`sprice_id`) REFERENCES `special_prices` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `var_resistent_coef`
+--
+ALTER TABLE `var_resistent_coef`
+  ADD CONSTRAINT `var_res_coef_alloy_fk` FOREIGN KEY (`alloy_id`) REFERENCES `alloys` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
