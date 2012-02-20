@@ -1,5 +1,6 @@
 <?php
 	require_once 'class.heater_calculator.php';
+	require_once 'my_global.php';
 
 	$form_params = array();
 	$form_params['power'] = $_GET['power'];
@@ -11,7 +12,9 @@
 	$form_params['temp_heating'] = $_GET['temp_heating'];
 	$form_params['placement'] = $_GET['placement'];
 	
-	$hcalc = new HeaterCalculator($form_parameters, "calc_heater");
-	$hcalc->calc($result);
-	// отправка результатов клиенту
+	$hcalc = new HeaterCalculator($form_params, "calc_heater");
+	$result = array();
+	$hcalc->calc();
+	$res = $hcalc->getJSONResult();
+	print $res;
 ?>

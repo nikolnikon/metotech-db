@@ -108,14 +108,18 @@ $(function() {
 		}*/
 		var params = $("form[name='heater_calc'] input[name!='pgrid_conn'], form[name='heater_calc'] select[name!='pgrid_conn']").serialize();
 		console.log(params);
+		//$("form[name = 'heater_calc'] input[name = 'diameter']").remove();
+		//$("form[name = 'heater_calc'] input[name = 'length']").remove();
 		$.getJSON("calc_heater.php", params, function(result, textStatus, jqXHR){
-			html_res = "<p>Диаметр нагревателя: <br><input type=\"number\" name=\"diameter\" value=\"";
+			$("form[name = 'heater_calc'] input[name = 'diameter']").val(result.D);
+			$("form[name = 'heater_calc'] input[name = 'length']").val(result.L);
+			/*html_res = "<p>Диаметр нагревателя, мм <br><input type=\"number\" name=\"diameter\" value=\"";
 			html_res += result.D;
-			html_res += "\"></p> \n <p>Длина нагревателя: <br><input type=\"number\" name=\"length\" value=\"";
+			html_res += "\" readonly></p> \n <p>Длина нагревателя, м <br><input type=\"number\" name=\"length\" value=\"";
 			html_res += result.L;
-			html_res += "\"></p>";
-			$("form[name = heater_calc_res']").empty();
-			$("form[name='heater_calc_res']").append(html_res);
+			html_res += "\" readonly></p>";*/
+			// $("form[name = 'heater_calc_res']").empty();
+			// $("form[name='heater_calc']").append(html_res);
 		});
 		return false;
 	});
@@ -188,10 +192,14 @@ $(function() {
 					</select>
 				</p>
 				<p><input type="submit" name="calc"></p>
+				<h1>Результаты расчета</h1>
+				Диаметр проволоки, мм
+					<br><input type="number" name="diameter" readonly>
+				<p>Длина проволоки, м
+					<br><input type="number" name="length" readonly>
+				</p>
 			</form>
 		</div>
-		<form name="heater_calc_res">
-		</form>
 		<p style="height: 24px">&nbsp;</p></td>
 		<td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
 			<tr>

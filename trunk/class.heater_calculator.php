@@ -25,14 +25,14 @@ class HeaterCalculator extends AbstractCalculator
 		
 		$ts = $form_params['temp_heating']; // температура тела
 		$th = $form_params['max_temp']; // максимальная рабочая температура нагревателя
-		echo '<br><br> th: '.$th.'<br><br>';
+		//echo '<br><br> th: '.$th.'<br><br>';
 		
 		try {
 			$db = MySqlDBase::instance();
 			
 			$query = "SELECT MIN(`temp_heater`) FROM `metalls`.`heater_surface_power` WHERE `temp_heater` > ".mysql_real_escape_string($ts)." AND temp_heater <= ".mysql_real_escape_string($th);
 			$res = $db->select($query);
-			echo '<br><br> res: '; print_r($res); echo '<br><br>';
+			//echo '<br><br> res: '; print_r($res); echo '<br><br>';
 			if (! isset($res)) {
 				;// неудачная попытка загрузки... в БД нет соответствующих данных
 			}
@@ -55,7 +55,7 @@ class HeaterCalculator extends AbstractCalculator
 			}
 			$this->_parameters['K'] = $res[0]['correction_coef'];
 			
-			echo '<br><br> _parameters: '; print_r($this->_parameters); echo '<br><br>';
+			//echo '<br><br> _parameters: '; print_r($this->_parameters); echo '<br><br>';
 		} catch (Exception $e) {
 			echo '<br><br>'.$e->getMessage().'<br>';
 		}
