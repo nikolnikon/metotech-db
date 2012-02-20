@@ -111,7 +111,7 @@ function getFilterQuery($table, $returned_fields, $conds=null) {
 		}
 		$query = substr($query, 0, strlen($query) - 5);
 	}
-	echo "<br><br>query_2: $query<br><br>";
+	//echo "<br><br>query_2: $query<br><br>";
 	return $query;	
 }
 
@@ -165,9 +165,9 @@ function calc_heater($params, &$calc_res) {
 	
 	// Расчет диаметра и длины
 	$exp_1 = 4 * $RO_T * pow($P, 2);
-	echo '<br><br> exp_1: '.$exp_1.'<br><br>';
+	//echo '<br><br> exp_1: '.$exp_1.'<br><br>';
 	$exp_2 = pow(M_PI, 2) * pow($U, 2) * $B_DOP;
-	echo '<br><br> exp_2: '.$exp_2.'<br><br>';
+	//echo '<br><br> exp_2: '.$exp_2.'<br><br>';
 	$D = pow($exp_1/$exp_2, 1/3);
 	
 	$exp_1 = $P * pow($U, 2);
@@ -204,7 +204,7 @@ function get_materials_content($param) {
 		foreach ($rows as $row) {
 			$ids[] = $row[id];
 		}
-		echo "<br>ids: "; print_r($ids); echo "<br>";
+		//echo "<br>ids: "; print_r($ids); echo "<br>";
 		$options = array();
 		fillGenericArray($table_name, $class_name, $options, $ids); // что будет в случае неудачи?
 		//echo "<br>options: "; print_r($options); echo "<br>";
