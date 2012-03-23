@@ -58,6 +58,7 @@ abstract class AbstractCalculator
 		else {
 			// обработать ошибку кодирования в json
 		}
+		return $jsn;
 	}
 
 	/**

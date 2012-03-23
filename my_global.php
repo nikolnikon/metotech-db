@@ -148,7 +148,7 @@ function calc_heater($params, &$calc_res) {
 	$R = $U / $I;
 	
 	// Расчет допустимой удельной поверхностной мощности
-	$B_EF = $params['B_EF'];
+	$B_EF = $params['B_EF'] * pow(10, 4);
 	$A = $params['A'];
 	if (! isset($B_EF) || ! isset($A)) {
 		return false;
@@ -156,7 +156,7 @@ function calc_heater($params, &$calc_res) {
 	$B_DOP = $B_EF * $A;
 	
 	// Расчет удельного электрического сопротивления
-	$RO_20 = $params['RO_20'];
+	$RO_20 = $params['RO_20'] * pow (10, -6);
 	$K = $params['K'];
 	if (! isset($RO_20) || ! isset($K)) {
 		return false;
@@ -179,7 +179,7 @@ function calc_heater($params, &$calc_res) {
 	return true;
 }
 
-function get_materials_content($param) {
+function get_heater_form_content($param) {
 	if ($param == "material") {
 		$table_name = 'alloys';
 		$class_name = 'Alloy';
@@ -210,13 +210,24 @@ function get_materials_content($param) {
 		//echo "<br>options: "; print_r($options); echo "<br>";
 		foreach ($options as $option) {
 			if ($param == "material") {
-				$query = "SELECT DISTINCT `temp_solid` FROM `metalls`.`heater_surface_power` WHERE `temp_heater` < ".$option->max_heater_temp;
+				// получаем допустимые значения температуры нагревателя 
+				$query = "SELECT DISTINCT `temp_heater` FROM `metalls`.`heater_surface_power` WHERE `temp_heater` <= ".($option->max_heater_temp - 50);
 				$temps = $db->select($query);
+				foreach ($temps as $temp) {
+					$arr[] = $temp['temp_heater'];
+				}
+				$t_h = getCommaSeparatedList($arr);
+				// получаем допустимые значения температуры изделия
+				$query = "SELECT DISTINCT `temp_solid` FROM `metalls`.`heater_surface_power` WHERE `temp_solid` < ".($option->max_heater_temp - 50);
+				$temps = $db->select($query);
+				unset($arr);
 				foreach ($temps as $temp) {
 					$arr[] = $temp['temp_solid'];
 				}
-				$t = getCommaSeparatedList($arr);
-				$html_code .= "<option value=\"".$option->id."\" data-maxtemp=\"".$option->max_heater_temp."\" data-resistivity=\"".$option->resistivity."\" data-temps=\"".$t."\">";
+				$t_s = getCommaSeparatedList($arr);
+				//echo "<br>t_s: ".$t_s."<br>";
+				
+				$html_code .= "<option value=\"".$option->id."\" data-max_temp=\"".$option->max_heater_temp."\" data-resistivity=\"".$option->resistivity."\" data-htemps=\"".$t_h."\" data-stemps=\"".$t_s."\" data-density=\"".$option->density."\">";
 				$html_code .= $option->__toString();
 				$html_code .= "</option>\n";
 				unset($arr);
