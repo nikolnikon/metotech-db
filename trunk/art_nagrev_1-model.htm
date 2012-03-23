@@ -10,7 +10,7 @@
 <link href="style.css" type="text/css" rel="stylesheet">
 <link rel="icon" href="/16x16.png" type="image/x-icon">
 <link rel="shortcut icon" href="/16x16.png" type="image/x-icon">
-<script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?10" charset="windows-1251"></script>
+<!-- <script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?10" charset="windows-1251"></script> -->
 <!--Аккордион меню begin-->
 <script src="libs/jquery/jquery-1.5.1.js"></script>
 <script src="libs/jquery/jquery-ui-1.8.14.custom.js"></script>
@@ -32,8 +32,8 @@ $(function() {
 });
 </script>
 <!--Аккордион меню end-->
-
-<script><!--
+<script src="calc_heater.js"></script>
+<!--  <script>
 $(function() {
 	// заполнение combobox "Материал" и "Размещение"
 	var clbck = function (response, status, xhr) {
@@ -41,12 +41,15 @@ $(function() {
 		    var msg = "Sorry but there was an error: ";
 		    alert(msg + xhr.status + " " + xhr.statusText);
 	  	}
-		/*else if (status == "success") {
-			window.loaded = true;
-		}*/
+		else if (status == "success") {
+			$("select[name = 'material']").change();
+		}
 	};
-	$("[name = 'material']").load("prepare_heater_form.php", {select_name: "material"}, clbck);
-	$("[name = 'placement']").load("prepare_heater_form.php", {select_name: "placement"}, clbck);
+	$("#total_length").hide();
+	$("#total_mass").hide();
+	
+	$("select[name = 'material']").load("prepare_heater_form.php", {select_name: "material"}, clbck);
+	$("select[name = 'placement']").load("prepare_heater_form.php", {select_name: "placement"}, clbck);
 	
 	// обработка выбора однонофазного/трехфазного подключения
 	$("[name = 'pgrid']").change(function() {
@@ -65,7 +68,6 @@ $(function() {
 			.change();
 		}
 		else if (pgrid_type == 1) { // если однофазное подключение
-			//$("p#pgrid_conn").css("display", "none");
 			$("p#pgrid_conn").hide();
 			$("input[name = 'voltage']").val("220");
 		}
@@ -74,19 +76,20 @@ $(function() {
 	
 	// обработка выбора материала нагревателя
 	$("select[name = 'material']").change(function() {
-		var max_temp = $("select[name = 'material'] option:selected").data("maxtemp");
-		var resistivity = $("select[name = 'material'] option:selected").data("resistivity");
-		if (max_temp === undefined) {
-			max_temp = "";
-		}
-		if (resistivity === undefined) {
-			resistivity = "";
-		}
-		$("[name = 'max_temp']").val(max_temp);
-		$("[name = 'resistivity']").val(resistivity);
+		$("select[name = 'temp_solid']").empty();
+		$("select[name = 'temp_heater']").empty();
 		
-		var temps = $("select[name = 'material'] option:selected").data("temps");
-		if (temps !== undefined) {
+		var arr = ["max_temp", "resistivity", "density"];
+		$.each(arr, function(key, par) {
+			var value = $("select[name = 'material'] option:selected").data(par);
+			if (value === undefined) {
+				value = "";
+			}
+			$("[name = '"+par+"']").val(value);
+		});
+		
+		var temps = $("select[name = 'material'] option:selected").data("htemps");
+			if (temps !== undefined) {
 			var arr_temps = temps.split(",");
 			var options;
 			$.each(arr_temps, function(key, val){
@@ -94,37 +97,65 @@ $(function() {
 				options += val;
 				options += "</option>\n";
 			});
-			$("select[name='temp_heating']").empty();
-			$("select[name='temp_heating']").append(options);
+			console.log(options);
+			$("select[name='temp_heater']").append(options);
+			$("select[name='temp_heater']").change();
+		}
+	})
+	.change();
+	
+	// обработка выбора температуры печи (нагревателя)
+	$("select[name='temp_heater']").change(function() {
+		$("select[name='temp_solid']").empty();
+		var temp_heater = $("select[name = 'temp_heater'] option:selected").val();
+		console.log("temp_heater: "+temp_heater);
+		if (temp_heater !== undefined) {
+			var temps = $("select[name = 'material'] option:selected").data("stemps");
+			console.log(temps);
+			if (temps !== undefined) {
+				var arr_temps = temps.split(",");
+				var options;
+				$.each(arr_temps, function(key, val){
+					if (parseInt(val) < parseInt(temp_heater)) {
+						options += "<option value=\"" + val + "\">";
+						options += val;
+						options += "</option>\n";
+					}
+				});
+				console.log(options);
+				$("select[name='temp_solid']").append(options);
+			}	
 		}
 	})
 	.change();
 	
 	// отправка данных на сервер
 	$("form[name='heater_calc']").submit(function() {
-		/*if ($("[name='temp_heating']").val() >= $("[name = 'max_temp']").val()) {
-			alert("Максимальная температура в печи не может быть больше или равна максимальной рабочей температуре нагревателя. \n Выберите другой материал или уменьшите температуру в печи");
-			return false;
-		}*/
+		//$("form[name = heater_calc_res']").empty();
 		var params = $("form[name='heater_calc'] input[name!='pgrid_conn'], form[name='heater_calc'] select[name!='pgrid_conn']").serialize();
 		console.log(params);
-		//$("form[name = 'heater_calc'] input[name = 'diameter']").remove();
-		//$("form[name = 'heater_calc'] input[name = 'length']").remove();
 		$.getJSON("calc_heater.php", params, function(result, textStatus, jqXHR){
-			$("form[name = 'heater_calc'] input[name = 'diameter']").val(result.D);
-			$("form[name = 'heater_calc'] input[name = 'length']").val(result.L);
-			/*html_res = "<p>Диаметр нагревателя, мм <br><input type=\"number\" name=\"diameter\" value=\"";
-			html_res += result.D;
-			html_res += "\" readonly></p> \n <p>Длина нагревателя, м <br><input type=\"number\" name=\"length\" value=\"";
-			html_res += result.L;
-			html_res += "\" readonly></p>";*/
-			// $("form[name = 'heater_calc_res']").empty();
-			// $("form[name='heater_calc']").append(html_res);
+			var pgrid = $("select[name='pgrid'] option:selected").val();
+			console.log("pgrid: "+pgrid+"\n");
+			$("input[name='diameter']").val(result.D);
+			$("input[name='length']").val(result.L);
+			$("input[name='mass']").val(result.M);
+			if (pgrid == 1) {
+				$("#total_length").hide();
+				$("#total_mass").hide();
+			}
+			else if (pgrid == 3) {
+				console.log("i'm in\n");
+				$("#total_length").show();
+				$("#total_mass").show();
+				$("input[name='total_length']").val(result.L * 3);
+				$("input[name='total_mass']").val((result.M * 3).toFixed(1));
+			}
 		});
 		return false;
 	});
 });
-</script>
+</script> -->
 </head>
 
 <body>
@@ -177,29 +208,43 @@ $(function() {
 				</p>
 				<p>Материал нагревателя
 					<br><select name="material" required>
+						<option></option>
 					</select>
 				</p>
 				<p>Максимальная рабочая температура нагревателя, °C
 					<br><input type="number" name="max_temp" value="1200" readonly>
 				</p>
 				<input type="hidden" name="resistivity" value="1.13">
-				<p>Максимальная температура в печи, °C
+				<input type="hidden" name="density" value="8.4">
+				<p>Температура печи, °C
+					<br><select name="temp_heater" required>
+					</select>
+				</p>
+				<p>Температура нагреваемого изделия, °C
+					<br><select name="temp_solid" required>
+					</select>
+				</p>
+				<!--<p>Максимальная температура в печи, °C
 					<br><select name="temp_heating" required>
 					</select>
-					<!-- <br><input type="number" name="temp_heating" required> --></p>
+				</p>
+				-->
 				<p>Размещение нагревателей
 					<br><select name="placement" required>
 					</select>
 				</p>
-				<p><input type="submit" name="calc"></p>
-				<h1>Результаты расчета</h1>
-				Диаметр проволоки, мм
-					<br><input type="number" name="diameter" readonly>
-				<p>Длина проволоки, м
-					<br><input type="number" name="length" readonly>
-				</p>
+				<p><input type="submit" name="calc" value="Рассчитать"></p>
+			</form>
+			<h1>Результаты расчета</h1>
+			<form name="heater_calc_res">
+				<p id="diameter">Диаметр нагревателя, мм: <br><input type="number" name="diameter" readonly></p>
+				<p id="length">Длина нагревателя, м: <br><input type="number" name="length" readonly></p>
+				<p id="mass">Масса нагревателя, кг: <br><input type="number" name="mass" readonly></p>
+				<p id="total_length">Общая длина нагревателей, м: <br><input type="number" name="total_length" readonly></p>
+				<p id="total_mass">Общая масса нагревателей, кг: <br><input type="number" name="total_mass" readonly></p>
 			</form>
 		</div>
+		
 		<p style="height: 24px">&nbsp;</p></td>
 		<td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
 			<tr>
@@ -212,7 +257,7 @@ $(function() {
 			</tr>
 			<tr style="text-align: right; ">
 				<td style="padding-right: 10px;">
-					<script src="http://connect.facebook.net/ru_RU/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/pages/Metotehnika/347420899019" width="230" show_faces="false" stream="false" header="false"></fb:like-box>
+					<!-- <script src="http://connect.facebook.net/ru_RU/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/pages/Metotehnika/347420899019" width="230" show_faces="false" stream="false" header="false"></fb:like-box> -->
 				</td>
 			</tr>
 			<tr>
@@ -226,27 +271,6 @@ $(function() {
 						</td>
 					</tr>
 				</table>
-				<div class="like">
-					<div style="float: left; width: 50%;">
-						<!--Mail.ru-->
-						<a target="_blank" class="mrc__plugin_like_button" href="http://connect.mail.ru/share" rel="{'type' : 'button', 'width' : '150'}">Нравится</a>
-						<script src="http://cdn.connect.mail.ru/js/loader.js" type="text/javascript" charset="UTF-8"></script>
-					</div>
-					<div>
-						<!--ВКонтакте-->
-						<script type="text/javascript">
-							document.write(VK.Share.button(false,{type: "button", text: "Нравится"}));
-						</script>
-					</div>
-					<div style="float: right; width: 39%; margin-top: 3px;">
-						<!--Tweet-->
-						<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="metotech">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-					</div>
-					<div style="width: 57%; margin-top: 3px;">
-						<!--Facebook-->
-						<script src="http://connect.facebook.net/ru_RU/all.js#xfbml=1"></script><fb:like layout="button_count" show_faces="false" width="150" font="verdana"></fb:like>
-					</div>
-				</div>
 				</td>
 			</tr>
 			<!--#include file="menu-top.htm"-->
