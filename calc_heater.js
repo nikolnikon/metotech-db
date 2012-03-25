@@ -3,6 +3,7 @@
  */
 
 $(function() {
+	var loc = window.location.href;
 	// заполнение combobox "Материал" и "Размещение"
 	var clbck = function (response, status, xhr) {
 		if (status == "error") {
@@ -67,7 +68,7 @@ $(function() {
 				options += val;
 				options += "</option>\n";
 			});
-			console.log(options);
+			//console.log(options);
 			$("select[name='temp_heater']").append(options);
 			$("select[name='temp_heater']").change();
 		}
@@ -110,6 +111,7 @@ $(function() {
 	// отправка данных на сервер
 	$("form[name='heater_calc']").submit(function() {
 		//$("form[name = heater_calc_res']").empty();
+		window.location = loc + "#result";
 		var params = $("form[name='heater_calc'] input[name!='pgrid_conn'], form[name='heater_calc'] select[name!='pgrid_conn']").serialize();
 		console.log(params);
 		$.getJSON("calc_heater.php", params, function(result, textStatus, jqXHR){
@@ -131,6 +133,9 @@ $(function() {
 				$("input[name='total_length']").val(result.L * 3);
 				$("input[name='total_mass']").val((result.M * 3).toFixed(1));
 			}
+			console.log(window.location.pathname);
+			console.log(window.location.href);
+			console.log(tmp);
 		});
 		return false;
 	});
