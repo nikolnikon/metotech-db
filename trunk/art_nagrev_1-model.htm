@@ -8,6 +8,9 @@
 <meta name="mrc__share_description" content="Статья &quot;Нагреватели. Методика и примеры расчета&quot; содержит обзор по расчету нагревателей электрических печей. Рассматриваются материалы, используемые для изготовления нагревателей, их свойства, достоинства и недостатки, условия работы (нихром, вольфрам, молибден и др.), описана цель расчета нагревателей, приведены методики, описанные на конкретных примерах. Также статья содержит справочные таблицы и ссылки на ГОСТы, необходимые для проведения расчета нагревателей электрических печей. ">
 <link rel="image_src" href="http://www.metotech.ru/images/articles/art_nagrev_1/logo_nagrev.png">
 <link href="style.css" type="text/css" rel="stylesheet">
+<link href="calc_heater.css" type="text/css" rel="stylesheet">
+<link href='http://fonts.googleapis.com/css?family=Play&subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Cuprum&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 <link rel="icon" href="/16x16.png" type="image/x-icon">
 <link rel="shortcut icon" href="/16x16.png" type="image/x-icon">
 <!-- <script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?10" charset="windows-1251"></script> -->
@@ -33,129 +36,6 @@ $(function() {
 </script>
 <!--Аккордион меню end-->
 <script src="calc_heater.js"></script>
-<!--  <script>
-$(function() {
-	// заполнение combobox "Материал" и "Размещение"
-	var clbck = function (response, status, xhr) {
-		if (status == "error") {
-		    var msg = "Sorry but there was an error: ";
-		    alert(msg + xhr.status + " " + xhr.statusText);
-	  	}
-		else if (status == "success") {
-			$("select[name = 'material']").change();
-		}
-	};
-	$("#total_length").hide();
-	$("#total_mass").hide();
-	
-	$("select[name = 'material']").load("prepare_heater_form.php", {select_name: "material"}, clbck);
-	$("select[name = 'placement']").load("prepare_heater_form.php", {select_name: "placement"}, clbck);
-	
-	// обработка выбора однонофазного/трехфазного подключения
-	$("[name = 'pgrid']").change(function() {
-		var pgrid_type = $("select[name = 'pgrid'] option:selected").val();
-		if (pgrid_type == 3) { // если трехфазное подключение
-			$("p#pgrid_conn").css("display", "block");
-			$("[name = 'pgrid_conn']").change(function() {
-				var conn_type = $("input[name = 'pgrid_conn']:checked").val();
-				if (conn_type == "STAR") {
-					$("input[name = 'voltage']").val("220");
-				}
-				else {
-					$("input[name = 'voltage']").val("380");
-				}
-			})
-			.change();
-		}
-		else if (pgrid_type == 1) { // если однофазное подключение
-			$("p#pgrid_conn").hide();
-			$("input[name = 'voltage']").val("220");
-		}
-	})
-	.change();
-	
-	// обработка выбора материала нагревателя
-	$("select[name = 'material']").change(function() {
-		$("select[name = 'temp_solid']").empty();
-		$("select[name = 'temp_heater']").empty();
-		
-		var arr = ["max_temp", "resistivity", "density"];
-		$.each(arr, function(key, par) {
-			var value = $("select[name = 'material'] option:selected").data(par);
-			if (value === undefined) {
-				value = "";
-			}
-			$("[name = '"+par+"']").val(value);
-		});
-		
-		var temps = $("select[name = 'material'] option:selected").data("htemps");
-			if (temps !== undefined) {
-			var arr_temps = temps.split(",");
-			var options;
-			$.each(arr_temps, function(key, val){
-				options += "<option value=\"" + val + "\">";
-				options += val;
-				options += "</option>\n";
-			});
-			console.log(options);
-			$("select[name='temp_heater']").append(options);
-			$("select[name='temp_heater']").change();
-		}
-	})
-	.change();
-	
-	// обработка выбора температуры печи (нагревателя)
-	$("select[name='temp_heater']").change(function() {
-		$("select[name='temp_solid']").empty();
-		var temp_heater = $("select[name = 'temp_heater'] option:selected").val();
-		console.log("temp_heater: "+temp_heater);
-		if (temp_heater !== undefined) {
-			var temps = $("select[name = 'material'] option:selected").data("stemps");
-			console.log(temps);
-			if (temps !== undefined) {
-				var arr_temps = temps.split(",");
-				var options;
-				$.each(arr_temps, function(key, val){
-					if (parseInt(val) < parseInt(temp_heater)) {
-						options += "<option value=\"" + val + "\">";
-						options += val;
-						options += "</option>\n";
-					}
-				});
-				console.log(options);
-				$("select[name='temp_solid']").append(options);
-			}	
-		}
-	})
-	.change();
-	
-	// отправка данных на сервер
-	$("form[name='heater_calc']").submit(function() {
-		//$("form[name = heater_calc_res']").empty();
-		var params = $("form[name='heater_calc'] input[name!='pgrid_conn'], form[name='heater_calc'] select[name!='pgrid_conn']").serialize();
-		console.log(params);
-		$.getJSON("calc_heater.php", params, function(result, textStatus, jqXHR){
-			var pgrid = $("select[name='pgrid'] option:selected").val();
-			console.log("pgrid: "+pgrid+"\n");
-			$("input[name='diameter']").val(result.D);
-			$("input[name='length']").val(result.L);
-			$("input[name='mass']").val(result.M);
-			if (pgrid == 1) {
-				$("#total_length").hide();
-				$("#total_mass").hide();
-			}
-			else if (pgrid == 3) {
-				console.log("i'm in\n");
-				$("#total_length").show();
-				$("#total_mass").show();
-				$("input[name='total_length']").val(result.L * 3);
-				$("input[name='total_mass']").val((result.M * 3).toFixed(1));
-			}
-		});
-		return false;
-	});
-});
-</script> -->
 </head>
 
 <body>
@@ -194,54 +74,61 @@ $(function() {
 		<div class="art_calc">
 			<h1>Рассчитать нагреватель</h1>
 			<form name="heater_calc">
-				<p>Мощность печи, Вт <br><input type="number" name="power" required></p>
-				<p>Напряжение на концах нагревателя, В <br><input type="number" name="voltage" value="220" readonly required></p>
-				<p>Тип электросети
-					<br><select name="pgrid" required>
-						<option value="1" selected="selected">Однофазная</option>
-						<option value="3">Трехфазная</option>
-					</select>
-				</p>
-				<p id="pgrid_conn" style="display: none;">Тип подключения нагревателей
-					<br><input type="radio" name="pgrid_conn" value="STAR" checked="checked">Звезда
-					<br><input type="radio" name="pgrid_conn" value="TRIANGLE">Треугольник
-				</p>
-				<p>Материал нагревателя
-					<br><select name="material" required>
-						<option></option>
-					</select>
-				</p>
-				<p>Максимальная рабочая температура нагревателя, °C
-					<br><input type="number" name="max_temp" value="1200" readonly>
-				</p>
-				<input type="hidden" name="resistivity" value="1.13">
-				<input type="hidden" name="density" value="8.4">
-				<p>Температура печи, °C
-					<br><select name="temp_heater" required>
-					</select>
-				</p>
-				<p>Температура нагреваемого изделия, °C
-					<br><select name="temp_solid" required>
-					</select>
-				</p>
-				<!--<p>Максимальная температура в печи, °C
-					<br><select name="temp_heating" required>
-					</select>
-				</p>
-				-->
-				<p>Размещение нагревателей
-					<br><select name="placement" required>
-					</select>
-				</p>
-				<p><input type="submit" name="calc" value="Рассчитать"></p>
+				<fieldset>
+					<legend>Параметры электрической печи</legend>
+					<p>Мощность печи, Вт <br><input type="number" name="power" required></p>
+					<p>Напряжение на концах нагревателя, В <br><input type="number" name="voltage" value="220" readonly required></p>
+					<p>Тип электросети
+						<br><select name="pgrid" required>
+							<option value="1" selected="selected">Однофазная</option>
+							<option value="3">Трехфазная</option>
+						</select>
+					</p>
+					<p id="pgrid_conn" style="display: none;">Тип подключения нагревателей
+						<br><input type="radio" name="pgrid_conn" value="STAR" checked="checked" id="star"><label for="star">Звезда</label>
+						<br><input type="radio" name="pgrid_conn" value="TRIANGLE" id="triangle"><label for="star">Треугольник</label>
+					</p>
+					<p>Материал нагревателя
+						<br><select name="material" required>
+							<option></option>
+						</select>
+					</p>
+					<p>Максимальная рабочая температура нагревателя, °C
+						<br><input type="number" name="max_temp" value="1200" readonly>
+					</p>
+					<input type="hidden" name="resistivity" value="1.13">
+					<input type="hidden" name="density" value="8.4">
+					<p>Температура печи, °C
+						<br><select name="temp_heater" required>
+						</select>
+					</p>
+					<p>Температура нагреваемого изделия, °C
+						<br><select name="temp_solid" required>
+						</select>
+					</p>
+					<!--<p>Максимальная температура в печи, °C
+						<br><select name="temp_heating" required>
+						</select>
+					</p>
+					-->
+					<p>Размещение нагревателей
+						<br><select name="placement" required>
+						</select>
+					</p>
+					<!--<p><input type="submit" name="calc" value="Рассчитать"></p>-->
+					<p style="text-align: center;"><button type="submit"><img src="images/heater.png" style="margin-right: 10px;">Рассчитать</button></p>
+				</fieldset>
 			</form>
-			<h1>Результаты расчета</h1>
+			<h1 id="result">Результаты расчета</h1>
 			<form name="heater_calc_res">
-				<p id="diameter">Диаметр нагревателя, мм: <br><input type="number" name="diameter" readonly></p>
-				<p id="length">Длина нагревателя, м: <br><input type="number" name="length" readonly></p>
-				<p id="mass">Масса нагревателя, кг: <br><input type="number" name="mass" readonly></p>
-				<p id="total_length">Общая длина нагревателей, м: <br><input type="number" name="total_length" readonly></p>
-				<p id="total_mass">Общая масса нагревателей, кг: <br><input type="number" name="total_mass" readonly></p>
+				<fieldset>
+					<legend>Параметры нагревателя</legend>
+					<p id="diameter">Диаметр нагревателя, мм: <br><input type="number" name="diameter" readonly></p>
+					<p id="length">Длина нагревателя, м: <br><input type="number" name="length" readonly></p>
+					<p id="mass">Масса нагревателя, кг: <br><input type="number" name="mass" readonly></p>
+					<p id="total_length">Общая длина нагревателей, м: <br><input type="number" name="total_length" readonly></p>
+					<p id="total_mass">Общая масса нагревателей, кг: <br><input type="number" name="total_mass" readonly></p>
+				</fieldset>
 			</form>
 		</div>
 		
