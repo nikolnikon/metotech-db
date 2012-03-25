@@ -19,8 +19,8 @@ $(function() {
 		$("form[name='heater_calc_res'] p").each(function(index) {
 			$(this).hide(is_slow);
 		});
-		$("#result").hide(is_slow);
 		$("form[name='heater_calc_res']").hide(is_slow);
+		$("#result").hide(is_slow);
 	}
 	
 	hide_result("");
