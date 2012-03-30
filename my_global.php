@@ -211,14 +211,14 @@ function get_heater_form_content($param) {
 		foreach ($options as $option) {
 			if ($param == "material") {
 				// получаем допустимые значения температуры нагревателя 
-				$query = "SELECT DISTINCT `temp_heater` FROM `metalls`.`heater_surface_power` WHERE `temp_heater` <= ".($option->max_heater_temp - 50);
+				$query = "SELECT DISTINCT `temp_heater` FROM `metalls`.`heater_surface_power` WHERE `temp_heater` <= ".($option->max_heater_temp);
 				$temps = $db->select($query);
 				foreach ($temps as $temp) {
 					$arr[] = $temp['temp_heater'];
 				}
 				$t_h = getCommaSeparatedList($arr);
 				// получаем допустимые значения температуры изделия
-				$query = "SELECT DISTINCT `temp_solid` FROM `metalls`.`heater_surface_power` WHERE `temp_solid` < ".($option->max_heater_temp - 50);
+				$query = "SELECT DISTINCT `temp_solid` FROM `metalls`.`heater_surface_power` WHERE `temp_solid` < ".($option->max_heater_temp);
 				$temps = $db->select($query);
 				unset($arr);
 				foreach ($temps as $temp) {
