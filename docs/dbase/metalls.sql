@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 26, 2012 at 10:42 AM
+-- Generation Time: Mar 30, 2012 at 06:01 PM
 -- Server version: 5.1.40
 -- PHP Version: 5.3.3
 
@@ -253,6 +253,33 @@ INSERT INTO `heater_surface_power` (`id`, `temp_solid`, `temp_heater`, `surface_
 (146, 1150, 1350, 17.55),
 (147, 1200, 1350, 14.55),
 (148, 1300, 1350, 7.95);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `max_heater_temp`
+--
+
+DROP TABLE IF EXISTS `max_heater_temp`;
+CREATE TABLE IF NOT EXISTS `max_heater_temp` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `alloy_id` int(11) NOT NULL COMMENT 'Ссылка на сплав нагревателя',
+  `diameter` double NOT NULL COMMENT 'Диаметр проволоки, мм',
+  `max_temp` double NOT NULL COMMENT 'Максимальная рабочая температура нагревателя для соответствующего диаметра, °С',
+  PRIMARY KEY (`id`),
+  KEY `max_heater_temp_alloy_fk` (`alloy_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Содержит значения максимальных рабочих температур нагревател' AUTO_INCREMENT=6 ;
+
+--
+-- Dumping data for table `max_heater_temp`
+--
+
+INSERT INTO `max_heater_temp` (`id`, `alloy_id`, `diameter`, `max_temp`) VALUES
+(1, 1, 0.2, 950),
+(2, 1, 0.4, 1000),
+(3, 1, 1, 1100),
+(4, 1, 3, 1150),
+(5, 1, 6, 1200);
 
 -- --------------------------------------------------------
 
@@ -519,6 +546,12 @@ INSERT INTO `var_resistent_coef` (`id`, `alloy_id`, `temp`, `correction_coef`) V
 ALTER TABLE `general_price`
   ADD CONSTRAINT `alloy_fk` FOREIGN KEY (`alloy_id`) REFERENCES `alloys` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `product_fk` FOREIGN KEY (`product_id`) REFERENCES `production` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `max_heater_temp`
+--
+ALTER TABLE `max_heater_temp`
+  ADD CONSTRAINT `max_heater_temp_alloy_fk` FOREIGN KEY (`alloy_id`) REFERENCES `alloys` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `prices_mapping`

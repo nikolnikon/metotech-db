@@ -90,12 +90,10 @@ $(function() {
 							<option></option>
 						</select>
 					</p>
-					<p>Максимальная рабочая температура нагревателя, °C
-						<br><input type="number" name="max_temp" value="1200" readonly>
-					</p>
-					<input type="hidden" name="resistivity" value="1.13">
-					<input type="hidden" name="density" value="8.4">
-					<p>Температура печи, °C
+					<input type="hidden" name="max_temp">
+					<input type="hidden" name="resistivity">
+					<input type="hidden" name="density">
+					<p>Температура нагревателя, °C
 						<br><select name="temp_heater" required>
 						</select>
 					</p>
@@ -108,7 +106,7 @@ $(function() {
 						</select>
 					</p>
 					-->
-					<p>Размещение нагревателей
+					<p>Тип и размещение нагревателей
 						<br><select name="placement" required>
 						</select>
 					</p>
