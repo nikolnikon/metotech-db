@@ -40,9 +40,11 @@ abstract class AbstractCalculator
 	 * @param array $result Результат вычислений
 	 * @return boolean Возвращает успех или неудачу
 	 */
-	public function calc() {
+	public function calc($need_handle_result = true) {
 		$success = call_user_func_array($this->_calcFuncName, array($this->_parameters, &$this->_result));
-		$this->_handleCalc();
+		if ($need_handle_result) {
+			$this->_handleCalc();	
+		}
 		//echo '<br><br> result: '; print_r($result); echo '<br><br>';
 	}
 	
