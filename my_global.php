@@ -147,14 +147,6 @@ function calc_heater($params, &$calc_res) {
 	$I = $P / $U;
 	$R = $U / $I;
 	
-	// Расчет допустимой удельной поверхностной мощности
-	$B_EF = $params['B_EF'] * pow(10, 4);
-	$A = $params['A'];
-	if (! isset($B_EF) || ! isset($A)) {
-		return false;
-	}
-	$B_DOP = $B_EF * $A;
-	
 	// Расчет удельного электрического сопротивления
 	$RO_20 = $params['RO_20'] * pow (10, -6);
 	$K = $params['K'];
@@ -163,13 +155,34 @@ function calc_heater($params, &$calc_res) {
 	}
 	$RO_T = $RO_20 * $K;
 	
-	// Расчет диаметра и длины
-	$exp_1 = 4 * $RO_T * pow($P, 2);
-	//echo '<br><br> exp_1: '.$exp_1.'<br><br>';
-	$exp_2 = pow(M_PI, 2) * pow($U, 2) * $B_DOP;
-	//echo '<br><br> exp_2: '.$exp_2.'<br><br>';
-	$D = pow($exp_1/$exp_2, 1/3);
+	// Расчет допустимой удельной поверхностной мощности
+	if (! isset($params['D'])) {
+		$B_EF = $params['B_EF'] * pow(10, 4);
+		$A = $params['A'];
+		if (! isset($B_EF) || ! isset($A)) {
+			return false;
+		}
+		$B_DOP = $B_EF * $A;
+	}
+	else {
+		$exp_1 = 4 * $RO_T * pow($P, 2);
+		$exp_2 = pow($params['D'], 3) * pow(M_PI, 2) * pow($U, 2);
+		$B_DOP = $exp_1 / $exp_2;
+	}
 	
+	// Расчет диаметра
+	if (! isset($params['D'])) {
+		$exp_1 = 4 * $RO_T * pow($P, 2);
+		//echo '<br><br> exp_1: '.$exp_1.'<br><br>';
+		$exp_2 = pow(M_PI, 2) * pow($U, 2) * $B_DOP;
+		//echo '<br><br> exp_2: '.$exp_2.'<br><br>';
+		$D = pow($exp_1/$exp_2, 1/3);
+	}
+	else {
+		$D = $params['D'];
+	}
+	
+	// Расчет длины
 	$exp_1 = $P * pow($U, 2);
 	$exp_2 = 4 * M_PI * $RO_T * pow($B_DOP, 2);
 	$L = pow($exp_1/$exp_2, 1/3);
