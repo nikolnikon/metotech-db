@@ -88,53 +88,74 @@ class HeaterCalculator extends AbstractCalculator
 			
 			echo "d: ".$d."; t: ".$t."\n";
 			
-			$query = "SELECT MAX(`diameter`), MAX(`max_temp`) FROM `metalls`.`max_heater_temp` WHERE `alloy_id`=".$this->_parameters['ALLOY']." AND `diameter` <= $d";
-			echo "query_low: ".$query."\n";
+			$query = "SELECT MIN(`diameter`), MIN(`max_temp`) FROM `metalls`.`max_heater_temp` WHERE `alloy_id`=".$this->_parameters['ALLOY']." AND `max_temp` >= $t";
+			echo "query_high: ".$query."\n";
 			unset($res);
 			$res = $db->select($query);
 			if (! isset($res)) {
 				;// неудачная попытка загрузки... в БД нет соответствующих данных
 			}
-			$t_low = $res[0]['MAX(`max_temp`)'];
-			$d_low = $res[0]['MAX(`diameter`)'];
-			echo "d_low: ".$d_low."; t_low: ".$t_low."\n";
-			if ($t <= $t_low) {
-				;// расчет верный
+			$t_high = $res[0]['MIN(`max_temp`)'];
+			$d_high = $res[0]['MIN(`diameter`)'];
+			echo "d_high: ".$d_high."; t_high: ".$t_high."\n";
+			
+			if ($d >= $d_high) {
+				echo '$d >= $d_high\n';
+				$this->_result['D'] = $d; // расчет верный
 			}
 			else {
-				$query = "SELECT MIN(`diameter`), MIN(`max_temp`) FROM `metalls`.`max_heater_temp` WHERE `alloy_id`=".$this->_parameters['ALLOY']." AND `diameter` > $d";
-				echo "query_high: ".$query."\n";
+				$query = "SELECT MAX(`diameter`), MAX(`max_temp`) FROM `metalls`.`max_heater_temp` WHERE `alloy_id`=".$this->_parameters['ALLOY']." AND `max_temp` < $t";
+				echo "query_low: ".$query."\n";
 				unset($res);
 				$res = $db->select($query);
 				if (! isset($res)) {
 					;// неудачная попытка загрузки... в БД нет соответствующих данных
 				}
-				$t_high = $res[0]['MIN(`max_temp`)'];
-				$d_high = $res[0]['MIN(`diameter`)'];
-				echo "d_high: ".$d_high."; t_high: ".$t_high."\n";
-				if ($t <= ($t_low/2 + $t_high/2)) { // выбираем min стандартный диаметр больший $d_low
-					$query = "SELECT MIN(`standart_diameter`) FROM `metalls`.`standart_nom_diameters` WHERE `standart_diameter` > ".mysql_real_escape_string($d_low);
-					unset($res);
-					$res = $db->select($query);
-					if (! isset($res)) {
-						;// неудачная попытка загрузки... в БД нет соответствующих данных
+				$t_low = $res[0]['MAX(`max_temp`)'];
+				$d_low = $res[0]['MAX(`diameter`)'];
+				echo "d_low: ".$d_low."; t_low: ".$t_low."\n";
+				
+				if ($d > $d_low && $d < $d_high) {
+					echo '$d > $d_low && $d < $d_high \n';
+					if ($t <= 0.5 * ($t_low + $t_high)) {
+						$this->_result['D'] = $d; // расчет верный
 					}
-					$d = $res[0]['MIN(`standart_diameter`)'];
-					$this->_parameters['D'] = $d;
-					$this->calc(false);
+					else {
+						$d = $d_high;
+						$this->_parameters['D'] = $d * pow(10, -3);
+						$this->calc(false);
+						$this->_result['D'] *= pow(10, 3);
+					}
 				}
-				else { // выбираем $d_high
-					$d = $d_high;
-					$this->_parameters['D'] = $d * pow(10, -3);
-					$this->calc(false);
+				elseif ($d <= $d_low) {
+					echo '$d <= $d_low \n';
+					if ($t <= 0.5 * ($t_low + $t_high)) {
+						echo '$t <= 0.5 * ($t_low + $t_high) \n';
+						$query = "SELECT MIN(`standart_diameter`) FROM `metalls`.`standart_nom_diameters` WHERE `standart_diameter` > ".mysql_real_escape_string($d_low)." AND `standart_diameter` < ".mysql_real_escape_string($d_high);
+						unset($res);
+						$res = $db->select($query);
+						if (! isset($res)) {
+							;// неудачная попытка загрузки... в БД нет соответствующих данных
+						}
+						$d = $res[0]['MIN(`standart_diameter`)'];
+						$this->_parameters['D'] = $d * pow(10, -3);
+						$this->calc(false);
+						$this->_result['D'] *= pow(10, 3);
+					}
+					else {
+						echo '$t > 0.5 * ($t_low + $t_high) \n';
+						$d = $d_high;
+						$this->_parameters['D'] = $d * pow(10, -3);
+						$this->calc(false);
+						$this->_result['D'] *= pow(10, 3);
+					}
 				}
 			}
 			
-			$this->_result['D'] = $d;
 			$this->_result['L'] = ceil($this->_result['L']);
 			$this->_result['M'] = $this->_result['L'] * $this->_parameters['DENS'] * pow(10, 3) * M_PI * pow($this->_result['D'], 2) * 0.25 * pow(10, -6);
 			$this->_result['M'] = round($this->_result['M'], 1);
-			//print_r($this->_result);
+			//echo "result_array: "; print_r($this->_result); echo "\n";
 		} catch(Exception $e) {
 			// обработка исключений от БД
 		}
