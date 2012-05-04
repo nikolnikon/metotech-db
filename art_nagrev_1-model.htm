@@ -74,7 +74,6 @@ $(function() {
 				<fieldset>
 					<legend>Параметры электрической печи</legend>
 					<p>Мощность печи, Вт <br><input type="number" name="power" required></p>
-					<p>Напряжение на концах нагревателя, В <br><input type="number" name="voltage" value="220" readonly required></p>
 					<p>Тип электросети
 						<br><select name="pgrid" required>
 							<option value="1" selected="selected">Однофазная</option>
@@ -85,6 +84,7 @@ $(function() {
 						<br><input type="radio" name="pgrid_conn" value="STAR" checked="checked" id="star"><label for="star">Звезда</label>
 						<br><input type="radio" name="pgrid_conn" value="TRIANGLE" id="triangle"><label for="triangle">Треугольник</label>
 					</p>
+					<p>Напряжение на концах нагревателя, В <br><input type="number" name="voltage" value="220" readonly required></p>
 					<p>Материал нагревателя
 						<br><select name="material" required>
 							<option></option>
@@ -101,11 +101,6 @@ $(function() {
 						<br><select name="temp_solid" required>
 						</select>
 					</p>
-					<!--<p>Максимальная температура в печи, °C
-						<br><select name="temp_heating" required>
-						</select>
-					</p>
-					-->
 					<p>Тип и размещение нагревателей
 						<br><select name="placement" required>
 						</select>
@@ -118,11 +113,22 @@ $(function() {
 			<form name="heater_calc_res">
 				<fieldset>
 					<legend>Параметры нагревателя</legend>
-					<p id="diameter">Диаметр нагревателя, мм: <br><input type="number" name="diameter" readonly></p>
-					<p id="length">Длина нагревателя, м: <br><input type="number" name="length" readonly></p>
-					<p id="mass">Масса нагревателя, кг: <br><input type="number" name="mass" readonly></p>
-					<p id="total_length">Общая длина нагревателей, м: <br><input type="number" name="total_length" readonly></p>
-					<p id="total_mass">Общая масса нагревателей, кг: <br><input type="number" name="total_mass" readonly></p>
+					<div>
+						<p id="diameter">Диаметр нагревателя, мм <br><input type="number" name="diameter" readonly></p>
+						<p id="length">Длина нагревателя, м <br><input type="number" name="length" readonly></p>
+						<p id="mass">Масса нагревателя, кг <br><input type="number" name="mass" readonly></p>
+						<p id="total_length">Общая длина нагревателей, м <br><input type="number" name="total_length" readonly></p>
+						<p id="total_mass">Общая масса нагревателей, кг <br><input type="number" name="total_mass" readonly></p>
+					</div>
+					<div id="total_note">
+						Для промышленной сети трехфазного тока к каждой фазе подключается по нагревателю.
+						<ul>
+							<li><b><i>Длина нагревателя</i></b><br>длина нагревателя, подключенного к одной фазе.</li>
+							<li><b><i>Масса нагревателя</i></b><br>масса нагревателя, подключенного к одной фазе.</li>
+							<li><b><i>Общая длина нагревателей</i></b><br>суммарная длина трех нагревателей.</li>
+							<li><b><i>Общая масса нагревателей</i></b><br>суммарная масса трех нагревателей.</li>
+						</ul>
+					</div>
 				</fieldset>
 			</form>
 		</div>

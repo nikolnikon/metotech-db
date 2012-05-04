@@ -132,10 +132,12 @@ $(function() {
 			if (pgrid == 1) {
 				$("#total_length").hide("slow");
 				$("#total_mass").hide("slow");
+				$("#total_note").hide("slow");
 			}
 			else if (pgrid == 3) {
 				$("#total_length").show("slow");
 				$("#total_mass").show("slow");
+				$("#total_note").show("slow");
 				$("input[name='total_length']").val(result.L * 3);
 				$("input[name='total_mass']").val((result.M * 3).toFixed(1));
 			}
