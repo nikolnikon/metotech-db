@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 30, 2012 at 06:01 PM
+-- Generation Time: May 05, 2012 at 12:24 AM
 -- Server version: 5.1.40
 -- PHP Version: 5.3.3
 
@@ -25,15 +25,13 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Table structure for table `alloys`
 --
 
-DROP TABLE IF EXISTS `alloys`;
 CREATE TABLE IF NOT EXISTS `alloys` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `alloy_name` varchar(45) CHARACTER SET cp1251 COLLATE cp1251_general_cs NOT NULL COMMENT 'Название сплава (металла)',
-  `grade` varchar(45) CHARACTER SET cp1251 COLLATE cp1251_general_cs NOT NULL COMMENT 'Марка сплава',
+  `alloy_name` varchar(45) NOT NULL COMMENT 'Название сплава (металла)',
+  `grade` varchar(45) NOT NULL COMMENT 'Марка сплава',
   `density` double DEFAULT NULL COMMENT 'Плотность',
   `resistivity` double DEFAULT NULL COMMENT 'Удельное электрическое сопротивление сплава, мкОм*м (номинальное значение по ГОСТ 12766.1-90). Максимальное среди значений для разных диаметров.',
   `heater` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Указывает, использовать ли сплав для расчета нагревателей',
-  `max_heater_temp` double DEFAULT NULL COMMENT 'Максимальная рабочая температура нагревателя (по ГОСТ 12766.1-90). Максимальное среди значений для разных диаметров.',
   PRIMARY KEY (`id`),
   UNIQUE KEY `grade_UNIQUE` (`grade`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Таблица, содержащая названия и марки сплавов, свойства.' AUTO_INCREMENT=9 ;
@@ -42,15 +40,15 @@ CREATE TABLE IF NOT EXISTS `alloys` (
 -- Dumping data for table `alloys`
 --
 
-INSERT INTO `alloys` (`id`, `alloy_name`, `grade`, `density`, `resistivity`, `heater`, `max_heater_temp`) VALUES
-(1, 'Нихром', 'Х20Н80', 8.4, 1.13, 1, 1200),
-(2, 'Нихром', 'Х15Н60', 8.4, 1.12, 1, 1125),
-(3, 'Вольфрам', 'ВА', 13, NULL, 0, NULL),
-(4, 'Титан', 'ВТ1-0', 10.6, NULL, 0, NULL),
-(5, 'Никель', 'Н1У', 8.9, NULL, 0, NULL),
-(6, 'Никель', 'НПА1', 8.9, NULL, 0, NULL),
-(7, 'Никель', 'НП2', 8.9, NULL, 0, NULL),
-(8, 'Фехраль', 'Х23Ю5Т', 7.21, 1.39, 1, 1400);
+INSERT INTO `alloys` (`id`, `alloy_name`, `grade`, `density`, `resistivity`, `heater`) VALUES
+(1, 'Нихром', 'Х20Н80', 8.4, 1.13, 1),
+(2, 'Нихром', 'Х15Н60', 8.4, 1.12, 1),
+(3, 'Вольфрам', 'ВА', 13, NULL, 0),
+(4, 'Титан', 'ВТ1-0', 10.6, NULL, 0),
+(5, 'Никель', 'Н1У', 8.9, NULL, 0),
+(6, 'Никель', 'НПА1', 8.9, NULL, 0),
+(7, 'Никель', 'НП2', 8.9, NULL, 0),
+(8, 'Фехраль', 'Х23Ю5Т', 7.21, 1.39, 1);
 
 -- --------------------------------------------------------
 
@@ -58,7 +56,6 @@ INSERT INTO `alloys` (`id`, `alloy_name`, `grade`, `density`, `resistivity`, `he
 -- Table structure for table `general_price`
 --
 
-DROP TABLE IF EXISTS `general_price`;
 CREATE TABLE IF NOT EXISTS `general_price` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `alloy_id` int(11) NOT NULL COMMENT 'Ссылка на таблицу alloys. Содержит название и марку сплава.',
@@ -91,7 +88,6 @@ INSERT INTO `general_price` (`id`, `alloy_id`, `product_id`, `quantity`, `mass`,
 -- Table structure for table `heater_surface_power`
 --
 
-DROP TABLE IF EXISTS `heater_surface_power`;
 CREATE TABLE IF NOT EXISTS `heater_surface_power` (
   `id` double NOT NULL AUTO_INCREMENT,
   `temp_solid` double NOT NULL COMMENT 'Температура нагреваемого тела (тепловоспринимающей поверхности), °С',
@@ -260,7 +256,6 @@ INSERT INTO `heater_surface_power` (`id`, `temp_solid`, `temp_heater`, `surface_
 -- Table structure for table `max_heater_temp`
 --
 
-DROP TABLE IF EXISTS `max_heater_temp`;
 CREATE TABLE IF NOT EXISTS `max_heater_temp` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `alloy_id` int(11) NOT NULL COMMENT 'Ссылка на сплав нагревателя',
@@ -268,7 +263,7 @@ CREATE TABLE IF NOT EXISTS `max_heater_temp` (
   `max_temp` double NOT NULL COMMENT 'Максимальная рабочая температура нагревателя для соответствующего диаметра, °С',
   PRIMARY KEY (`id`),
   KEY `max_heater_temp_alloy_fk` (`alloy_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Содержит значения максимальных рабочих температур нагревател' AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Содержит значения максимальных рабочих температур нагревател' AUTO_INCREMENT=11 ;
 
 --
 -- Dumping data for table `max_heater_temp`
@@ -279,7 +274,12 @@ INSERT INTO `max_heater_temp` (`id`, `alloy_id`, `diameter`, `max_temp`) VALUES
 (2, 1, 0.4, 1000),
 (3, 1, 1, 1100),
 (4, 1, 3, 1150),
-(5, 1, 6, 1200);
+(5, 1, 6, 1200),
+(6, 2, 0.2, 900),
+(7, 2, 0.4, 950),
+(8, 2, 1, 1000),
+(9, 2, 3, 1075),
+(10, 2, 6, 1125);
 
 -- --------------------------------------------------------
 
@@ -287,7 +287,6 @@ INSERT INTO `max_heater_temp` (`id`, `alloy_id`, `diameter`, `max_temp`) VALUES
 -- Table structure for table `prices_mapping`
 --
 
-DROP TABLE IF EXISTS `prices_mapping`;
 CREATE TABLE IF NOT EXISTS `prices_mapping` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sprice_id` int(11) NOT NULL COMMENT 'Ссылка на конкретный прайс-лист',
@@ -315,7 +314,6 @@ INSERT INTO `prices_mapping` (`id`, `sprice_id`, `gprice_id`, `order`) VALUES
 -- Table structure for table `production`
 --
 
-DROP TABLE IF EXISTS `production`;
 CREATE TABLE IF NOT EXISTS `production` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `prod_name` varchar(45) NOT NULL COMMENT 'Название продукции (проволока, лента и т.д.)',
@@ -350,7 +348,6 @@ INSERT INTO `production` (`id`, `prod_name`, `diameter`, `length`, `width`, `thi
 -- Table structure for table `rad_eff_coef`
 --
 
-DROP TABLE IF EXISTS `rad_eff_coef`;
 CREATE TABLE IF NOT EXISTS `rad_eff_coef` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `heater_placement` text NOT NULL COMMENT 'Размещение нагревателей',
@@ -364,11 +361,9 @@ CREATE TABLE IF NOT EXISTS `rad_eff_coef` (
 --
 
 INSERT INTO `rad_eff_coef` (`id`, `heater_placement`, `min_coef`, `max_coef`) VALUES
-(1, 'Проволочные спирали, полузакрытые в пазах футеровки', 0.16, 0.24),
+(1, 'Проволочные спирали полузакрытые', 0.16, 0.24),
 (2, 'Проволочные спирали на полочках в трубках', 0.3, 0.36),
-(3, 'Проволочные зигзагообразные (стержневые) нагреватели', 0.6, 0.72),
-(4, 'Ленточные зигзагообразные нагреватели', 0.38, 0.44),
-(5, 'Ленточные профилированные (ободовые) нагреватели', 0.56, 0.7);
+(3, 'Проволочные зигзагообразные нагреватели', 0.6, 0.72);
 
 -- --------------------------------------------------------
 
@@ -376,7 +371,6 @@ INSERT INTO `rad_eff_coef` (`id`, `heater_placement`, `min_coef`, `max_coef`) VA
 -- Table structure for table `special_prices`
 --
 
-DROP TABLE IF EXISTS `special_prices`;
 CREATE TABLE IF NOT EXISTS `special_prices` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `price_name` varchar(45) NOT NULL COMMENT 'Имя прайс-листа. Например, nihrom-price, volfram-price.',
@@ -400,7 +394,6 @@ INSERT INTO `special_prices` (`id`, `price_name`) VALUES
 -- Table structure for table `standart_nom_diameters`
 --
 
-DROP TABLE IF EXISTS `standart_nom_diameters`;
 CREATE TABLE IF NOT EXISTS `standart_nom_diameters` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `standart_diameter` double NOT NULL COMMENT 'Стандартный диаметр, мм',
@@ -495,7 +488,6 @@ INSERT INTO `standart_nom_diameters` (`id`, `standart_diameter`) VALUES
 -- Table structure for table `var_resistent_coef`
 --
 
-DROP TABLE IF EXISTS `var_resistent_coef`;
 CREATE TABLE IF NOT EXISTS `var_resistent_coef` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `alloy_id` int(11) NOT NULL COMMENT 'Ссылка на сплав',
