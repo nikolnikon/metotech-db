@@ -86,10 +86,10 @@ class HeaterCalculator extends AbstractCalculator
 			$this->_result['D_CALC'] = $d;
 			$this->_result['L_CALC'] = ceil($this->_result['L']);
 			
-			echo "d: ".$d."; t: ".$t."\n";
+			//echo "d: ".$d."; t: ".$t."\n";
 			
 			$query = "SELECT MIN(`diameter`), MIN(`max_temp`) FROM `metalls`.`max_heater_temp` WHERE `alloy_id`=".$this->_parameters['ALLOY']." AND `max_temp` >= $t";
-			echo "query_high: ".$query."\n";
+			//echo "query_high: ".$query."\n";
 			unset($res);
 			$res = $db->select($query);
 			if (! isset($res)) {
@@ -97,15 +97,15 @@ class HeaterCalculator extends AbstractCalculator
 			}
 			$t_high = $res[0]['MIN(`max_temp`)'];
 			$d_high = $res[0]['MIN(`diameter`)'];
-			echo "d_high: ".$d_high."; t_high: ".$t_high."\n";
+			//echo "d_high: ".$d_high."; t_high: ".$t_high."\n";
 			
 			if ($d >= $d_high) {
-				echo '$d >= $d_high\n';
+				//echo '$d >= $d_high\n';
 				$this->_result['D'] = $d; // расчет верный
 			}
 			else {
 				$query = "SELECT MAX(`diameter`), MAX(`max_temp`) FROM `metalls`.`max_heater_temp` WHERE `alloy_id`=".$this->_parameters['ALLOY']." AND `max_temp` < $t";
-				echo "query_low: ".$query."\n";
+				//echo "query_low: ".$query."\n";
 				unset($res);
 				$res = $db->select($query);
 				if (! isset($res)) {
@@ -113,10 +113,10 @@ class HeaterCalculator extends AbstractCalculator
 				}
 				$t_low = $res[0]['MAX(`max_temp`)'];
 				$d_low = $res[0]['MAX(`diameter`)'];
-				echo "d_low: ".$d_low."; t_low: ".$t_low."\n";
+				//echo "d_low: ".$d_low."; t_low: ".$t_low."\n";
 				
 				if ($d > $d_low && $d < $d_high) {
-					echo '$d > $d_low && $d < $d_high \n';
+					//echo '$d > $d_low && $d < $d_high \n';
 					if ($t <= 0.5 * ($t_low + $t_high)) {
 						$this->_result['D'] = $d; // расчет верный
 					}
@@ -130,7 +130,7 @@ class HeaterCalculator extends AbstractCalculator
 				elseif ($d <= $d_low) {
 					echo '$d <= $d_low \n';
 					if ($t <= 0.5 * ($t_low + $t_high)) {
-						echo '$t <= 0.5 * ($t_low + $t_high) \n';
+						//echo '$t <= 0.5 * ($t_low + $t_high) \n';
 						$query = "SELECT MIN(`standart_diameter`) FROM `metalls`.`standart_nom_diameters` WHERE `standart_diameter` > ".mysql_real_escape_string($d_low)." AND `standart_diameter` < ".mysql_real_escape_string($d_high);
 						unset($res);
 						$res = $db->select($query);
@@ -143,7 +143,7 @@ class HeaterCalculator extends AbstractCalculator
 						$this->_result['D'] *= pow(10, 3);
 					}
 					else {
-						echo '$t > 0.5 * ($t_low + $t_high) \n';
+						//echo '$t > 0.5 * ($t_low + $t_high) \n';
 						$d = $d_high;
 						$this->_parameters['D'] = $d * pow(10, -3);
 						$this->calc(false);
