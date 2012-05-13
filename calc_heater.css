@@ -18,7 +18,7 @@ div.art_calc:hover {
     box-shadow: 0 0 5px 1px rgba(191, 0, 0, 1);
 }
 
-div.art_calc h1 {
+div.art_calc h1, div#error h3 {
 	color: #bf0000;
 	font-family: 'Cuprum', Verdana, sans-serif;
 	font-size: 30px;
@@ -38,4 +38,16 @@ div.art_calc button {
 	font-family: 'Play', Verdana, sans-serif;
 	height: 50px;
 	width: 250px;
+}
+
+div#error {
+	border: 1px solid red;
+	bacground-color: #ffd9d9;
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
+	border-radius: 20px;
+}
+
+div#error p {
+	text-align: center;
 }

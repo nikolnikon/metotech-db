@@ -44,7 +44,7 @@ class GenericObjectCollection
 	public function populateObjectArray() {
 		if ($this->_itemsCount > 0) {
 			$query = "SELECT * FROM `".$this->_db->getDBName()."`.`$this->_tableName` WHERE `id` IN (".$this->_getCommaSeparatedIdList().")";
-			//echo $query."<br>";
+			//echo "query: ".$query."\n";
 			try {
 				$res = $this->_db->select($query);
 				foreach ($res as $row) {

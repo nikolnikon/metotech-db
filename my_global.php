@@ -193,6 +193,8 @@ function calc_heater($params, &$calc_res) {
 }
 
 function get_heater_form_content($param) {
+	/*header("HTTP/1.0 500 Internal Server Error", true, 500);
+	print json_encode(array("status"=>"error", "message"=>"it's very bad!"));*/
 	if ($param == "material") {
 		$table_name = 'alloys';
 		$class_name = 'Alloy';
@@ -208,7 +210,7 @@ function get_heater_form_content($param) {
 	try {
 		$db = MySQLDBase::instance();
 	} catch (Exception $e) {
-		print $e->getMessage();
+		print json_encode(array("status"=>"db_error", "error_header"=>"Ошибка БД", "error_message"=>"Запрос к БД не может быть выполнен. Повторите попытку расчета позже"));
 		// обработка исключения
 	};
 	$query = getFilterQuery($table_name, $selected_fields, $conds);
@@ -223,15 +225,23 @@ function get_heater_form_content($param) {
 		//echo "<br>options: "; print_r($options); echo "<br>";
 		foreach ($options as $option) {
 			if ($param == "material") {
+				// получаем максимальную рабочую температуру нагревателя (наибольшее значение)
+				$query = "SELECT MAX(`max_temp`) FROM `max_heater_temp` WHERE `alloy_id` = ".mysql_real_escape_string($option->id);
+				$res = $db->select($query);
+				//echo "res: "; print_r($res); echo "\n";
+				if (empty($res[0]['MAX(`max_temp`)'])) { // если в БД нет максимальной температуры для данного сплава, то не включаем его в список доступных сплавов
+					continue;
+				}
+				$max_heater_temp = $res[0]['MAX(`max_temp`)'];
 				// получаем допустимые значения температуры нагревателя 
-				$query = "SELECT DISTINCT `temp_heater` FROM `metalls`.`heater_surface_power` WHERE `temp_heater` <= ".($option->max_heater_temp);
+				$query = "SELECT DISTINCT `temp_heater` FROM `metalls`.`heater_surface_power` WHERE `temp_heater` <= ".mysql_real_escape_string($max_heater_temp);
 				$temps = $db->select($query);
 				foreach ($temps as $temp) {
 					$arr[] = $temp['temp_heater'];
 				}
 				$t_h = getCommaSeparatedList($arr);
 				// получаем допустимые значения температуры изделия
-				$query = "SELECT DISTINCT `temp_solid` FROM `metalls`.`heater_surface_power` WHERE `temp_solid` < ".($option->max_heater_temp);
+				$query = "SELECT DISTINCT `temp_solid` FROM `metalls`.`heater_surface_power` WHERE `temp_solid` < ".mysql_real_escape_string($max_heater_temp);
 				$temps = $db->select($query);
 				unset($arr);
 				foreach ($temps as $temp) {
@@ -254,8 +264,7 @@ function get_heater_form_content($param) {
 		}
 		print $html_code;
 	} catch (Exception $e) {
-		// обработка исключения
+		print json_encode(array("status"=>"db_error", "error_header"=>"Ошибка БД", "error_message"=>"Запрос к БД не может быть выполнен. Повторите попытку расчета позже"));
 	}
 }
-
 ?>

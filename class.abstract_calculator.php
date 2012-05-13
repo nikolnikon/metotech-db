@@ -3,8 +3,7 @@
 /**
  * Абстрактный класс, который является родителем для калькуляторов
  * @author nikolnikon
- * @version 1.0
- * @created 07-���-2012 16:28:05
+ * @created 07-04-2012 16:28:05
  */
 abstract class AbstractCalculator
 {
@@ -18,6 +17,21 @@ abstract class AbstractCalculator
 	 * @var array
 	 */
 	protected $_result;
+	/**
+	 * Содержит информацию о результате вычислений
+	 * @var boolean $_success
+	 */
+	protected $_success;
+	/**
+	 * Содержит код ошибки, которая возникла в результате расчета
+	 * @var integer $_errorCode
+	 */
+	protected $_errorCode;
+	/**
+	 * Содержит сообщение об ошибке, которая возникла в результате расчета
+	 * @var string $_errorMsg
+	 */
+	protected $_errorMsg;
 	/**
 	 * Имя функции, которая выполняет вычисления
 	 * @var array $_calcFuncName
@@ -36,14 +50,14 @@ abstract class AbstractCalculator
 	
 	/**
 	 * Выполняет вычисления, используя parameters и возвращает результат в result
-	 * @param array $parameters Параметры, необходимые для вычислений
-	 * @param array $result Результат вычислений
+	 * @param boolean $need_handle_result Говорит, надо ли дополнительно обрабатывать результаты вычислений
 	 * @return boolean Возвращает успех или неудачу
 	 */
 	public function calc($need_handle_result = true) {
-		$success = call_user_func_array($this->_calcFuncName, array($this->_parameters, &$this->_result));
+		$this->_success = call_user_func_array($this->_calcFuncName, array($this->_parameters, &$this->_result));
+		$this->_errorCode = CALCERROR;
 		if ($need_handle_result) {
-			$this->_handleCalc();	
+			$this->_success = $this->_handleCalc();	
 		}
 		//echo '<br><br> result: '; print_r($result); echo '<br><br>';
 	}
@@ -52,16 +66,7 @@ abstract class AbstractCalculator
 	 * Возвращает результаты вычислений в виде json-строки
 	 * @return sting Результат вычислений в виде json-строки
 	 */
-	public function getJSONResult() {
-		$jsn = json_encode($this->_result);
-		if (json_last_error() == JSON_ERROR_NONE) {
-			return $jsn;
-		}
-		else {
-			// обработать ошибку кодирования в json
-		}
-		return $jsn;
-	}
+	public abstract function getJSONResult();
 
 	/**
 	 * Загружает параметры, необходимые для вычислений
@@ -74,5 +79,17 @@ abstract class AbstractCalculator
 	 * Выполняет необходимые действия после выполнения расчетов
 	 */
 	protected abstract function _handleCalc();
+}
+
+/**
+ * Содержит коды ошибок, возникающих в калькуляторе нагревателей
+ * @author nikolnikon
+ *
+ */
+class HeaterCalculatorErrors
+{
+	const DBERROR = 1;
+	const DATAERROR = 2;
+	const CALCERROR = 3;
 }
 ?>

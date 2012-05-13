@@ -6,9 +6,14 @@ $(function() {
 	var loc = window.location.href;
 	// заполнение combobox "Материал" и "Размещение"
 	var clbck = function (response, status, xhr) {
+		console.log("status: " + status);
+		console.log("xhr.status: " + xhr.status);
+		console.log("xhr.statusText: " + xhr.statusText);
+		console.log("response: " + response);
 		if (status == "error") {
-		    var msg = "Sorry but there was an error: ";
-		    alert(msg + xhr.status + " " + xhr.statusText);
+			$("div#error h1").text("Ошибка сервера");
+			$("div#error p").html("Error code: " + xhr.status + "<br> Попробуйте перезагрузить страницу позже.");
+			$("div#error").show("slow").fadeOut(7000);
 	  	}
 		else if (status == "success") {
 			$("select[name = 'material']").change();
@@ -24,6 +29,7 @@ $(function() {
 	}
 	
 	hide_result("");
+	$("div#error").hide();
 	
 	$("select[name = 'material']").load("prepare_heater_form.php", {select_name: "material"}, clbck);
 	$("select[name = 'placement']").load("prepare_heater_form.php", {select_name: "placement"}, clbck);

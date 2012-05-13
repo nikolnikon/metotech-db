@@ -10,6 +10,35 @@ require_once ('class.mysql_dbase.php');
  */
 class HeaterCalculator extends AbstractCalculator
 {
+	public function getJSONResult()
+	{
+		$resp_array = $this->_result;
+		if ($this->_success) {
+			$resp_array['status'] = "success";
+		}
+		else {
+			switch ($this->_errorCode) {
+				case DBERROR:
+					$resp_array['status'] = "db_error";
+					$resp_array['error_header'] = "Ошибка БД";
+					$resp_array['error_message'] = "Запрос к БД не может быть выполнен. Повторите попытку расчета позже";
+					break;
+				case DATAERROR:
+					$resp_array['status'] = "data_error";
+					$resp_array['error_header'] = "Ошибка данных";
+					$resp_array['error_message'] = "Не удалось получить необходимые для вычислений данные. Повторите попытку расчета позже";
+					break;
+				case CALCERROR:
+					$resp_array['status'] = "calc_error";
+					$resp_array['error_header'] = "Ошибка при расчете";
+					$resp_array['error_message'] = "Не удалось получить необходимые исходные данные. Повторите попытку расчета позже";
+					break;
+			}
+		}
+		$jsn = json_encode($resp_array);
+		return $jsn;
+	}
+	
 	protected function _loadParameters($form_params)
 	{
 		$this->_parameters['U'] = $form_params['voltage'];
@@ -62,9 +91,11 @@ class HeaterCalculator extends AbstractCalculator
 			
 			//echo '<br><br> _parameters: '; print_r($this->_parameters); echo '<br><br>';
 		} catch (Exception $e) {
-			echo '<br><br>'.$e->getMessage().'<br>';
+			$this->_errorCode = DBERROR;
+			return false;
+			//print json_encode(array("status"=>"db_error", "error_header"=>"Ошибка БД", "error_message"=>$e->getMessage()));
 		}
-		// return true;
+		return true;
 	}
 	
 	/**
@@ -128,7 +159,7 @@ class HeaterCalculator extends AbstractCalculator
 					}
 				}
 				elseif ($d <= $d_low) {
-					echo '$d <= $d_low \n';
+					//echo '$d <= $d_low \n';
 					if ($t <= 0.5 * ($t_low + $t_high)) {
 						//echo '$t <= 0.5 * ($t_low + $t_high) \n';
 						$query = "SELECT MIN(`standart_diameter`) FROM `metalls`.`standart_nom_diameters` WHERE `standart_diameter` > ".mysql_real_escape_string($d_low)." AND `standart_diameter` < ".mysql_real_escape_string($d_high);
@@ -157,7 +188,8 @@ class HeaterCalculator extends AbstractCalculator
 			$this->_result['M'] = round($this->_result['M'], 1);
 			//echo "result_array: "; print_r($this->_result); echo "\n";
 		} catch(Exception $e) {
-			// обработка исключений от БД
+			$this->_errorCode = DBERROR;
+			return false;
 		}
 	}
 }
