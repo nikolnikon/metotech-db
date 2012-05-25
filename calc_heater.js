@@ -150,4 +150,19 @@ $(function() {
 		});
 		return false;
 	});
+	
+	// валидация данных на форме
+	$("form[name='heater_calc']").validate({
+		rules: {
+			power: {
+				required: true,
+				number: true
+			}
+		},
+		messages: {
+			power: {
+				required: "Введите мощность"
+			}
+		}
+	});
 });

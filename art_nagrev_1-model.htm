@@ -16,6 +16,7 @@
 <!-- <script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?10" charset="windows-1251"></script> -->
 <!--Аккордион меню begin-->
 <script src="libs/jquery/jquery-1.5.1.js"></script>
+<script src="scripts/jquery-validation-1.9.0/jquery.validate.min.js"></script>
 <script src="libs/jquery/jquery-ui-1.8.14.custom.js"></script>
 <link rel="stylesheet" href="libs/jquery/css/menu-left-style.css">
 <script>
@@ -73,7 +74,8 @@ $(function() {
 			<form name="heater_calc">
 				<fieldset>
 					<legend>Параметры электрической печи</legend>
-					<p>Мощность печи, Вт <br><input type="number" name="power" required></p>
+					<p>Мощность печи, Вт
+					<br><input type="number" name="power" required></p>
 					<p>Тип электросети
 						<br><select name="pgrid" required>
 							<option value="1" selected="selected">Однофазная</option>
