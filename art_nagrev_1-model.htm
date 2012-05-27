@@ -7,7 +7,7 @@
 <meta name="mrc__share_title" content="Расчет нагревателей электрических печей">
 <meta name="mrc__share_description" content="Статья &quot;Нагреватели. Методика и примеры расчета&quot; содержит обзор по расчету нагревателей электрических печей. Рассматриваются материалы, используемые для изготовления нагревателей, их свойства, достоинства и недостатки, условия работы (нихром, вольфрам, молибден и др.), описана цель расчета нагревателей, приведены методики, описанные на конкретных примерах. Также статья содержит справочные таблицы и ссылки на ГОСТы, необходимые для проведения расчета нагревателей электрических печей. ">
 <link rel="image_src" href="http://www.metotech.ru/images/articles/art_nagrev_1/logo_nagrev.png">
-<link href="style.css" type="text/css" rel="stylesheet">
+<link href="style.css" type="text/css" rel="stylesheet">	
 <link href="calc_heater.css" type="text/css" rel="stylesheet">
 <link href='http://fonts.googleapis.com/css?family=Play&subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Cuprum&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
@@ -17,6 +17,8 @@
 <!--Аккордион меню begin-->
 <script src="libs/jquery/jquery-1.5.1.js"></script>
 <script src="scripts/jquery-validation-1.9.0/jquery.validate.min.js"></script>
+<script src="scripts/jquery-validation-1.9.0/lib/jquery.form.js"></script>
+<script src="scripts/jquery-tooltip/js/jtip.js"></script>
 <script src="libs/jquery/jquery-ui-1.8.14.custom.js"></script>
 <link rel="stylesheet" href="libs/jquery/css/menu-left-style.css">
 <script>
@@ -75,7 +77,9 @@ $(function() {
 				<fieldset>
 					<legend>Параметры электрической печи</legend>
 					<p>Мощность печи, Вт
-					<br><input type="number" name="power" required></p>
+						<br><input type="number" name="power" required>
+						<span class="formInfo"><a href="scripts/jquery-tooltip/power_tooltip.htm?width=375" class="jTip" id="one" name="Мощность печи, Вт">?</a></span>
+					</p>
 					<p>Тип электросети
 						<br><select name="pgrid" required>
 							<option value="1" selected="selected">Однофазная</option>
@@ -92,7 +96,6 @@ $(function() {
 							<option></option>
 						</select>
 					</p>
-					<input type="hidden" name="max_temp">
 					<input type="hidden" name="resistivity">
 					<input type="hidden" name="density">
 					<p>Температура нагревателя, °C

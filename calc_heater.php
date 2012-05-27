@@ -7,7 +7,6 @@
 	$form_params['voltage'] = $_GET['voltage'];
 	$form_params['pgrid'] = $_GET['pgrid'];
 	$form_params['material'] = $_GET['material'];
-	$form_params['max_temp'] = $_GET['max_temp'];
 	$form_params['resistivity'] = $_GET['resistivity'];
 	$form_params['density'] = $_GET['density'];
 	$form_params['temp_heater'] = $_GET['temp_heater'];

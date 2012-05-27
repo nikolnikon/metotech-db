@@ -142,6 +142,7 @@ function calc_heater($params, &$calc_res) {
 	$U = $params['U'];
 	$P = $params['P'];
 	if (! isset($U) || ! isset($P)) {
+		echo "bad U\n";
 		return false;
 	}
 	
@@ -149,6 +150,7 @@ function calc_heater($params, &$calc_res) {
 	$RO_20 = $params['RO_20'] * pow (10, -6);
 	$K = $params['K'];
 	if (! isset($RO_20) || ! isset($K)) {
+		echo "bad RO20\n";
 		return false;
 	}
 	$RO_T = $RO_20 * $K;
@@ -157,6 +159,7 @@ function calc_heater($params, &$calc_res) {
 	$B_EF = $params['B_EF'] * pow(10, 4);
 	$A = $params['A'];
 	if (! isset($B_EF) || ! isset($A)) {
+		echo "bad B_EF\n";
 		return false;
 	}
 	$B_DOP = $B_EF * $A;
@@ -249,7 +252,7 @@ function get_heater_form_content($param) {
 				$t_s = getCommaSeparatedList($arr);
 				//echo "<br>t_s: ".$t_s."<br>";
 				
-				$html_code .= "<option value=\"".$option->id."\" data-max_temp=\"".$option->max_heater_temp."\" data-resistivity=\"".$option->resistivity."\" data-htemps=\"".$t_h."\" data-stemps=\"".$t_s."\" data-density=\"".$option->density."\">";
+				$html_code .= "<option value=\"".$option->id."\" data-resistivity=\"".$option->resistivity."\" data-htemps=\"".$t_h."\" data-stemps=\"".$t_s."\" data-density=\"".$option->density."\">";
 				$html_code .= $option->__toString();
 				$html_code .= "</option>\n";
 				unset($arr);

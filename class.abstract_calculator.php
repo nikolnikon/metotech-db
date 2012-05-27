@@ -55,10 +55,18 @@ abstract class AbstractCalculator
 	 */
 	public function calc($need_handle_result = true) {
 		$this->_success = call_user_func_array($this->_calcFuncName, array($this->_parameters, &$this->_result));
-		$this->_errorCode = CALCERROR;
+		if (! $this->_success) {
+			$this->_errorCode = CALCERROR;
+		}
 		if ($need_handle_result) {
 			$this->_success = $this->_handleCalc();	
 		}
+		/*if ($this->_success) {
+			echo "status_php: ok\n";
+		}
+		else {
+			echo "status_php: bad\n";
+		}*/
 		//echo '<br><br> result: '; print_r($result); echo '<br><br>';
 	}
 	
