@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 05, 2012 at 12:24 AM
+-- Generation Time: May 17, 2012 at 02:10 AM
 -- Server version: 5.1.40
 -- PHP Version: 5.3.3
 
@@ -354,7 +354,7 @@ CREATE TABLE IF NOT EXISTS `rad_eff_coef` (
   `min_coef` double NOT NULL COMMENT 'Минимальное значение коэффициента',
   `max_coef` double NOT NULL COMMENT 'Максимальное значение коэффициента',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Коэффициент эффективности излучения (Дьяков)' AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Коэффициент эффективности излучения (Дьяков)' AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `rad_eff_coef`

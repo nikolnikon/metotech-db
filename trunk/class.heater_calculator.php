@@ -58,7 +58,6 @@ class HeaterCalculator extends AbstractCalculator
 		
 		$ts = $form_params['temp_solid']; // температура тела
 		$th = $form_params['temp_heater']; // температура печи (нагревателя)
-		$maxth = $form_params['max_temp']; // максимальная рабочая температура нагревателя
 		//echo '<br><br> maxth: '.$maxth.'<br><br>';
 		//echo '<br><br> th: '.$th.'<br><br>';
 		//echo '<br><br> ts: '.$ts.'<br><br>';
@@ -191,6 +190,7 @@ class HeaterCalculator extends AbstractCalculator
 			$this->_errorCode = DBERROR;
 			return false;
 		}
+		return true;
 	}
 }
 ?>
