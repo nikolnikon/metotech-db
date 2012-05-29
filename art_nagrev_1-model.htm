@@ -77,8 +77,8 @@ $(function() {
 				<fieldset>
 					<legend>Параметры электрической печи</legend>
 					<p>Мощность печи, Вт
+						<span class="formInfo"><a href="scripts/jquery-tooltip/diameter_tooltip.htm?width=375" class="jTip" id="one" name="Мощность печи, Вт">?</a></span>
 						<br><input type="number" name="power" required>
-						<span class="formInfo"><a href="scripts/jquery-tooltip/power_tooltip.htm?width=375" class="jTip" id="one" name="Мощность печи, Вт">?</a></span>
 					</p>
 					<p>Тип электросети
 						<br><select name="pgrid" required>
@@ -119,20 +119,26 @@ $(function() {
 				<fieldset>
 					<legend>Параметры нагревателя</legend>
 					<div>
-						<p id="diameter">Диаметр нагревателя, мм <br><input type="number" name="diameter" readonly></p>
-						<p id="length">Длина нагревателя, м <br><input type="number" name="length" readonly></p>
-						<p id="mass">Масса нагревателя, кг <br><input type="number" name="mass" readonly></p>
-						<p id="total_length">Общая длина нагревателей, м <br><input type="number" name="total_length" readonly></p>
-						<p id="total_mass">Общая масса нагревателей, кг <br><input type="number" name="total_mass" readonly></p>
-					</div>
-					<div id="total_note">
-						Для промышленной сети трехфазного тока к каждой фазе подключается по нагревателю.
-						<ul>
-							<li><b><i>Длина нагревателя</i></b><br>длина нагревателя, подключенного к одной фазе.</li>
-							<li><b><i>Масса нагревателя</i></b><br>масса нагревателя, подключенного к одной фазе.</li>
-							<li><b><i>Общая длина нагревателей</i></b><br>суммарная длина трех нагревателей.</li>
-							<li><b><i>Общая масса нагревателей</i></b><br>суммарная масса трех нагревателей.</li>
-						</ul>
+						<p id="diameter">Диаметр нагревателя, мм
+							<br><input type="number" name="diameter" readonly>
+							<span class="formInfo"><a href="scripts/jquery-tooltip/diameter_tooltip.htm?width=375" class="jTip" id="two" name="Диаметр нагревателя">?</a></span>
+						</p>
+						<p id="length">Длина нагревателя, м
+							<br><input type="number" name="length" readonly>
+							<span class="formInfo"><a href="scripts/jquery-tooltip/length_tooltip.htm?width=375" class="jTip" id="three" name="Длина нагревателя">?</a></span>
+						</p>
+						<p id="mass">Масса нагревателя, кг
+							<br><input type="number" name="mass" readonly>
+							<span class="formInfo"><a href="scripts/jquery-tooltip/mass_tooltip.htm?width=375" class="jTip" id="four" name="Масса нагревателя">?</a></span>
+						</p>
+						<p id="total_length">Общая длина нагревателей, м
+							<br><input type="number" name="total_length" readonly>
+							<span class="formInfo"><a href="scripts/jquery-tooltip/total_length_tooltip.htm?width=375" class="jTip" id="five" name="Общая длина нагревателей">?</a></span>
+						</p>
+						<p id="total_mass">Общая масса нагревателей, кг
+							<br><input type="number" name="total_mass" readonly>
+							<span class="formInfo"><a href="scripts/jquery-tooltip/total_mass_tooltip.htm?width=375" class="jTip" id="six" name="Общая масса нагревателей">?</a></span>
+						</p>
 					</div>
 				</fieldset>
 			</form>
