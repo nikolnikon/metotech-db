@@ -36,14 +36,21 @@ $(function() {
 	
 	// валидация данных на форме
 	$("form[name='heater_calc']").validate({
-		rules: {
-			power: {
-				required: true
-			}
-		},
 		messages: {
 			power: {
-				required: "Введите мощность печи"
+				required: "Не задана мощность печи"
+			},
+			material: {
+				required: "Не задан материал нагревателя"
+			},
+			temp_heater: {
+				required: "Не задана температура нагревателя"
+			},
+			temp_solid: {
+				required: "Не задана температура нагреваемого изделия"
+			},
+			placement: {
+				required: "Не заданы тип и размещение нагревателей"
 			}
 		},
 		errorElement: "li"
