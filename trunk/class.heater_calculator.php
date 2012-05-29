@@ -115,6 +115,8 @@ class HeaterCalculator extends AbstractCalculator
 			$t = $this->_parameters['TEMP_HEATER'];
 			$this->_result['D_CALC'] = $d;
 			$this->_result['L_CALC'] = ceil($this->_result['L']);
+			$this->_result['M_CALC'] = $this->_result['L_CALC'] * $this->_parameters['DENS'] * pow(10, 3) * M_PI * pow($this->_result['D_CALC'], 2) * 0.25 * pow(10, -6);
+			$this->_result['M_CALC'] = round($this->_result['M_CALC'], 1);
 			
 			//echo "d: ".$d."; t: ".$t."\n";
 			
