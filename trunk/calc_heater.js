@@ -186,14 +186,15 @@ $(function() {
 					$("#length").show("slow");
 					$("#mass").show("slow");
 					if (pgrid == 1) {
+						$("span.formInfo #two, span.formInfo #three, span.formInfo #four").hide("slow");
 						$("#total_length").hide("slow");
 						$("#total_mass").hide("slow");
 						$("#total_note").hide("slow");
 					}
 					else if (pgrid == 3) {
+						$("span.formInfo #two, span.formInfo #three, span.formInfo #four").show("slow");
 						$("#total_length").show("slow");
 						$("#total_mass").show("slow");
-						$("#total_note").show("slow");
 						$("input[name='total_length']").val(result.L * 3);
 						$("input[name='total_mass']").val((result.M * 3).toFixed(1));
 					}
