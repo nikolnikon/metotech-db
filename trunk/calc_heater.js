@@ -122,7 +122,7 @@ $(function() {
 		});
 		
 		var temps = $("select[name = 'material'] option:selected").data("htemps");
-			if (temps !== undefined) {
+		if (temps !== undefined) {
 			var arr_temps = temps.split(",");
 			var options;
 			$.each(arr_temps, function(key, val){
@@ -131,32 +131,62 @@ $(function() {
 				options += "</option>\n";
 			});
 			//console.log(options);
-			$("select[name='temp_heater']").append(options);
-			$("select[name='temp_heater']").change();
+			var temp_heater_select = $("select[name='temp_heater']");
+			temp_heater_select.append(options);
+			
+			var temps_count = temp_heater_select.children("option").length;
+			console.log("temps_count: " + temps_count);
+			if (temps_count >= 2)
+				temp_heater_select.prop("selectedIndex", temps_count - 2);
+			
+			temp_heater_select.change();
 		}
 	})
 	.change();
 	
+	$("input[name='temp_heater_enabled']").change(function(){
+		if ($(this).prop("checked"))
+			$("select[name='temp_heater']").prop("disabled", false);
+		else {
+			$("select[name='temp_heater']").prop("disabled", true);
+			temps_count = $("select[name='temp_heater']").children("option").length;
+			if (temps_count >= 2)
+				$("select[name='temp_heater']").prop("selectedIndex", temps_count - 2);
+			else
+				$("select[name='temp_heater']").prop("selectedIndex", 0);
+		}
+	});
+	
 	// обработка выбора температуры печи (нагревателя)
 	$("select[name='temp_heater']").change(function() {
+		var prev_temp_solid = $("select[name='temp_solid'] option:selected").val();
 		$("select[name='temp_solid']").empty();
 		var temp_heater = $("select[name = 'temp_heater'] option:selected").val();
-		console.log("temp_heater: "+temp_heater);
+		console.log("temp_heater: " + temp_heater);
 		if (temp_heater !== undefined) {
 			var temps = $("select[name = 'material'] option:selected").data("stemps");
 			console.log(temps);
 			if (temps !== undefined) {
 				var arr_temps = temps.split(",");
 				var options;
+				var index = -1;
 				$.each(arr_temps, function(key, val){
 					if (parseInt(val) < parseInt(temp_heater)) {
 						options += "<option value=\"" + val + "\">";
 						options += val;
 						options += "</option>\n";
+						
+						if (parseInt(val) == prev_temp_solid)
+							index = key;
 					}
 				});
 				console.log(options);
+				console.log("index: " + index);
 				$("select[name='temp_solid']").append(options);
+				if (index >= 0)
+					$("select[name='temp_solid']").prop("selectedIndex", index);
+				else
+					$("select[name='temp_solid']").prop("selectedIndex", 0);
 			}	
 		}
 	})
@@ -176,6 +206,9 @@ $(function() {
 				url: 'calc_heater.php',
 				data: params,
 				dataType: 'json',
+				beforeSerialize: function() {
+					$("select[name='temp_heater']").prop("disabled", false);
+				},
 				beforeSubmit: function(arr, $form, options) {
 					return $form.valid();
 				},
@@ -205,6 +238,8 @@ $(function() {
 						$("input[name='total_length']").val(result.L * 3);
 						$("input[name='total_mass']").val((result.M * 3).toFixed(1));
 					}
+					
+					$("select[name='temp_heater']").prop("disabled", ! $("input[name='temp_heater_enabled']").prop("checked"));
 				}
 		};
 		$(this).ajaxSubmit(options);

@@ -106,84 +106,19 @@ class HeaterCalculator extends AbstractCalculator
 		try {
 			$db = MySqlDBase::instance();
 			$d *= pow(10, 3);
+			
 			$query = "SELECT MIN(`standart_diameter`) FROM `metalls`.`standart_nom_diameters` WHERE `standart_diameter` > ".mysql_real_escape_string($d);
 			$res = $db->select($query);
-			if (! isset($res)) {
-				;// неудачная попытка загрузки... в БД нет соответствующих данных
-			}
-			$d = $res[0]['MIN(`standart_diameter`)'];
-			$t = $this->_parameters['TEMP_HEATER'];
-			$this->_result['D_CALC'] = $d;
-			$this->_result['L_CALC'] = ceil($this->_result['L']);
-			$this->_result['M_CALC'] = $this->_result['L_CALC'] * $this->_parameters['DENS'] * pow(10, 3) * M_PI * pow($this->_result['D_CALC'], 2) * 0.25 * pow(10, -6);
-			$this->_result['M_CALC'] = round($this->_result['M_CALC'], 1);
-			
-			//echo "d: ".$d."; t: ".$t."\n";
-			
-			$query = "SELECT MIN(`diameter`), MIN(`max_temp`) FROM `metalls`.`max_heater_temp` WHERE `alloy_id`=".$this->_parameters['ALLOY']." AND `max_temp` >= $t";
-			//echo "query_high: ".$query."\n";
-			unset($res);
-			$res = $db->select($query);
-			if (! isset($res)) {
-				;// неудачная попытка загрузки... в БД нет соответствующих данных
-			}
-			$t_high = $res[0]['MIN(`max_temp`)'];
-			$d_high = $res[0]['MIN(`diameter`)'];
-			//echo "d_high: ".$d_high."; t_high: ".$t_high."\n";
-			
-			if ($d >= $d_high) {
-				//echo '$d >= $d_high\n';
-				$this->_result['D'] = $d; // расчет верный
-			}
-			else {
-				$query = "SELECT MAX(`diameter`), MAX(`max_temp`) FROM `metalls`.`max_heater_temp` WHERE `alloy_id`=".$this->_parameters['ALLOY']." AND `max_temp` < $t";
-				//echo "query_low: ".$query."\n";
-				unset($res);
-				$res = $db->select($query);
-				if (! isset($res)) {
-					;// неудачная попытка загрузки... в БД нет соответствующих данных
-				}
-				$t_low = $res[0]['MAX(`max_temp`)'];
-				$d_low = $res[0]['MAX(`diameter`)'];
-				//echo "d_low: ".$d_low."; t_low: ".$t_low."\n";
-				
-				if ($d > $d_low && $d < $d_high) {
-					//echo '$d > $d_low && $d < $d_high \n';
-					if ($t <= 0.5 * ($t_low + $t_high)) {
-						$this->_result['D'] = $d; // расчет верный
-					}
-					else {
-						$d = $d_high;
-						$this->_parameters['D'] = $d * pow(10, -3);
-						$this->calc(false);
-						$this->_result['D'] *= pow(10, 3);
-					}
-				}
-				elseif ($d <= $d_low) {
-					//echo '$d <= $d_low \n';
-					if ($t <= 0.5 * ($t_low + $t_high)) {
-						//echo '$t <= 0.5 * ($t_low + $t_high) \n';
-						$query = "SELECT MIN(`standart_diameter`) FROM `metalls`.`standart_nom_diameters` WHERE `standart_diameter` > ".mysql_real_escape_string($d_low)." AND `standart_diameter` < ".mysql_real_escape_string($d_high);
-						unset($res);
-						$res = $db->select($query);
-						if (! isset($res)) {
-							;// неудачная попытка загрузки... в БД нет соответствующих данных
-						}
-						$d = $res[0]['MIN(`standart_diameter`)'];
-						$this->_parameters['D'] = $d * pow(10, -3);
-						$this->calc(false);
-						$this->_result['D'] *= pow(10, 3);
-					}
-					else {
-						//echo '$t > 0.5 * ($t_low + $t_high) \n';
-						$d = $d_high;
-						$this->_parameters['D'] = $d * pow(10, -3);
-						$this->calc(false);
-						$this->_result['D'] *= pow(10, 3);
-					}
-				}
+			if (isset($res)) {
+				$d = $res[0]['MIN(`standart_diameter`)'];
 			}
 			
+//			$this->_result['D_CALC'] = $d;
+//			$this->_result['L_CALC'] = ceil($this->_result['L']);
+//			$this->_result['M_CALC'] = $this->_result['L_CALC'] * $this->_parameters['DENS'] * pow(10, 3) * M_PI * pow($this->_result['D_CALC'], 2) * 0.25 * pow(10, -6);
+//			$this->_result['M_CALC'] = round($this->_result['M_CALC'], 1);
+			
+			$this->_result['D'] = $d;
 			$this->_result['L'] = ceil($this->_result['L']);
 			$this->_result['M'] = $this->_result['L'] * $this->_parameters['DENS'] * pow(10, 3) * M_PI * pow($this->_result['D'], 2) * 0.25 * pow(10, -6);
 			$this->_result['M'] = round($this->_result['M'], 1);
