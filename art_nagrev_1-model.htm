@@ -15,7 +15,8 @@
 <link rel="shortcut icon" href="/16x16.png" type="image/x-icon">
 <!-- <script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?10" charset="windows-1251"></script> -->
 <!--Аккордион меню begin-->
-<script src="libs/jquery/jquery-1.5.1.js"></script>
+<!-- <script src="libs/jquery/jquery-1.5.1.js"></script> -->
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script src="scripts/jquery-validation-1.9.0/jquery.validate.min.js"></script>
 <script src="scripts/jquery-validation-1.9.0/lib/jquery.form.js"></script>
 <script src="scripts/jquery-tooltip/js/jtip.js"></script>
@@ -100,7 +101,8 @@ $(function() {
 					<input type="hidden" name="density">
 					<p>Температура нагревателя, °C
 						<span class="formInfo"><a href="scripts/jquery-tooltip/temp_heater_tooltip.htm?width=375" class="jTip" id="seven" name="Температура нагревателя">?</a></span>
-						<br><select name="temp_heater" required>
+						<br><input type="checkbox" name="temp_heater_enabled"><span style="font-size: 11px;">Редактировать температуру нагревателя</span>
+						<br><select name="temp_heater" disabled required>
 						</select>
 					</p>
 					<p>Температура нагреваемого изделия, °C
