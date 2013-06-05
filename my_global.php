@@ -191,6 +191,9 @@ function calc_heater($params, &$calc_res) {
 	
 	$calc_res['D'] = $D;
 	$calc_res['L'] = $L;
+	
+//	echo "calc result: "; print_r($calc_res); echo "\n";
+	
 	return true;
 }
 

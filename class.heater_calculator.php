@@ -102,14 +102,13 @@ class HeaterCalculator extends AbstractCalculator
 	 */
 	protected function _handleCalc() {
 		$d = $this->_result['D'];
-		
 		try {
 			$db = MySqlDBase::instance();
 			$d *= pow(10, 3);
 			
 			$query = "SELECT MIN(`standart_diameter`) FROM `metalls`.`standart_nom_diameters` WHERE `standart_diameter` > ".mysql_real_escape_string($d);
 			$res = $db->select($query);
-			if (isset($res)) {
+			if (isset($res[0]['MIN(`standart_diameter`)'])) {
 				$d = $res[0]['MIN(`standart_diameter`)'];
 			}
 			
@@ -118,11 +117,11 @@ class HeaterCalculator extends AbstractCalculator
 //			$this->_result['M_CALC'] = $this->_result['L_CALC'] * $this->_parameters['DENS'] * pow(10, 3) * M_PI * pow($this->_result['D_CALC'], 2) * 0.25 * pow(10, -6);
 //			$this->_result['M_CALC'] = round($this->_result['M_CALC'], 1);
 			
-			$this->_result['D'] = $d;
+			$this->_result['D'] = round($d, 1);
 			$this->_result['L'] = ceil($this->_result['L']);
 			$this->_result['M'] = $this->_result['L'] * $this->_parameters['DENS'] * pow(10, 3) * M_PI * pow($this->_result['D'], 2) * 0.25 * pow(10, -6);
 			$this->_result['M'] = round($this->_result['M'], 1);
-			//echo "result_array: "; print_r($this->_result); echo "\n";
+			// echo "result_array: "; print_r($this->_result); echo "\n";
 		} catch(Exception $e) {
 			$this->_errorCode = DBERROR;
 			return false;
