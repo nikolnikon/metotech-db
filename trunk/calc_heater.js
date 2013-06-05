@@ -73,7 +73,7 @@ $(function() {
 			.change();
 			$("input[name='power']").rules("remove", "min max");
 			$("input[name='power']").rules("add", {
-				range: [7000, 50000],
+				range: [7000, 500000],
 				messages: {
 					range: jQuery.format("Введите мощность печи от {0} до {1} Ватт") 
 				}
