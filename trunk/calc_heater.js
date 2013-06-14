@@ -236,7 +236,7 @@ $(function() {
 						$("#total_length").show("slow");
 						$("#total_mass").show("slow");
 						$("input[name='total_length']").val(result.L * 3);
-						$("input[name='total_mass']").val((result.M * 3).toFixed(1));
+						$("input[name='total_mass']").val((result.M * 3).toFixed(3));
 					}
 					
 					$("select[name='temp_heater']").prop("disabled", ! $("input[name='temp_heater_enabled']").prop("checked"));
