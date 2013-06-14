@@ -120,7 +120,7 @@ class HeaterCalculator extends AbstractCalculator
 			$this->_result['D'] = round($d, 1);
 			$this->_result['L'] = ceil($this->_result['L']);
 			$this->_result['M'] = $this->_result['L'] * $this->_parameters['DENS'] * pow(10, 3) * M_PI * pow($this->_result['D'], 2) * 0.25 * pow(10, -6);
-			$this->_result['M'] = round($this->_result['M'], 1);
+			$this->_result['M'] = round($this->_result['M'], 3);
 			// echo "result_array: "; print_r($this->_result); echo "\n";
 		} catch(Exception $e) {
 			$this->_errorCode = DBERROR;
