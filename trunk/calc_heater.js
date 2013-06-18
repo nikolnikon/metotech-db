@@ -1,18 +1,14 @@
-/**
- * 
- */
-
 $(function() {
 	var loc = window.location.href;
 	// заполнение combobox "Материал" и "Размещение"
 	var clbck = function (response, status, xhr) {
-		console.log("status: " + status);
-		console.log("xhr.status: " + xhr.status);
-		console.log("xhr.statusText: " + xhr.statusText);
-		console.log("response: " + response);
+		//console.log("status: " + status);
+		//console.log("xhr.status: " + xhr.status);
+		//console.log("xhr.statusText: " + xhr.statusText);
+		//console.log("response: " + response);
 		if (status == "error") {
 			$("div#error h1").text("Ошибка сервера");
-			$("div#error p").html("Error code: " + xhr.status + "<br> Попробуйте перезагрузить страницу позже.");
+			$("div#error p").html("Error code: " + xhr.status + "<br> Попробуйте загрузить страницу позже.");
 			$("div#error").show("slow").fadeOut(7000);
 	  	}
 		else if (status == "success") {
@@ -35,7 +31,7 @@ $(function() {
 	$("select[name = 'placement']").load("prepare_heater_form.php", {select_name: "placement"}, clbck);
 	
 	// валидация данных на форме
-	$("form[name='heater_calc']").validate({
+	var validator = $("form[name='heater_calc']").validate({
 		messages: {
 			power: {
 				required: "Не задана мощность печи"
@@ -78,13 +74,6 @@ $(function() {
 					range: jQuery.format("Введите мощность печи от {0} до {1} Ватт") 
 				}
 			});
-			//$("input[name='power']").valid();
-			/*if (! $("input[name='power']").valid()) {
-				$("button").attr("disabled", "disabled");
-			}
-			else {
-				$("button").removeAttr("disabled");
-			}*/
 		}
 		else if (pgrid_type == 1) { // если однофазное подключение
 			$("p#pgrid_conn").hide("slow");
@@ -96,13 +85,11 @@ $(function() {
 					range: jQuery.format("Введите мощность печи от {0} до {1} Ватт")
 				}
 			});
-			//$("input[name='power']").valid();
-			/*if (! $("input[name='power']").valid()) {
-				$("button").attr("disabled", "disabled");
-			}
-			else {
-				$("button").removeAttr("disabled");
-			}*/
+		}
+		
+		var v = validator.element("[name='power']");
+		if (v) {
+			$("[name='power'] li").hide();
 		}
 	})
 	.change();
@@ -135,7 +122,7 @@ $(function() {
 			temp_heater_select.append(options);
 			
 			var temps_count = temp_heater_select.children("option").length;
-			console.log("temps_count: " + temps_count);
+			//console.log("temps_count: " + temps_count);
 			if (temps_count >= 2)
 				temp_heater_select.prop("selectedIndex", temps_count - 2);
 			
@@ -144,16 +131,18 @@ $(function() {
 	})
 	.change();
 	
+	// обработка снятия/установки флажка "Редактировать температуру нагревателя"
 	$("input[name='temp_heater_enabled']").change(function(){
-		if ($(this).prop("checked"))
+		if ($(this).prop("checked")) // если установили флажок
 			$("select[name='temp_heater']").prop("disabled", false);
-		else {
+		else { // если сняли флажок
 			$("select[name='temp_heater']").prop("disabled", true);
 			temps_count = $("select[name='temp_heater']").children("option").length;
 			if (temps_count >= 2)
 				$("select[name='temp_heater']").prop("selectedIndex", temps_count - 2);
 			else
 				$("select[name='temp_heater']").prop("selectedIndex", 0);
+			$("select[name='temp_heater']").change(); // инициируем смену значения температуры нагревателя
 		}
 	});
 	
@@ -162,10 +151,10 @@ $(function() {
 		var prev_temp_solid = $("select[name='temp_solid'] option:selected").val();
 		$("select[name='temp_solid']").empty();
 		var temp_heater = $("select[name = 'temp_heater'] option:selected").val();
-		console.log("temp_heater: " + temp_heater);
+		//console.log("temp_heater: " + temp_heater);
 		if (temp_heater !== undefined) {
 			var temps = $("select[name = 'material'] option:selected").data("stemps");
-			console.log(temps);
+			//console.log(temps);
 			if (temps !== undefined) {
 				var arr_temps = temps.split(",");
 				var options;
@@ -180,8 +169,8 @@ $(function() {
 							index = key;
 					}
 				});
-				console.log(options);
-				console.log("index: " + index);
+				//console.log(options);
+				//console.log("index: " + index);
 				$("select[name='temp_solid']").append(options);
 				if (index >= 0)
 					$("select[name='temp_solid']").prop("selectedIndex", index);
@@ -201,7 +190,7 @@ $(function() {
 	// отправка данных на сервер
 	$("form[name='heater_calc']").submit(function() {
 		var params = $("form[name='heater_calc'] input[name!='pgrid_conn'], form[name='heater_calc'] select[name!='pgrid_conn']").serialize();
-		console.log(params);
+		//console.log(params);
 		var options = {
 				url: 'calc_heater.php',
 				data: params,
@@ -213,7 +202,7 @@ $(function() {
 					return $form.valid();
 				},
 				success: function(result, statusText, xhr, $form) {
-					console.log(result);
+					//console.log(result);
 					var pgrid = $("select[name='pgrid'] option:selected").val();
 					$("input[name='diameter']").val(result.D);
 					$("input[name='length']").val(result.L);
@@ -243,32 +232,6 @@ $(function() {
 				}
 		};
 		$(this).ajaxSubmit(options);
-		
-		/*$.getJSON("calc_heater.php", params, function(result, textStatus, jqXHR){
-			var pgrid = $("select[name='pgrid'] option:selected").val();
-			$("input[name='diameter']").val(result.D);
-			$("input[name='length']").val(result.L);
-			$("input[name='mass']").val(result.M);
-			
-			$("#result").show("slow");
-			$("form[name='heater_calc_res']").show("slow");
-			window.location = loc + "#result";
-			$("#diameter").show("slow");
-			$("#length").show("slow");
-			$("#mass").show("slow");
-			if (pgrid == 1) {
-				$("#total_length").hide("slow");
-				$("#total_mass").hide("slow");
-				$("#total_note").hide("slow");
-			}
-			else if (pgrid == 3) {
-				$("#total_length").show("slow");
-				$("#total_mass").show("slow");
-				$("#total_note").show("slow");
-				$("input[name='total_length']").val(result.L * 3);
-				$("input[name='total_mass']").val((result.M * 3).toFixed(1));
-			}
-		});*/
 		return false;
 	});
 });
