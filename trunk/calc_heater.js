@@ -187,6 +187,10 @@ $(function() {
 	})
 	.change();
 	
+	$("[name='power']").keydown(function(){
+		hide_result("slow");
+	});
+	
 	// отправка данных на сервер
 	$("form[name='heater_calc']").submit(function() {
 		var params = $("form[name='heater_calc'] input[name!='pgrid_conn'], form[name='heater_calc'] select[name!='pgrid_conn']").serialize();
@@ -210,7 +214,7 @@ $(function() {
 					
 					$("#result").show("slow");
 					$("form[name='heater_calc_res']").show("slow");
-					window.location = loc + "#result";
+					//window.location = loc + "#result";
 					$("#diameter").show("slow");
 					$("#length").show("slow");
 					$("#mass").show("slow");
