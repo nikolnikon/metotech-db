@@ -20,6 +20,7 @@
 <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.min.js"></script>
 <script src="scripts/jquery-validation-1.11.1/dist/jquery.validate.min.js"></script>
 <script src="scripts/jquery-validation-1.11.1/lib/jquery.form.js"></script>
+<script src="scripts/jquery-hotkeys-0.1.0/jquery.hotkeys.js"></script>
 <!--<script src="scripts/jquery-validation-1.9.0/jquery.validate.min.js"></script>
 <script src="scripts/jquery-validation-1.9.0/lib/jquery.form.js"></script>-->
 <script src="scripts/jquery-tooltip/js/jtip.js"></script>
@@ -82,10 +83,10 @@ $(function() {
 					<legend>Параметры электрической печи</legend>
 					<p>Мощность печи, Вт
 						<span class="formInfo"><a href="scripts/jquery-tooltip/power_tooltip.htm?width=375" class="jTip" id="one" name="Мощность печи">?</a></span>
-						<br><input type="text" name="power" required>
+						<br><input type="text" name="power">
 					</p>
 					<p>Тип электросети
-						<br><select name="pgrid" required>
+						<br><select name="pgrid" disabled required>
 							<option value="1" selected="selected">Однофазная</option>
 							<option value="3">Трехфазная</option>
 						</select>
