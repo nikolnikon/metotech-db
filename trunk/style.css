@@ -23,11 +23,23 @@ body {
 	font-weight:bold;
 	color:#e6e6e6;
 }
-.mail {
+td.mail {
+	height: 28px;
+	text-align: right;
+	vertical-align: top;
+	padding-right: 18px;
+}
+.mail span {
 	font-size: 14px;
 	color:#7d7d7d;
 	font-weight:bold;
 }
+.mail a {
+	font-size: 19px;
+	color: #9a5c5c;
+	font-weight: normal;
+}
+
 .head1 {
 	color: #FFFFFF;
 	font-weight: bold;
@@ -121,7 +133,8 @@ table.ooo td {
 
 table.ooo {
   margin-bottom: 20px;
-  margin-left: 10px;
+  margin-left: 15px;
+  width: 706px;
 }
 
 table.ooo tr {
@@ -638,7 +651,7 @@ div.art {
 
 div.ind_prod {
 	float: left;
-	width: 70%;
+	/*width: 70%;*/
 	margin-left: 5px;
 }
 
@@ -684,6 +697,7 @@ div.news {
 	padding: 5px;
 	background-color: #3e5d88;
 	color: #ffffff;
+	line-height: 1.7;
 }
 
 div.news a {
@@ -753,15 +767,105 @@ a.hidden {
 	text-decoration: none;
 }
 
-/*.rating li#r_1 {
-	font-size: 17px;
-	color: #bf0000;
+#apDiv1 {
+	position:absolute;
+	width:352px;
+	height:86px;
+	z-index:1;
+	left:50%;
+	margin-left:-600px;
+	top: 0px;
 }
 
-.rating li#r_2 {
+#apDiv2 {
+	position: absolute;
+	margin-left: auto;
+	width:1255px;
+	height:1px;
+	z-index:0;
+	top: 30px;
+}
+
+#calc_button {
+	font-size: 16pt;
+	font-family: Verdana;
+	color: grey;
+	margin-left: 15px;
+}
+
+#refs_calc_button {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+#effect {
+	width: 733px;
+	height: 510px;
+	background-color: #ffffff;
+	text-align: center;
+	/*padding: 0.4em;*/
+	margin-bottom: 30px;
+	display: none;
+}
+
+#effect  h3{
+	font-size: 13pt;
+	margin: 0px;
+}
+
+#pismo div.message {
+	border-radius: 10px;
+	padding: 10px;
 	font-size: 15px;
+	text-align: center;
+	margin-right: 5px;
 }
 
-.rating li#r_3 {
-	font-size: 13px;
-}*/
+#pismo div.success {
+	border: green 3px solid;
+}
+
+#pismo div.error {
+	border: red 3px solid;
+}
+
+#pismo li {
+	color: red;
+	font-size: 11px;
+	list-style-type: none;
+}
+
+#pismo input, #pismo textarea {
+	background-color: #fafafa;
+}
+
+#calc_question {
+	font-size: 10pt;
+	font-family: Verdana;
+	color: gray;
+	text-decoration: underline;
+	margin-left: 15px;
+	display: none;
+	/*float: right;*/
+}
+
+#calc_question:hover {
+	cursor: pointer;
+	color: #ff9b25;
+}
+
+.fancybox-custom .fancybox-skin {
+	background: rgb(238, 238, 238);
+}
+
+tr.top_contact {
+	height: 160px;
+	text-align: right;
+	vertical-align: top;
+}
+
+div#contact_cont {
+	float: right;
+	width: 250px;
+}
+
