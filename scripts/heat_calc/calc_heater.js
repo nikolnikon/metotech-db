@@ -1,5 +1,27 @@
 $(function() {
 	var loc = window.location.href;
+	// всплывающие подсказки
+	$('[data-tooltip!=""]').qtip({
+		content: {
+			attr: 'data-tooltip',
+			title: {
+				text: function(api) {
+					return $(this).attr('name');
+				}
+			}
+		},
+		hide: {
+			fixed: true,
+			delay: 300
+		},
+		position: {
+			my: "bottom left",
+			at: "top right"
+		},
+		style: {
+			classes: 'qtip-light qtip-shadow'
+		}
+	});
 	// заполнение combobox "Материал" и "Размещение"
 	var clbck = function (response, status, xhr) {
 		//console.log("status: " + status);

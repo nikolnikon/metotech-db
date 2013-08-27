@@ -25,6 +25,7 @@
 <link rel="stylesheet" type="text/css" href="scripts/fancyBox/source/helpers/jquery.fancybox-thumbs.css" />
 <link href='http://fonts.googleapis.com/css?family=Play&subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'  />
 <link href='http://fonts.googleapis.com/css?family=Cuprum&subset=latin,cyrillic' rel='stylesheet' type='text/css' />
+<link href='//cdnjs.cloudflare.com/ajax/libs/qtip2/2.1.1/jquery.qtip.min.css' rel='stylesheet' type='text/css' />
 
 <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.min.js"></script>
@@ -40,6 +41,7 @@
 <script src="scripts/menu/menu-accordion.js"></script>
 <script src="scripts/heat_calc/calc_heater.js"></script>
 <script src="scripts/heat_calc/heat_calc.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/qtip2/2.1.1/jquery.qtip.min.js"></script>
 
 <!-- Скрипты соц. сетей начало -->
 <script type="text/javascript" src="//yandex.st/share/share.js" charset="utf-8"></script>
@@ -139,6 +141,29 @@
 	#heater_effect  h3{
 		font-size: 13pt;
 		margin: 0px;
+	}
+	
+	.error {
+		color: #bf0000;
+		font-size: 13px;
+		font-family: 'Cuprum', Verdana, sans-serif;
+		list-style-type: none;
+	}
+	
+	.formInfo a, .formInfo a:active, formInfo a:visited{
+		background-color:#bf0000;
+		font-family: 'Cuprum', Verdana, sans-serif;
+		font-size: 13px;
+		font-weight: normal;
+		padding:0px 4px;
+		margin-left:3px;
+		color:#FFFFFF;
+		text-decoration: none;
+	}
+
+	.formInfo a:hover{
+		color:#660000;
+		text-decoration: none;
 	}
 </style>
 
@@ -723,7 +748,7 @@
 									<fieldset>
 										<legend>Параметры электрической печи</legend>
 										<p>Мощность печи, Вт
-											<span class="formInfo"><a href="scripts/jquery-tooltip/power_tooltip.htm?width=375" class="jTip" id="one" name="Мощность печи">?</a></span>
+											<span class="formInfo"><a data-tooltip="<p>При подключении к бытовой сети <u>однофазного тока</u> значение мощности не должно превышать <u>6999</u> Вт.</p> <p style=&quot;margin-top: 7px;&quot;>При подключении к промышленной сети <u>трехфазного тока</u> значение мощности должно принадлежать диапазону <u>от 7000 до 500000</u> Вт включительно.</p>" id="one" name="Мощность печи">?</a></span>
 											<br><input type="text" name="power">
 										</p>
 										<p>Тип электросети
