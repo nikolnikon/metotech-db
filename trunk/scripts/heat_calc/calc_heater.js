@@ -19,7 +19,7 @@ $(function() {
 			at: "top right"
 		},
 		style: {
-			classes: 'qtip-light qtip-shadow'
+			classes: 'qtip-light qtip-shadow',
 		}
 	});
 	// заполнение combobox "Материал" и "Размещение"
@@ -57,13 +57,15 @@ $(function() {
 		rules: {
 			power: {
 				required: true,
-				number: true
+				number: true,
+				max: 500000
 			}
 		},
 		messages: {
 			power: {
 				required: "Не задана мощность печи",
-				number: "Введите корректное значение мощности"
+				number: "Введите корректное значение мощности",
+				max: "Введите значение мощностти в диаппазоне от 1 до 500000 Вт"
 			},
 			material: {
 				required: "Не задан материал нагревателя"

@@ -164,6 +164,18 @@
 	.formInfo a:hover{
 		color:#660000;
 		text-decoration: none;
+		cursor: help;
+	}
+	
+	.qtip-content, .qtip-title{
+		font-family: 'Cuprum', Verdana, sans-serif;
+		font-size: 14px;
+		font-weight: normal;
+	}
+	
+	.qtip-title{
+		font-size: 15px;
+		font-weight: bold;
 	}
 </style>
 
@@ -748,7 +760,7 @@
 									<fieldset>
 										<legend>Параметры электрической печи</legend>
 										<p>Мощность печи, Вт
-											<span class="formInfo"><a data-tooltip="<p>При подключении к бытовой сети <u>однофазного тока</u> значение мощности не должно превышать <u>6999</u> Вт.</p> <p style=&quot;margin-top: 7px;&quot;>При подключении к промышленной сети <u>трехфазного тока</u> значение мощности должно принадлежать диапазону <u>от 7000 до 500000</u> Вт включительно.</p>" id="one" name="Мощность печи">?</a></span>
+											<span class="formInfo"><a data-tooltip="При подключении к бытовой сети <u>однофазного тока</u> значение мощности не должно превышать <u>6999</u> Вт.<br><br>При подключении к промышленной сети <u>трехфазного тока</u> значение мощности должно принадлежать диапазону <u>от 7000 до 500000</u> Вт включительно." id="one" name="Мощность печи">?</a></span>
 											<br><input type="text" name="power">
 										</p>
 										<p>Тип электросети
@@ -770,13 +782,13 @@
 										<input type="hidden" name="resistivity">
 										<input type="hidden" name="density">
 										<p>Температура нагревателя, °C
-											<span class="formInfo"><a href="scripts/jquery-tooltip/temp_heater_tooltip.htm?width=375" class="jTip" id="seven" name="Температура нагревателя">?</a></span>
+											<span class="formInfo"><a data-tooltip="Температура, которую имеет непосредственно нагреватель электрической печи. Данная температура должна быть выше температуры нагреваемого изделия." id="seven" name="Температура нагревателя">?</a></span>
 											<br><input type="checkbox" name="temp_heater_enabled"><span style="font-size: 11px;">Редактировать температуру нагревателя</span>
 											<br><select name="temp_heater" disabled required>
 											</select>
 										</p>
 										<p>Температура нагреваемого изделия, °C
-											<span class="formInfo"><a href="scripts/jquery-tooltip/temp_solid_tooltip.htm?width=375" class="jTip" id="eight" name="Температура изделия">?</a></span>
+											<span class="formInfo"><a data-tooltip="Температура, до которой необходимо нагреть изделие с помощью электрической печи." id="eight" name="Температура изделия">?</a></span>
 											<br><select name="temp_solid" required>
 											</select>
 										</p>
@@ -797,7 +809,7 @@
 										<div>
 											<p id="diameter">Диаметр нагревателя, мм
 												<br><input type="text" name="diameter" readonly>
-												<span class="formInfo"><a href="scripts/jquery-tooltip/diameter_tooltip.htm?width=285" class="jTip" id="two" name="Диаметр нагревателя">?</a></span>
+												<span class="formInfo"><a data-tooltip="Диаметр нагревателя, подключенного к одной фазе" id="two" name="Диаметр нагревателя">?</a></span>
 											</p>
 											<p id="length">Длина нагревателя, м
 												<br><input type="text" name="length" readonly>
