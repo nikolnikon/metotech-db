@@ -51,6 +51,11 @@ div#error {
 div#error p {
 	text-align: center;
 }
+
+p#heater_calc_note {
+	font-size: 11px;
+}
+
 /*jquery-validation*/
 .error {
 	color: #bf0000;
@@ -59,7 +64,7 @@ div#error p {
 	list-style-type: none;
 }
 
-/*jquery-tooltip*/
+/*qTip2*/
 .formInfo a, .formInfo a:active, formInfo a:visited{
 	background-color:#bf0000;
 	font-family: 'Cuprum', Verdana, sans-serif;
@@ -76,86 +81,13 @@ div#error p {
 	text-decoration: none;
 }
 
-/* ----- add selectors here for font sizing ----- */
-#JT_close_left, #JT_close_right{
-	font-family: 'Play', Verdana, sans-serif;
-	font-size: 1em;
-}
-#JT_copy p, #JT_copy ul{
+.qtip-content, .qtip-title{
 	font-family: 'Cuprum', Verdana, sans-serif;
-	font-size: 0.9em;
+	font-size: 14px;
+	font-weight: normal;
 }
-
-#JT_arrow_left{
-	background-image: url(scripts/jquery-tooltip/images/arrow_left.gif);
-	background-repeat: no-repeat;
-	background-position: left top;
-	position: absolute;
-	z-index:101;
-	left:-12px;
-	height:23px;
-	width:10px;
-    top:-3px;
-}
-
-#JT_arrow_right{
-	background-image: url(scripts/jquery-tooltip/images/arrow_right.gif);
-	background-repeat: no-repeat;
-	background-position: left top;
-	position: absolute;
-	z-index:101;
-	height:23px;
-	width:11px;
-    top:-2px;
-}
-
-#JT {
-	position: absolute;
-	z-index:100;
-	border: 2px solid #CCCCCC;
-	background-color: #fff;
-}
-
-#JT_copy{
-	padding:10px 10px 10px 10px;
-	color:#333333;
-}
-
-.JT_loader{
-	background-image: url(scripts/jquery-tooltip/images/loader.gif);
-	background-repeat: no-repeat;
-	background-position: center center;
-	width:100%;
-	height:12px;
-}
-
-#JT_close_left{
-	background-color: #CCCCCC;
-	text-align: left;
-	padding-left: 8px;
-	padding-bottom: 5px;
-	padding-top: 2px;
-	font-weight:bold;
-}
-
-#JT_close_right{
-	background-color: #CCCCCC;
-	text-align: left;
-	padding-left: 8px;
-	padding-bottom: 5px;
-	padding-top: 2px;
-	font-weight:bold;
-}
-
-#JT_copy p{
-margin:3px 0;
-}
-
-#JT_copy img{
-	padding: 1px;
-	border: 1px solid #CCCCCC;
-}
-
-.jTip{
-	cursor:help;
+	
+.qtip-title{
+	font-size: 15px;
+	font-weight: bold;
 }
