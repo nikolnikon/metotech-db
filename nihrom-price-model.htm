@@ -74,22 +74,18 @@
 	
 	div#heater_calc {
 		background-color: #f5f5f5;
+		/*background-color: #CED3D9;*/
 		margin: 10px 5px;
+		margin-left: 13px;
 		padding: 5px;
 		font-family: 'Play', Verdana, sans-serif;
 		height: 750px;
 		width: 700px;
 		text-align: center;
-		
 		border: 1px dotted #acb7bf;
-		/*-moz-border-radius: 20px;
-		-webkit-border-radius: 20px;
-		border-radius: 20px;*/
 	}
 
 	div#heater_calc:hover {
-		/*-moz-box-shadow: 0 0 5px 1px rgba(191, 0, 0, 1);
-		-webkit-box-shadow: 0 0 5px 1px rgba(191, 0, 0, 1);*/
 		box-shadow: 0 0 5px 1px rgba(191, 0, 0, 1);
 	}
 	
@@ -116,7 +112,7 @@
 		font-weight: bold;
 	}
 
-	div#heater_calc_input select, div#heater_calc_input input, div#heater_calc_input label {
+	div#heater_calc_input select, div#heater_calc_input input, div#heater_calc_input label, div#heater_calc_res input, div#heater_calc_res label {
 		font-family: 'Cuprum', Verdana, sans-serif;
 		font-size: 20px;
 	}
@@ -141,6 +137,20 @@
 	#heater_effect  h3{
 		font-size: 13pt;
 		margin: 0px;
+	}
+	
+	#heater_calc_note {
+		font-size: 11px;
+		margin-top: 25px;
+	}
+	
+	#heater_calc_copyright {
+		position: absolute;
+		top: 1510px;
+		right: 460px;
+		font-family: 'Cuprum', Verdana, sans-serif;
+		/*color: #bf0000;*/
+		font-size: 20px;
 	}
 	
 	.error {
@@ -813,24 +823,32 @@
 											</p>
 											<p id="length">Длина нагревателя, м
 												<br><input type="text" name="length" readonly>
-												<span class="formInfo"><a href="scripts/jquery-tooltip/length_tooltip.htm?width=285" class="jTip" id="three" name="Длина нагревателя">?</a></span>
+												<span class="formInfo"><a data-tooltip="Длина нагревателя, подключенного к одной фазе" id="three" name="Длина нагревателя">?</a></span>
 											</p>
 											<p id="mass">Масса нагревателя, кг
 												<br><input type="text" name="mass" readonly>
-												<span class="formInfo"><a href="scripts/jquery-tooltip/mass_tooltip.htm?width=285" class="jTip" id="four" name="Масса нагревателя">?</a></span>
+												<span class="formInfo"><a data-tooltip="Масса нагревателя, подключенного к одной фазе" id="four" name="Масса нагревателя">?</a></span>
 											</p>
 											<p id="total_length">Общая длина нагревателей, м
 												<br><input type="text" name="total_length" readonly>
-												<span class="formInfo"><a href="scripts/jquery-tooltip/total_length_tooltip.htm?width=220" class="jTip" id="five" name="Общая длина нагревателей">?</a></span>
+												<span class="formInfo"><a data-tooltip="Суммарная длина трех нагревателей" id="five" name="Общая длина нагревателей">?</a></span>
 											</p>
 											<p id="total_mass">Общая масса нагревателей, кг
 												<br><input type="text" name="total_mass" readonly>
-												<span class="formInfo"><a href="scripts/jquery-tooltip/total_mass_tooltip.htm?width=220" class="jTip" id="six" name="Общая масса нагревателей">?</a></span>
+												<span class="formInfo"><a data-tooltip="Суммарная масса трех нагревателей" id="six" name="Общая масса нагревателей">?</a></span>
 											</p>
+										</div>
+										<div id="heater_calc_note">
+											<sup>*</sup>Результаты расчета нагревателей электрических печей, выполненного с помощью данного калькулятора, носят информативный характер.
+											<br><br>Расчет основан на подходе, рассмотренном в книге "Типовые расчеты по электрооборудованию", Дьяков В.И., а также в статье <a href="art_nagrev_1.htm">"Нагреватели. Методика и примеры расчета"</a>, и содержит ряд допущений.
+											<br><br>В каждом конкретном случае могут появиться дополнительные условия, связанные с конструктивными особенностями печи, а также условиями эксплуатации.
 										</div>
 									</fieldset>
 								</form>
 							</div>
+							<!-- <div id="heater_calc_copyright">
+								&#169; ООО "Метотехника"
+							</div> -->
 						</div>
 					</div>
 					<!--copyscapeskip-->
