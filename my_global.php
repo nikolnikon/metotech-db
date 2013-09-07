@@ -102,7 +102,7 @@ function getFilterQuery($table, $returned_fields, $conds=null) {
 		$query .= "`$returned_field`, ";
 	}
 	$query = substr($query, 0, strlen($query) - 2);
-	$query .= " FROM `metalls`.`$table`";
+	$query .= " FROM `wwwmetotechru_metalls`.`$table`";
 	if (! is_null($conds)) {
 		$query .= " WHERE ";
 		foreach ($conds as $cond => $values) {
@@ -215,7 +215,8 @@ function get_heater_form_content($param) {
 	try {
 		$db = MySQLDBase::instance();
 	} catch (Exception $e) {
-		print json_encode(array("status"=>"db_error", "error_header"=>"Ошибка БД", "error_message"=>"Запрос к БД не может быть выполнен. Повторите попытку расчета позже"));
+		//print "Запрос к БД не может быть выполнен. ".$e->getMessage().". Повторите попытку расчета позже";
+		print json_encode(array("status"=>"db_error", "error_header"=>"Ошибка БД", "error_message"=>$e->getMessage()));
 		// обработка исключения
 	};
 	$query = getFilterQuery($table_name, $selected_fields, $conds);
@@ -239,14 +240,14 @@ function get_heater_form_content($param) {
 				}
 				$max_heater_temp = $res[0]['MAX(`max_temp`)'];
 				// получаем допустимые значения температуры нагревателя 
-				$query = "SELECT DISTINCT `temp_heater` FROM `metalls`.`heater_surface_power` WHERE `temp_heater` <= ".mysql_real_escape_string($max_heater_temp);
+				$query = "SELECT DISTINCT `temp_heater` FROM `wwwmetotechru_metalls`.`heater_surface_power` WHERE `temp_heater` <= ".mysql_real_escape_string($max_heater_temp);
 				$temps = $db->select($query);
 				foreach ($temps as $temp) {
 					$arr[] = $temp['temp_heater'];
 				}
 				$t_h = getCommaSeparatedList($arr);
 				// получаем допустимые значения температуры изделия
-				$query = "SELECT DISTINCT `temp_solid` FROM `metalls`.`heater_surface_power` WHERE `temp_solid` < ".mysql_real_escape_string($max_heater_temp);
+				$query = "SELECT DISTINCT `temp_solid` FROM `wwwmetotechru_metalls`.`heater_surface_power` WHERE `temp_solid` < ".mysql_real_escape_string($max_heater_temp);
 				$temps = $db->select($query);
 				unset($arr);
 				foreach ($temps as $temp) {
@@ -269,7 +270,7 @@ function get_heater_form_content($param) {
 		}
 		print $html_code;
 	} catch (Exception $e) {
-		print json_encode(array("status"=>"db_error", "error_header"=>"Ошибка БД", "error_message"=>"Запрос к БД не может быть выполнен. Повторите попытку расчета позже"));
+		print json_encode(array("status"=>"db_error", "error_header"=>"Ошибка БД", "error_message"=>$e->getMessage()));
 	}
 }
 ?>
