@@ -70,7 +70,7 @@ class HeaterCalculator extends AbstractCalculator
 				$this->_parameters['B_EF'] = 5;
 			}
 			else {
-				$query = "SELECT `surface_power` FROM `metalls`.`heater_surface_power` WHERE `temp_solid` = ".mysql_real_escape_string($ts)." AND temp_heater = ".mysql_real_escape_string($th);
+				$query = "SELECT `surface_power` FROM `wwwmetotechru_metalls`.`heater_surface_power` WHERE `temp_solid` = ".mysql_real_escape_string($ts)." AND temp_heater = ".mysql_real_escape_string($th);
 				$res = $db->select($query);
 				if (! isset($res)) {
 					;// неудачная попытка загрузки... в БД нет соответствующих данных
@@ -80,7 +80,7 @@ class HeaterCalculator extends AbstractCalculator
 			
 			// определение поправочного коэффициента для расчета изменения электрического сопротивления в зависимости от температуры
 			$id_mat = $form_params['material'];
-			$query = "SELECT `correction_coef` FROM `metalls`.`var_resistent_coef` WHERE `alloy_id` = ".mysql_real_escape_string($id_mat)." AND temp = (SELECT MIN(`temp`) FROM `metalls`.`var_resistent_coef` WHERE `temp` >= ".mysql_real_escape_string($th).")";
+			$query = "SELECT `correction_coef` FROM `wwwmetotechru_metalls`.`var_resistent_coef` WHERE `alloy_id` = ".mysql_real_escape_string($id_mat)." AND temp = (SELECT MIN(`temp`) FROM `wwwmetotechru_metalls`.`var_resistent_coef` WHERE `temp` >= ".mysql_real_escape_string($th).")";
 			unset($res);
 			$res = $db->select($query);
 			if (! isset($res)) {
@@ -106,7 +106,7 @@ class HeaterCalculator extends AbstractCalculator
 			$db = MySqlDBase::instance();
 			$d *= pow(10, 3);
 			
-			$query = "SELECT MIN(`standart_diameter`) FROM `metalls`.`standart_nom_diameters` WHERE `standart_diameter` > ".mysql_real_escape_string($d);
+			$query = "SELECT MIN(`standart_diameter`) FROM `wwwmetotechru_metalls`.`standart_nom_diameters` WHERE `standart_diameter` > ".mysql_real_escape_string($d);
 			$res = $db->select($query);
 			if (isset($res[0]['MIN(`standart_diameter`)'])) {
 				$d = $res[0]['MIN(`standart_diameter`)'];

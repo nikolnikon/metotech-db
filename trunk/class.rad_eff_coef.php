@@ -2,7 +2,7 @@
 require_once 'class.generic_object.php';
 
 /**
- * GenericObject, который соответствует таблице БД `metalls`.`rad_eff_coef`
+ * GenericObject, который соответствует таблице БД `wwwmetotechru_metalls`.`rad_eff_coef`
  * @author nikonov
  *
  */
