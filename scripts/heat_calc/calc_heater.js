@@ -49,8 +49,8 @@ $(function() {
 	hide_result("");
 	$("div#error").hide();
 	
-	$("select[name = 'material']").load("prepare_heater_form.php", {select_name: "material"}, clbck);
-	$("select[name = 'placement']").load("prepare_heater_form.php", {select_name: "placement"}, clbck);
+	$("select[name = 'material']").load("../../heater_calc/prepare_heater_form.php", {select_name: "material"}, clbck);
+	$("select[name = 'placement']").load("../../heater_calc/prepare_heater_form.php", {select_name: "placement"}, clbck);
 	
 	// валидация данных на форме
 	var validator = $("form[name='heater_calc']").validate({
@@ -251,7 +251,7 @@ $(function() {
 		var params = $("form[name='heater_calc'] input[name!='pgrid_conn'], form[name='heater_calc'] select[name!='pgrid_conn']").serialize();
 		//console.log(params);
 		var options = {
-				url: 'calc_heater.php',
+				url: '../../heater_calc/calc_heater.php',
 				data: params,
 				dataType: 'json',
 				beforeSerialize: function() {
