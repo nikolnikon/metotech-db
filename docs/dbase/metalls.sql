@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 17, 2012 at 02:10 AM
+-- Generation Time: Oct 07, 2013 at 02:20 PM
 -- Server version: 5.1.40
 -- PHP Version: 5.3.3
 
@@ -263,7 +263,7 @@ CREATE TABLE IF NOT EXISTS `max_heater_temp` (
   `max_temp` double NOT NULL COMMENT 'Максимальная рабочая температура нагревателя для соответствующего диаметра, °С',
   PRIMARY KEY (`id`),
   KEY `max_heater_temp_alloy_fk` (`alloy_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Содержит значения максимальных рабочих температур нагревател' AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Содержит значения максимальных рабочих температур нагревател' AUTO_INCREMENT=16 ;
 
 --
 -- Dumping data for table `max_heater_temp`
@@ -279,7 +279,12 @@ INSERT INTO `max_heater_temp` (`id`, `alloy_id`, `diameter`, `max_temp`) VALUES
 (7, 2, 0.4, 950),
 (8, 2, 1, 1000),
 (9, 2, 3, 1075),
-(10, 2, 6, 1125);
+(10, 2, 6, 1125),
+(11, 8, 0.2, 950),
+(12, 8, 0.4, 1075),
+(13, 8, 1, 1225),
+(14, 8, 3, 1350),
+(15, 8, 6, 1400);
 
 -- --------------------------------------------------------
 
@@ -398,7 +403,7 @@ CREATE TABLE IF NOT EXISTS `standart_nom_diameters` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `standart_diameter` double NOT NULL COMMENT 'Стандартный диаметр, мм',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Содержит список стандартных номинальных диаметров проволки, ' AUTO_INCREMENT=81 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Содержит список стандартных номинальных диаметров проволки, ' AUTO_INCREMENT=85 ;
 
 --
 -- Dumping data for table `standart_nom_diameters`
@@ -480,7 +485,11 @@ INSERT INTO `standart_nom_diameters` (`id`, `standart_diameter`) VALUES
 (77, 6.3),
 (78, 6.7),
 (79, 7),
-(80, 7.5);
+(80, 7.5),
+(81, 8),
+(82, 9),
+(83, 10),
+(84, 12);
 
 -- --------------------------------------------------------
 
