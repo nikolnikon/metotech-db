@@ -28,6 +28,8 @@ class MySQLDBase extends AbstractDBase
         
         if (! mysql_select_db($name, $this->m_dbConn))
         	throw new Exception("Не удалось выбрать базу данных", E_USER_ERROR);
+			
+		mysql_query("SET CHARACTER SET 'utf8'", $this->m_dbConn);
     }	
  
     /*Отсоединение от БД*/
