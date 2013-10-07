@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 07, 2013 at 02:20 PM
+-- Generation Time: Oct 07, 2013 at 03:26 PM
 -- Server version: 5.1.40
 -- PHP Version: 5.3.3
 
@@ -504,7 +504,7 @@ CREATE TABLE IF NOT EXISTS `var_resistent_coef` (
   `correction_coef` double NOT NULL COMMENT 'Поправочный коэффициент',
   PRIMARY KEY (`id`),
   KEY `var_res_coef_alloy_fk` (`alloy_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Поправочный коэффициент для расчета изменения электрического' AUTO_INCREMENT=38 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Поправочный коэффициент для расчета изменения электрического' AUTO_INCREMENT=68 ;
 
 --
 -- Dumping data for table `var_resistent_coef`
@@ -535,7 +535,22 @@ INSERT INTO `var_resistent_coef` (`id`, `alloy_id`, `temp`, `correction_coef`) V
 (34, 2, 800, 1.089),
 (35, 2, 900, 1.097),
 (36, 2, 1000, 1.105),
-(37, 2, 1100, 1.114);
+(37, 2, 1100, 1.114),
+(53, 8, 20, 1),
+(54, 8, 100, 1.002),
+(55, 8, 200, 1.007),
+(56, 8, 300, 1.013),
+(57, 8, 400, 1.022),
+(58, 8, 500, 1.036),
+(59, 8, 600, 1.056),
+(60, 8, 700, 1.063),
+(61, 8, 800, 1.067),
+(62, 8, 900, 1.072),
+(63, 8, 1000, 1.076),
+(64, 8, 1100, 1.079),
+(65, 8, 1200, 1.08),
+(66, 8, 1300, 1.083),
+(67, 8, 1400, 1.086);
 
 --
 -- Constraints for dumped tables
