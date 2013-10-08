@@ -95,10 +95,12 @@ $(function() {
 		if (power <= max_power_1) {
 			$("[name = 'pgrid']").val("1");
 			$("[name = 'pgrid']").change();
+			$("select[name='pgrid']").prop("disabled", false);
 		}
 		else if (power >= min_power_3 && power <= max_power_3) {
 			$("[name = 'pgrid']").val("3");
 			$("[name = 'pgrid']").change();
+			$("select[name='pgrid']").prop("disabled", true);
 		}
 	});
 	
@@ -122,24 +124,10 @@ $(function() {
 				}
 			})
 			.change();
-			// $("input[name='power']").rules("remove", "min max");
-			// $("input[name='power']").rules("add", {
-				// range: [7000, 500000],
-				// messages: {
-					// range: jQuery.format("Введите мощность печи от {0} до {1} Ватт") 
-				// }
-			// });
 		}
 		else if (pgrid_type == 1) { // если однофазное подключение
 			$("p#pgrid_conn").hide("slow");
 			$("input[name = 'voltage']").val("220");
-			// $("input[name='power']").rules("remove", "min max");
-			// $("input[name='power']").rules("add", {
-				// range: [1000, 6999],
-				// messages: {
-					// range: jQuery.format("Введите мощность печи от {0} до {1} Ватт")
-				// }
-			// });
 		}
 		
 		var v = validator.element("[name='power']");
@@ -249,6 +237,7 @@ $(function() {
 	// отправка данных на сервер
 	$("form[name='heater_calc']").submit(function() {
 		var params = $("form[name='heater_calc'] input[name!='pgrid_conn'], form[name='heater_calc'] select[name!='pgrid_conn']").serialize();
+		var is_pgrid_disabled = $("select[name='pgrid']").prop("disabled");
 		//console.log(params);
 		var options = {
 				url: '../../heater_calc/calc_heater.php',
@@ -289,7 +278,8 @@ $(function() {
 					}
 					
 					$("select[name='temp_heater']").prop("disabled", ! $("input[name='temp_heater_enabled']").prop("checked"));
-					$("select[name='pgrid']").prop("disabled", true);
+					if (is_pgrid_disabled)
+						$("select[name='pgrid']").prop("disabled", true);
 				}
 		};
 		$(this).ajaxSubmit(options);

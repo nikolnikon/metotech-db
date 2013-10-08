@@ -102,7 +102,7 @@ function getFilterQuery($table, $returned_fields, $conds=null) {
 		$query .= "`$returned_field`, ";
 	}
 	$query = substr($query, 0, strlen($query) - 2);
-	$query .= " FROM `wwwmetotechru_metalls`.`$table`";
+	$query .= " FROM `metotech_metalls`.`$table`";
 	if (! is_null($conds)) {
 		$query .= " WHERE ";
 		foreach ($conds as $cond => $values) {
@@ -240,14 +240,14 @@ function get_heater_form_content($param) {
 				}
 				$max_heater_temp = $res[0]['MAX(`max_temp`)'];
 				// получаем допустимые значения температуры нагревателя 
-				$query = "SELECT DISTINCT `temp_heater` FROM `wwwmetotechru_metalls`.`heater_surface_power` WHERE `temp_heater` <= ".mysql_real_escape_string($max_heater_temp);
+				$query = "SELECT DISTINCT `temp_heater` FROM `metotech_metalls`.`heater_surface_power` WHERE `temp_heater` <= ".mysql_real_escape_string($max_heater_temp);
 				$temps = $db->select($query);
 				foreach ($temps as $temp) {
 					$arr[] = $temp['temp_heater'];
 				}
 				$t_h = getCommaSeparatedList($arr);
 				// получаем допустимые значения температуры изделия
-				$query = "SELECT DISTINCT `temp_solid` FROM `wwwmetotechru_metalls`.`heater_surface_power` WHERE `temp_solid` < ".mysql_real_escape_string($max_heater_temp);
+				$query = "SELECT DISTINCT `temp_solid` FROM `metotech_metalls`.`heater_surface_power` WHERE `temp_solid` < ".mysql_real_escape_string($max_heater_temp);
 				$temps = $db->select($query);
 				unset($arr);
 				foreach ($temps as $temp) {
