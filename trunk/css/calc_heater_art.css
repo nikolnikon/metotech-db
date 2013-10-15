@@ -1,10 +1,9 @@
-@CHARSET "UTF-8";
-
 div.art_calc {
 	background-color: #f5f5f5;
 	margin: 0px 5px;
 	padding: 5px;
 	font-family: 'Play', Verdana, sans-serif;
+	/* background-image: url(../images/background/back_heater_calc.jpg); */
 	
 	border: 1px dotted #acb7bf;
 	-moz-border-radius: 20px;
@@ -33,6 +32,9 @@ div.art_calc select, div.art_calc input, div.art_calc label {
 	font-family: 'Cuprum', Verdana, sans-serif;
 	font-size: 20px;
 }
+div.art_calc select[name="placement"] {
+	font-size: 16px;
+}
 
 div.art_calc button {
 	font-family: 'Play', Verdana, sans-serif;
@@ -52,19 +54,11 @@ div#error p {
 	text-align: center;
 }
 
-p#heater_calc_note {
+#heater_calc_note {
 	font-size: 11px;
+	margin-top: 25px;
 }
 
-/*jquery-validation*/
-.error {
-	color: #bf0000;
-	font-size: 13px;
-	font-family: 'Cuprum', Verdana, sans-serif;
-	list-style-type: none;
-}
-
-/*qTip2*/
 .formInfo a, .formInfo a:active, formInfo a:visited{
 	background-color:#bf0000;
 	font-family: 'Cuprum', Verdana, sans-serif;
@@ -76,18 +70,16 @@ p#heater_calc_note {
 	text-decoration: none;
 }
 
-.formInfo a:hover{
-	color:#660000;
+.formInfo a:hover {
+	color: #660000;
 	text-decoration: none;
+	cursor: help;
 }
 
-.qtip-content, .qtip-title{
+/*jquery-validation*/
+.error {
+	color: #bf0000;
+	font-size: 13px;
 	font-family: 'Cuprum', Verdana, sans-serif;
-	font-size: 14px;
-	font-weight: normal;
-}
-	
-.qtip-title{
-	font-size: 15px;
-	font-weight: bold;
+	list-style-type: none;
 }

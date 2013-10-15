@@ -1,53 +1,57 @@
-<html>
+<html itemscope itemtype="http://schema.org">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf8">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="description" content="Статья по расчету нагревателей электрических печей. Рассматриваются материалы нагревателей, методика и примеры расчета.">
 <meta name="keywords" content="нагреватель, нагреватели, расчет, электрическая печь, расчет нагревателей">
 <title>Нагреватели. Методика и примеры расчета. Статья</title>
-<meta name="mrc__share_title" content="Расчет нагревателей электрических печей">
-<meta name="mrc__share_description" content="Статья &quot;Нагреватели. Методика и примеры расчета&quot; содержит обзор по расчету нагревателей электрических печей. Рассматриваются материалы, используемые для изготовления нагревателей, их свойства, достоинства и недостатки, условия работы (нихром, вольфрам, молибден и др.), описана цель расчета нагревателей, приведены методики, описанные на конкретных примерах. Также статья содержит справочные таблицы и ссылки на ГОСТы, необходимые для проведения расчета нагревателей электрических печей. ">
+<!-- Теги для соц. сетей начало -->
+<meta name="mrc__share_title" content="Расчет нагревателей электрических печей. Статья. Метотехника">
+<meta name="mrc__share_description" content="Статья &quot;Нагреватели. Методика и примеры расчета&quot; содержит обзор по расчету нагревателей электрических печей. Рассматриваются материалы, используемые для изготовления нагревателей, их свойства, достоинства и недостатки, условия работы (нихром, вольфрам, молибден и др.), описана цель расчета нагревателей, приведены методики, описанные на конкретных примерах. Также статья содержит справочные таблицы и ссылки на ГОСТы, необходимые для проведения расчета нагревателей электрических печей.">
 <link rel="image_src" href="http://www.metotech.ru/images/articles/art_nagrev_1/logo_nagrev.png">
-<link href="style.css" type="text/css" rel="stylesheet">	
-<link href="calc_heater.css" type="text/css" rel="stylesheet">
-<link href='http://fonts.googleapis.com/css?family=Play&subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Cuprum&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+<meta itemprop="name" content="Расчет нагревателей электрических печей. Статья. Метотехника">
+<meta itemprop="description" content="Статья &quot;Нагреватели. Методика и примеры расчета&quot; содержит обзор по расчету нагревателей электрических печей. Рассматриваются материалы, используемые для изготовления нагревателей, их свойства, достоинства и недостатки, условия работы (нихром, вольфрам, молибден и др.), описана цель расчета нагревателей, приведены методики, описанные на конкретных примерах. Также статья содержит справочные таблицы и ссылки на ГОСТы, необходимые для проведения расчета нагревателей электрических печей.">
+<meta itemprop="image" content="http://www.metotech.ru/images/articles/art_nagrev_1/logo_nagrev.png">
+<!-- Теги для соц. сетей конец -->
+
 <link rel="icon" href="/16x16.png" type="image/x-icon">
 <link rel="shortcut icon" href="/16x16.png" type="image/x-icon">
-<!-- <script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?10" charset="windows-1251"></script> -->
-<!--Аккордион меню begin-->
-<!-- <script src="libs/jquery/jquery-1.5.1.js"></script> -->
+
+<link href="style.css" type="text/css" rel="stylesheet" />
+<link href="libs/jquery/jquery-ui-1.10.0.custom/css/jquery-ui-1.10.0.custom.css" rel="stylesheet" />
+<link href="libs/jquery/jquery-ui-1.10.0.custom/css/jquery.ui.accordion.css" rel="stylesheet" />
+<link href="scripts/jquery-realperson-1.1.0/css/jquery.realperson.css" type="text/css" rel="stylesheet">
+<link href="css/calc_heater_art.css" rel="stylesheet" type="text/css" />
+<link href='http://fonts.googleapis.com/css?family=Play&subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'  />
+<link href='http://fonts.googleapis.com/css?family=Cuprum&subset=latin,cyrillic' rel='stylesheet' type='text/css' />
+<link href='//cdnjs.cloudflare.com/ajax/libs/qtip2/2.1.1/jquery.qtip.min.css' rel='stylesheet' type='text/css' />
+
 <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.min.js"></script>
-<script src="scripts/jquery-validation-1.11.1/dist/jquery.validate.min.js"></script>
-<script src="scripts/jquery-validation-1.11.1/lib/jquery.form.js"></script>
-<script src="scripts/jquery-hotkeys-0.1.0/jquery.hotkeys.js"></script>
-<!--<script src="scripts/jquery-validation-1.9.0/jquery.validate.min.js"></script>
-<script src="scripts/jquery-validation-1.9.0/lib/jquery.form.js"></script>-->
-<script src="scripts/jquery-tooltip/js/jtip.js"></script>
-<!--<script src="libs/jquery/jquery-ui-1.8.14.custom.js"></script>-->
-<link rel="stylesheet" href="libs/jquery/css/menu-left-style.css">
-<script>
-$(function() {
-	$( "#accordion" ).accordion({
-		collapsible: true,
-		autoHeight: false,
-		active: 0
-	});
-	var active = $( "#accordion" ).accordion( "option", "active" );
-	if (active !== false) {
-		$("[name = hidden]").eq(active).css("display", "block");
-	}
-	$("[name = v]").each(function(index, element) {
-		$(element).css("display", "none");
-	});
-});
+<script src="scripts/jquery-validation-1.9.0/jquery.validate.min.js"></script>
+<script src="scripts/jquery-validation-1.9.0/lib/jquery.form.js"></script>
+<script src="scripts/jquery-realperson-1.1.0/jquery.realperson.min.js"></script>
+<script src="scripts/menu/menu-accordion.js"></script>
+<script src="scripts/mail/mail.js"></script>
+<script src="scripts/heat_calc/calc_heater.js"></script>
+<!--<script src="scripts/heat_calc/heat_calc.js"></script>-->
+<script src="//cdnjs.cloudflare.com/ajax/libs/qtip2/2.1.1/jquery.qtip.min.js"></script>
+
+<!-- Скрипты соц. сетей начало -->
+<script type="text/javascript" src="//yandex.st/share/share.js" charset="utf-8"></script>
+<script type="text/javascript">
+  window.___gcfg = {lang: 'ru'};
+
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
 </script>
-<!--Аккордион меню end-->
-<script src="calc_heater.js"></script>
+<!-- Скрипты соц. сетей конец -->
 </head>
 
-<body>
-<table width="995" height="100%" border="0" align="center" cellpadding="0" cellspacing="0" style="background-image:url(images/logo_cat.jpg); background-repeat:no-repeat; background-position:left top; border-left:1px solid #808080; border-right:1px solid #808080;">
+<body data-metall="nihrom">
+<table width="1255" height="100%" border="0" align="center" cellpadding="0" cellspacing="0" style="background-image:url(images/logo_cat.jpg); background-repeat:no-repeat; background-position:left top; border-left:1px solid #808080; border-right:1px solid #808080;">
 	<tr>
 		<td width="243" valign="top" style="padding-top:80px;"><!--замена-->
 		<!--#include file="menu-left-2.htm"-->
@@ -63,30 +67,39 @@ $(function() {
 				<li><a href="#Пример 2">Пример 2</a></li>
 				<li><a href="#Заключение">Заключение</a></li>
 				<li><a href="#Литература">Список литературы</a></li>
+				<li><a href="#Калькулятор">Калькулятор нагревателей</a></li>
 			</ul>
 		</div>
+			<p align="center">Вам понравилась эта статья?! Добавьте ее в свои закладки.
+				<br><br><noindex></noindex>
+			</p>
 		</div>
 		<div class="art_question">
-			<form method="POST" action="http://metotech.ru/cgi-bin/mail.php">
-				<p>Имя: <input type="text" name="name"></p>
-				<p>E-mail: <input type="text" name="email"></p>
+			<form id="pismo">
+				<div class="message">
+				</div>
+				<p>Имя<sup style="color: red;">*</sup>: <input type="text" name="name" required></p>
+				<p>E-mail<sup style="color: red;">*</sup>: <input type="text" name="email" required></p>
 				<p>Тема: <input type="text" name="subject"></p>
-				<p>Сообщение: <textarea name="text" rows="7" style="resize: vertical;"></textarea></p>
+				<p>Сообщение<sup style="color: red;">*</sup>: <textarea name="text" rows="7" style="resize: vertical;" required></textarea></p>
+				<p>Код<sup style="color: red;">*</sup>: <p><input type="text" name="captcha" id="captcha" required></p></p>
 				<input type="hidden" name="form_type" value="art_mail">
 				<p style="text-align: center;"><input type="submit" name="send_button" value="Отправить"></p>
 			</form>
 		</div>
 		<div class="art_calc">
+			<a name="Калькулятор"></a>
 			<h1>Рассчитать нагреватель</h1>
 			<form name="heater_calc">
 				<fieldset>
 					<legend>Параметры электрической печи</legend>
 					<p>Мощность печи, Вт
-						<span class="formInfo"><a href="scripts/jquery-tooltip/power_tooltip.htm?width=375" class="jTip" id="one" name="Мощность печи">?</a></span>
+						<span class="formInfo"><a data-tooltip="При подключении к бытовой сети <u>однофазного тока</u> значение мощности не должно превышать <u>6999</u> Вт.<br><br>При подключении к промышленной сети <u>трехфазного тока</u> значение мощности должно принадлежать диапазону <u>от 7000 до 500000</u> Вт включительно." id="one" name="Мощность печи">?</a></span>
 						<br><input type="text" name="power">
 					</p>
 					<p>Тип электросети
-						<br><select name="pgrid" disabled required>
+						<span class="formInfo"><a data-tooltip="Типы электросети более подробно рассмотрены в статье <a href=art_nagrev_1.htm target=_blank>Нагреватели. Методика и примеры расчета</a>" name="Тип электросети">?</a></span>
+						<br><select name="pgrid" required>
 							<option value="1" selected="selected">Однофазная</option>
 							<option value="3">Трехфазная</option>
 						</select>
@@ -104,13 +117,13 @@ $(function() {
 					<input type="hidden" name="resistivity">
 					<input type="hidden" name="density">
 					<p>Температура нагревателя, °C
-						<span class="formInfo"><a href="scripts/jquery-tooltip/temp_heater_tooltip.htm?width=375" class="jTip" id="seven" name="Температура нагревателя">?</a></span>
+						<span class="formInfo"><a data-tooltip="Температура, которую имеет непосредственно нагреватель электрической печи. Данная температура должна быть выше температуры нагреваемого изделия." id="seven" name="Температура нагревателя">?</a></span>
 						<br><input type="checkbox" name="temp_heater_enabled"><span style="font-size: 11px;">Редактировать температуру нагревателя</span>
 						<br><select name="temp_heater" disabled required>
 						</select>
 					</p>
 					<p>Температура нагреваемого изделия, °C
-						<span class="formInfo"><a href="scripts/jquery-tooltip/temp_solid_tooltip.htm?width=375" class="jTip" id="eight" name="Температура изделия">?</a></span>
+						<span class="formInfo"><a data-tooltip="Температура, до которой необходимо нагреть изделие с помощью электрической печи." id="eight" name="Температура изделия">?</a></span>
 						<br><select name="temp_solid" required>
 						</select>
 					</p>
@@ -129,24 +142,29 @@ $(function() {
 					<div>
 						<p id="diameter">Диаметр нагревателя, мм
 							<br><input type="text" name="diameter" readonly>
-							<span class="formInfo"><a href="scripts/jquery-tooltip/diameter_tooltip.htm?width=285" class="jTip" id="two" name="Диаметр нагревателя">?</a></span>
+							<span class="formInfo"><a data-tooltip="Диаметр нагревателя, подключенного к одной фазе" id="two" name="Диаметр нагревателя">?</a></span>
 						</p>
 						<p id="length">Длина нагревателя, м
 							<br><input type="text" name="length" readonly>
-							<span class="formInfo"><a href="scripts/jquery-tooltip/length_tooltip.htm?width=285" class="jTip" id="three" name="Длина нагревателя">?</a></span>
+							<span class="formInfo"><a data-tooltip="Длина нагревателя, подключенного к одной фазе" id="three" name="Длина нагревателя">?</a></span>
 						</p>
 						<p id="mass">Масса нагревателя, кг
 							<br><input type="text" name="mass" readonly>
-							<span class="formInfo"><a href="scripts/jquery-tooltip/mass_tooltip.htm?width=285" class="jTip" id="four" name="Масса нагревателя">?</a></span>
+							<span class="formInfo"><a data-tooltip="Масса нагревателя, подключенного к одной фазе" id="four" name="Масса нагревателя">?</a></span>
 						</p>
 						<p id="total_length">Общая длина нагревателей, м
 							<br><input type="text" name="total_length" readonly>
-							<span class="formInfo"><a href="scripts/jquery-tooltip/total_length_tooltip.htm?width=220" class="jTip" id="five" name="Общая длина нагревателей">?</a></span>
+							<span class="formInfo"><a data-tooltip="Суммарная длина трех нагревателей" id="five" name="Общая длина нагревателей">?</a></span>
 						</p>
 						<p id="total_mass">Общая масса нагревателей, кг
 							<br><input type="text" name="total_mass" readonly>
-							<span class="formInfo"><a href="scripts/jquery-tooltip/total_mass_tooltip.htm?width=220" class="jTip" id="six" name="Общая масса нагревателей">?</a></span>
+							<span class="formInfo"><a data-tooltip="Суммарная масса трех нагревателей" id="six" name="Общая масса нагревателей">?</a></span>
 						</p>
+					</div>
+					<div id="heater_calc_note">
+						<sup>*</sup>Результаты расчета нагревателей электрических печей, выполненного с помощью данного калькулятора, носят информативный характер.
+						<br><br>Расчет основан на подходе, рассмотренном в книге "Типовые расчеты по электрооборудованию", Дьяков В.И., а также в статье <a href="art_nagrev_1.htm">"Нагреватели. Методика и примеры расчета"</a>, Никонов Н. В., и содержит ряд допущений.
+						<br><br>В каждом конкретном случае могут появиться дополнительные условия, связанные с конструктивными особенностями печи, а также условиями эксплуатации.
 					</div>
 				</fieldset>
 			</form>
@@ -155,20 +173,19 @@ $(function() {
 				<p></p>
 			</div>
 		</div>
-		
 		<p style="height: 24px">&nbsp;</p></td>
 		<td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
 			<tr>
-				<td height="98" style="background-image:url(images/head_right.jpg); background-position:right top; background-repeat:no-repeat; padding-right:55px; padding-top:23px;" align="right" valign="top"><span class="tel">т/ф (495) 623-42-95<br>
+				<td height="98" style="background-image:url(images/head_right.jpg); background-position:right top; background-repeat:no-repeat; padding-right:55px; padding-top:23px;" align="right" valign="top"><span class="tel"><!--т/ф (495) 366-23-24<br>-->
 					(495) 504-95-54<br>
-					(495) 507-28-79</span></td>
+					(495) 642-41-95</span></td>
 			</tr>
 			<tr>
-				<td height="28" align="right" valign="top" style="padding-right:30px; background-image:url(images/bg_right_1.jpg); background-position:bottom right; background-repeat:no-repeat;"><span class="mail">e-mail: <a href="mailto:metotech@mail.ru" class="mail">metotech@mail.ru</a></span></td>
+				<td class="mail"><span>e-mail: <a href="mailto:info@metotech.ru">info@metotech.ru</a></span></td>
 			</tr>
 			<tr style="text-align: right; ">
 				<td style="padding-right: 10px;">
-					<!-- <script src="http://connect.facebook.net/ru_RU/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/pages/Metotehnika/347420899019" width="230" show_faces="false" stream="false" header="false"></fb:like-box> -->
+					<script src="http://connect.facebook.net/ru_RU/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/pages/Metotehnika/347420899019" width="230" show_faces="false" stream="false" header="false"></fb:like-box>
 				</td>
 			</tr>
 			<tr>
@@ -182,6 +199,11 @@ $(function() {
 						</td>
 					</tr>
 				</table>
+				<div style="width: 240px; text-align: left;">
+					<div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="button" data-yashareQuickServices="vkontakte,facebook,twitter" style="float: left;"></div>
+					<div style="height: 7px;"></div>
+					<div class="g-plusone" data-size="small" data-annotation="none"></div>
+				</div>
 				</td>
 			</tr>
 			<!--#include file="menu-top.htm"-->
@@ -191,15 +213,7 @@ $(function() {
 				<td height="42" valign="top" style="padding-right:20px;">
 		<table class="anons">
 			<tr>
-				<td width="200">
-					<strong><a href="nihrom-price.htm">Нихром - ПРАЙС-ЛИСТ</a></strong>
-					<br><br><strong><a href="nihrom-opisanie.htm">Нихром - описание</a></strong>
-					<br><br><strong><a href="art_nagrev_1.htm" class="link_or">Нихром - Методика расчета нагревателей</a></strong>
-					<br><br><strong><a href="x20n80-opisanie.htm" style="padding-left: 20px;">Х20Н80 - описание</a></strong>
-					<br><br><strong><a href="x15n60-opisanie.htm" style="padding-left: 20px;">Х15Н60 - описание</a></strong>
-					<br><br><strong><a href="nihrom-gost.htm">Нихром - ГОСТы</a></strong>
-
-  			 </td>
+				<!--#include file="nihrom-menu.htm"-->
 				<!--copyscapeskip--><td style="line-height:20px; font-size: 11px; text-align: justify;">Статья <strong>"Нагреватели. Методика и примеры расчета"</strong> содержит обзор по расчету нагревателей электрических печей. Рассматриваются материалы, используемые для изготовления нагревателей, их свойства, достоинства и недостатки, условия работы (<a href="/">нихром</a>, <a href="volfram-opisanie.htm">вольфрам</a>, <a href="molibden-opisanie.htm">молибден</a> и др.), описана цель расчета нагревателей, приведены методики, описанные на конкретных примерах. Также статья содержит справочные таблицы и ссылки на ГОСТы, необходимые для проведения расчета нагревателей электрических печей.
 				<br><br><span style="font-size: 12px;">На странице представлена только выдержка из статьи <strong>"Нагреватели. Методика и примеры расчета"</strong></span>. 
 				<br><span style="color: #bf0000; font-weight: bold;">Полный вариант статьи вы можете <a href="http://www.metotech.ru/articles/art_nagrev_1.pdf" target="blank">скачать</a> в формате pdf.</td><!--/copyscapeskip-->
@@ -217,7 +231,7 @@ $(function() {
 				<div>
 					<h1>Нагреватели. Материалы для изготовления нагревателей</h1>
 					Непосредственно <strong>нагреватель</strong> – один из самых важных элементов печи, именно он осуществляет нагрев, имеет наибольшую температуру и определяет работоспособность нагревательной установки в целом. Поэтому нагреватели должны соответствовать ряду требований, которые приведены ниже.
-					<h2>Требования к нагревтелям</h2>
+					<h2>Требования к нагревателям</h2>
 					<b>Основные требования к нагревателям (материалам нагревателей):</b>
 					<ul style="list-style-type: decimal;">
 						<li>Нагреватели должны обладать достаточной жаростойкостью (окалиностойкостью) и жаропрочностью. Жаропрочность - механическая прочность при высоких температурах. Жаростойкость - сопротивление металлов и сплавов газовой коррозии при высоких температурах (более подробно свойства жаростойкости и жаропорочности описаны на странице <a href="http://www.metotech.ru/garsplavy-price.htm">“Жаропрочные сплавы и стали”</a>).</li>
@@ -248,8 +262,8 @@ $(function() {
 					</ul>
 					<b>Достоинства фехрали:</b>
 					<ul style="list-style-type: decimal;">
-						<li>более дешевый сплав по сравнению с нихромом, т.к. не содержит никель;</li>
-						<li>обладает лучшей по сравнению с нихромом жаростойкостью, напрмер, фехраль Х23Ю5Т может работать при температуре до 1400 °С (1400 °С - максимальная рабочая температура для нагревателя из проволоки O 6,0 мм и более; O 3,0 - 1350 °С; O 1,0 - 1225 °С; O 0,2 - 950 °С).</li>
+						<li>более дешевый сплав по сравнению с нихромом, т.к. не содержит <strong><a href="nikel-opisanie.htm">никель</a></strong>;</li>
+						<li>обладает лучшей по сравнению с нихромом жаростойкостью, напрмер, фехраль Х23Ю5Т может работать при температуре до 1400 °С (1400 °С - максимальная рабочая температура для нагревателя из проволоки &#216; 6,0 мм и более; &#216; 3,0 - 1350 °С; &#216; 1,0 - 1225 °С; &#216; 0,2 - 950 °С).</li>
 					</ul>
 					<b>Недостатки фехрали:</b>
 					<ul style="list-style-type: decimal;">
@@ -285,7 +299,7 @@ $(function() {
 
 					<br><br><u><b>Пример расчета диаметра и длины нагревательного элемента</b></u>
 					<br><br><i>Исходные данные:</i>
-					<br>Устройство мощьностью <i><b>P</b></i> = 800 Вт; напряжение сети <i><b>U</b></i> = 220 В; температура нагревателя 800 °C. В качестве нагревательного элемента используется нихромовая проволока Х20Н80.
+					<br>Устройство мощностью <i><b>P</b></i> = 800 Вт; напряжение сети <i><b>U</b></i> = 220 В; температура нагревателя 800 °C. В качестве нагревательного элемента используется нихромовая проволока Х20Н80.
 
 					<br><br><span>1.</span> Сначала необходимо определить силу тока, которая будет проходить через нагревательный элемент:
 					<br>&nbsp;&nbsp;&nbsp;&nbsp;<i><b>I = P / U</b></i> = 800 / 220 = 3,63 А.
@@ -725,6 +739,8 @@ $(function() {
 
 					<br><br><span>Промышленная сеть трехфазного тока</span>
 					<br><br>При данном типе подключения нагрузка распределяется равномерно на три фазы, т.е. по 6 / 3 = 2 КВт на фазу. Таким образом, нам требуется 3 нагревателя. Далее необходимо выбрать способ подключения непосредственно нагревателей (нагрузки). Способов может быть 2: “ЗВЕЗДА” или “ТРЕУГОЛЬНИК”.
+					
+					<br><br>Стоит заметить, что в данной статье формулы для расчета силы тока (<i><b>I</b></i>) и сопротивления (<i><b>R</b></i>) для трехфазной сети записаны не в классическом виде. Это сделано для того, чтобы не усложнять изложение материала по расчету нагревателей электротехническими терминами и определениями (например, не упоминаются фазные и линейные напряжения и токи и соотношения между ними). С классическим подходом и формулами расчета трехфазных цепей можно ознакомиться в специализированной литературе. В данной статье некоторые математические преобразования, проведенные над классическими формулами, скрыты от читателя, и на конечный результат это не оказывает никакого влияния.
 					
 					<br><br><strong>При подключении типа “ЗВЕЗДА”</strong> нагреватель подключается между фазой и нулем (см. рис. 2). Соответственно, напряжение на концах нагревателя будет <i><b>U</b></i> = 220 В.
 					<br>Ток, проходящий через нагреватель -
@@ -1173,7 +1189,7 @@ $(function() {
 
 					<br><br>Надеемся, что статья оказалась Вам полезной. Мы допускаем её свободное распространение при условии сохранения ссылки на наш сайт http://www.metotech.ru
 
-					<br><br>В случае обнаружения неточностей, просим сообщить нам на адрес электронной почты metotech@mail.ru или с помощью системы "Орфус", выделив текст с ошибкой и нажав Ctrl+Enter.
+					<br><br>В случае обнаружения неточностей, просим сообщить нам на адрес электронной почты info@metotech.ru или с помощью системы "Орфус", выделив текст с ошибкой и нажав Ctrl+Enter.
 				</div>
 				<a name="Литература"></a>
 				<div class="literature">
@@ -1183,7 +1199,7 @@ $(function() {
 						<li>Жуков Л.Л., Племянникова И.М., Миронова М.Н., Баркая Д.С., Шумков Ю.В. <b>"Сплавы для нагревателей"</b>.</li>
 						<li>Сокунов Б.А., Гробова Л.С. <b>"Электротермические установки (электрические печи сопротивления)"</b>.</li>
 						<li>Фельдман И.А., Гутман М.Б., Рубин Г.К., Шадрич Н.И. <b>"Расчет и конструирование нагревателей электропечей сопротивления"</b>.</li>
-						<li>http://www.horss.ru/index.php/goods/osnovnye-svedeniya/76-pechi/677-raschetnagrevatelei</li>
+						<li>http://www.horss.ru/h6.php?p=45</li>
 						<li>http://www.electromonter.info/advice/nichrom.html</li>
 					</ul>
 				</div>
