@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 07, 2013 at 03:26 PM
+-- Generation Time: Oct 18, 2013 at 01:15 AM
 -- Server version: 5.1.40
 -- PHP Version: 5.3.3
 
@@ -16,7 +16,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `metalls`
+-- Database: `metotech_metalls`
 --
 
 -- --------------------------------------------------------
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `heater_surface_power` (
   `temp_heater` double NOT NULL COMMENT 'Температура нагревателя, °С',
   `surface_power` double NOT NULL COMMENT 'Удельная поверхностная мощность нагревателя, Вт/см^2',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Удельная поверхностная мощность нагревателей в зависимости о' AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Удельная поверхностная мощность нагревателей в зависимости о' AUTO_INCREMENT=149 ;
 
 --
 -- Dumping data for table `heater_surface_power`
@@ -263,7 +263,7 @@ CREATE TABLE IF NOT EXISTS `max_heater_temp` (
   `max_temp` double NOT NULL COMMENT 'Максимальная рабочая температура нагревателя для соответствующего диаметра, °С',
   PRIMARY KEY (`id`),
   KEY `max_heater_temp_alloy_fk` (`alloy_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Содержит значения максимальных рабочих температур нагревател' AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Содержит значения максимальных рабочих температур нагревател' AUTO_INCREMENT=11 ;
 
 --
 -- Dumping data for table `max_heater_temp`
@@ -279,12 +279,7 @@ INSERT INTO `max_heater_temp` (`id`, `alloy_id`, `diameter`, `max_temp`) VALUES
 (7, 2, 0.4, 950),
 (8, 2, 1, 1000),
 (9, 2, 3, 1075),
-(10, 2, 6, 1125),
-(11, 8, 0.2, 950),
-(12, 8, 0.4, 1075),
-(13, 8, 1, 1225),
-(14, 8, 3, 1350),
-(15, 8, 6, 1400);
+(10, 2, 6, 1125);
 
 -- --------------------------------------------------------
 
@@ -358,17 +353,19 @@ CREATE TABLE IF NOT EXISTS `rad_eff_coef` (
   `heater_placement` text NOT NULL COMMENT 'Размещение нагревателей',
   `min_coef` double NOT NULL COMMENT 'Минимальное значение коэффициента',
   `max_coef` double NOT NULL COMMENT 'Максимальное значение коэффициента',
+  `order` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Коэффициент эффективности излучения (Дьяков)' AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Коэффициент эффективности излучения (Дьяков)' AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `rad_eff_coef`
 --
 
-INSERT INTO `rad_eff_coef` (`id`, `heater_placement`, `min_coef`, `max_coef`) VALUES
-(1, 'Проволочные спирали полузакрытые', 0.16, 0.24),
-(2, 'Проволочные спирали на полочках в трубках', 0.3, 0.36),
-(3, 'Проволочные зигзагообразные нагреватели', 0.6, 0.72);
+INSERT INTO `rad_eff_coef` (`id`, `heater_placement`, `min_coef`, `max_coef`, `order`) VALUES
+(1, 'Проволочные спирали полузакрытые', 0.16, 0.24, 2),
+(2, 'Проволочные спирали на полочках в трубках', 0.3, 0.36, 3),
+(3, 'Проволочные зигзагообразные нагреватели', 0.6, 0.72, 4),
+(4, 'Проволочные спиралевидные нагреватели', 0.6, 0.72, 1);
 
 -- --------------------------------------------------------
 
@@ -403,7 +400,7 @@ CREATE TABLE IF NOT EXISTS `standart_nom_diameters` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `standart_diameter` double NOT NULL COMMENT 'Стандартный диаметр, мм',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Содержит список стандартных номинальных диаметров проволки, ' AUTO_INCREMENT=85 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Содержит список стандартных номинальных диаметров проволки, ' AUTO_INCREMENT=81 ;
 
 --
 -- Dumping data for table `standart_nom_diameters`
@@ -485,11 +482,7 @@ INSERT INTO `standart_nom_diameters` (`id`, `standart_diameter`) VALUES
 (77, 6.3),
 (78, 6.7),
 (79, 7),
-(80, 7.5),
-(81, 8),
-(82, 9),
-(83, 10),
-(84, 12);
+(80, 7.5);
 
 -- --------------------------------------------------------
 
@@ -504,7 +497,7 @@ CREATE TABLE IF NOT EXISTS `var_resistent_coef` (
   `correction_coef` double NOT NULL COMMENT 'Поправочный коэффициент',
   PRIMARY KEY (`id`),
   KEY `var_res_coef_alloy_fk` (`alloy_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Поправочный коэффициент для расчета изменения электрического' AUTO_INCREMENT=68 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Поправочный коэффициент для расчета изменения электрического' AUTO_INCREMENT=38 ;
 
 --
 -- Dumping data for table `var_resistent_coef`
@@ -535,22 +528,7 @@ INSERT INTO `var_resistent_coef` (`id`, `alloy_id`, `temp`, `correction_coef`) V
 (34, 2, 800, 1.089),
 (35, 2, 900, 1.097),
 (36, 2, 1000, 1.105),
-(37, 2, 1100, 1.114),
-(53, 8, 20, 1),
-(54, 8, 100, 1.002),
-(55, 8, 200, 1.007),
-(56, 8, 300, 1.013),
-(57, 8, 400, 1.022),
-(58, 8, 500, 1.036),
-(59, 8, 600, 1.056),
-(60, 8, 700, 1.063),
-(61, 8, 800, 1.067),
-(62, 8, 900, 1.072),
-(63, 8, 1000, 1.076),
-(64, 8, 1100, 1.079),
-(65, 8, 1200, 1.08),
-(66, 8, 1300, 1.083),
-(67, 8, 1400, 1.086);
+(37, 2, 1100, 1.114);
 
 --
 -- Constraints for dumped tables
