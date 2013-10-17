@@ -96,7 +96,7 @@ function getCommaSeparatedList($array, $type = VALUES) {
  * @param array $conds key -> фильтруемое поле, value -> массив значений для поля. Если null, то условие не включается в запрос.
  * @return string SQL-запрос
  */
-function getFilterQuery($table, $returned_fields, $conds=null) {
+function getFilterQuery($table, $returned_fields, $conds=null, $order_field=null) {
 	$query = "SELECT ";
 	foreach ($returned_fields as $returned_field) {
 		$query .= "`$returned_field`, ";
@@ -110,6 +110,9 @@ function getFilterQuery($table, $returned_fields, $conds=null) {
 			$query .= "`$cond` IN ($s) AND ";
 		}
 		$query = substr($query, 0, strlen($query) - 5);
+	}
+	if (! is_null($order_field)) {
+		$query .= " ORDER BY $order_field";
 	}
 	//echo "<br><br>query_2: $query<br><br>";
 	return $query;	
@@ -228,6 +231,16 @@ function get_heater_form_content($param) {
 		//echo "<br>ids: "; print_r($ids); echo "<br>";
 		$options = array();
 		fillGenericArray($table_name, $class_name, $options, $ids); // что будет в случае неудачи?
+		
+		if ($param == "placement") {
+			$compare_funс = function ($first, $second)
+			{
+				if ($first->order == $second->order)
+					return 0;
+				return ($first->order < $second->order) ? -1 : 1;
+			};
+			uasort($options, $compare_funс);
+		}
 		//echo "<br>options: "; print_r($options); echo "<br>";
 		foreach ($options as $option) {
 			if ($param == "material") {
