@@ -276,7 +276,7 @@ function get_heater_form_content($param) {
 			}
 			elseif ($param == "placement") {
 				$av_coef = ($option->min_coef + $option->max_coef) / 2;
-				$html_code .= "<option value=\"".$av_coef."\">";
+				$html_code .= "<option value=\"".$av_coef."\ data-type=\"".$option->heater_type."\"">";
 				$html_code .= $option->__toString();
 				$html_code .= "</option>\n";
 			}

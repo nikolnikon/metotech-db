@@ -224,6 +224,24 @@ $(function() {
 	})
 	.change();
 	
+	// обработка выбора круглого/плоского нагревателя
+	$("[name = 'heater_type']").change(function() {
+		var heater_type = $("select[name = 'heater_type'] option:selected").val();
+		if (heater_type == 'plane') { // если плоский нагреватель
+			$("p#size_relation").show("slow");
+		}
+		else if (heater_type == 'round') { // если круглый нагреватель
+			$("p#size_relation").hide("slow");
+			$("input[name = 'voltage']").val("");
+		}
+		
+		var v = validator.element("[name='power']");
+		if (v) {
+			$("[name='power'] li").hide();
+		}
+	})
+	.change();
+	
 	// если пользователь меняет исходные данные, то результаты предыдущего расчета скрываются
 	$("form[name='heater_calc'] select, form[name='heater_calc'] input").change(function() {
 		hide_result("slow");

@@ -804,6 +804,18 @@
 											<br><select name="temp_solid" required>
 											</select>
 										</p>
+										<p>Тип нагревателей
+											<span class="formInfo"><a data-tooltip="Проволочные спиралевидные нагреватели <img src=images/heater_calc/heater_spiral.png> <br>Проволочные спирали полузакрытые <img src=images/heater_calc/heater_groove.png> <br>Проволочные спирали на полочках в трубках <img src=images/heater_calc/heater_tube.png> <br>Проволочные зигзагообразные нагреватели <img src=images/heater_calc/heater_zigzag.png>" name="Тип и размещение нагревателей">?</a></span>
+											<br>
+											<select name="heater_type" required>
+												<option value="round" selected="selected">Проволочные</option>
+												<option value="plane">Ленточные</option>
+											</select>
+										</p>
+										<p id="size_relation" style="display: none;">Отношение ширины ленты к толщине
+											<span class="formInfo"><a data-tooltip="Проволочные спиралевидные нагреватели <img src=images/heater_calc/heater_spiral.png> <br>Проволочные спирали полузакрытые <img src=images/heater_calc/heater_groove.png> <br>Проволочные спирали на полочках в трубках <img src=images/heater_calc/heater_tube.png> <br>Проволочные зигзагообразные нагреватели <img src=images/heater_calc/heater_zigzag.png>" name="Тип и размещение нагревателей">?</a></span>
+											<br><input type="text" name="size_relation">
+										</p>
 										<p>Тип и размещение нагревателей
 											<span class="formInfo"><a data-tooltip="Проволочные спиралевидные нагреватели <img src=images/heater_calc/heater_spiral.png> <br>Проволочные спирали полузакрытые <img src=images/heater_calc/heater_groove.png> <br>Проволочные спирали на полочках в трубках <img src=images/heater_calc/heater_tube.png> <br>Проволочные зигзагообразные нагреватели <img src=images/heater_calc/heater_zigzag.png>" name="Тип и размещение нагревателей">?</a></span>
 											<br><select name="placement" required>
