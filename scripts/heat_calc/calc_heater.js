@@ -35,6 +35,7 @@ $(function() {
 	  	}
 		else if (status == "success") {
 			$("select[name = 'material']").change();
+			$("select[name = 'heater_type']").change();
 		}
 	};
 	
@@ -227,18 +228,49 @@ $(function() {
 	// обработка выбора круглого/плоского нагревателя
 	$("[name = 'heater_type']").change(function() {
 		var heater_type = $("select[name = 'heater_type'] option:selected").val();
+		var options = $("select[name = 'placement'] option");
+		var first_placement_index = -1;
+		
 		if (heater_type == 'plane') { // если плоский нагреватель
 			$("p#size_relation").show("slow");
+			options.each(function(index){
+				if ($(this).data("type") == 1)
+					$(this).hide();
+				else if ($(this).data("type") == 2) {
+					if (first_placement_index < 0)
+						first_placement_index = index;
+					$(this).show();
+				}
+			});
+			$("input[name='size_relation']").rules("add", {
+														range: [5, 15],
+														messages: {
+															range: jQuery.format("Введите отношение ширины ленты к ее толщине от {0} до {1}")
+														}
+			});
 		}
 		else if (heater_type == 'round') { // если круглый нагреватель
 			$("p#size_relation").hide("slow");
-			$("input[name = 'voltage']").val("");
+			$("input[name = 'size_relation']").val("");
+			options.each(function(index){
+				if ($(this).data("type") == 2)
+					$(this).hide();
+				else if ($(this).data("type") == 1) {
+					if (first_placement_index < 0)
+						first_placement_index = index;
+					$(this).show();
+				}
+			});
+			$("input[name='size_relation']").rules("remove", "min max");
 		}
 		
-		var v = validator.element("[name='power']");
-		if (v) {
-			$("[name='power'] li").hide();
-		}
+		$("select[name = 'placement']").prop("selectedIndex", first_placement_index);
+		$("select[name = 'placement']").change();
+		
+		// var v = validator.element("[name='power']");
+		// if (v) {
+			// $("[name='power'] li").hide();
+		// }
 	})
 	.change();
 	
