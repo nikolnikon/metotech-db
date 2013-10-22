@@ -4,6 +4,7 @@ require_once 'class.mysql_dbase.php';
 require_once 'class.generic_object_collection.php';
 require_once 'class.alloy.php';
 require_once 'class.rad_eff_coef.php';
+// require_once 'class.heater_calculator.php';
 
 /**
  * Класс задает константы для типа продукции
@@ -167,42 +168,70 @@ function calc_heater($params, &$calc_res) {
 	}
 	$B_DOP = $B_EF * $A;
 	
-	
-	// Расчет диаметра
-	if (! isset($params['D'])) {
-		$exp_1 = 4 * $RO_T * pow($P, 2);
-		//echo '<br><br> exp_1: '.$exp_1.'<br><br>';
-		$exp_2 = pow(M_PI, 2) * pow($U, 2) * $B_DOP;
-		//echo '<br><br> exp_2: '.$exp_2.'<br><br>';
-		$D = pow($exp_1/$exp_2, 1/3);
-	}
-	else {
-		$D = $params['D'];
+	// Расчет отношения ширины плоского нагревателя к его толщине
+	$M = $params['M'];
+	if (! isset($M)) {
+		echo "bad M\n";
+		return false;
 	}
 	
-	// Расчет длины
-	if (! isset($params['D'])) {
-		$exp_1 = $P * pow($U, 2);
-		$exp_2 = 4 * M_PI * $RO_T * pow($B_DOP, 2);
+	if ($params['HEATER_TYPE'] == HeaterType::ROUND) {
+		// Расчет диаметра круглого нагревателя
+		if (! isset($params['D'])) {
+			$exp_1 = 4 * $RO_T * pow($P, 2);
+			//echo '<br><br> exp_1: '.$exp_1.'<br><br>';
+			$exp_2 = pow(M_PI, 2) * pow($U, 2) * $B_DOP;
+			//echo '<br><br> exp_2: '.$exp_2.'<br><br>';
+			$D = pow($exp_1/$exp_2, 1/3);
+		}
+		else {
+			$D = $params['D'];
+		}
+		
+		// Расчет длины круглого нагревателя
+		if (! isset($params['D'])) {
+			$exp_1 = $P * pow($U, 2);
+			$exp_2 = 4 * M_PI * $RO_T * pow($B_DOP, 2);
+			$L = pow($exp_1/$exp_2, 1/3);
+		}
+		else {
+			$I = $P / $U;
+			$R = $U / $I;
+			$L = (M_PI * pow($D, 2) * $R) / (4 * $RO_T);
+		}
+		
+		$calc_res['D'] = $D;
+		$calc_res['L'] = $L;
+	}
+	
+	elseif ($params['HEATER_TYPE'] == HeaterType::PLANE) {
+		// Расчет толщины плоского нагревателя
+		$exp_1 = $RO_T * pow($P, 2);
+		$exp_2 = $M * ($M + 1) * pow($U, 2) * $B_DOP;
+		// echo "exp_1: ".$exp_1."\n";
+		// echo "exp_2: ".$exp_2."\n";
+		$A = pow($exp_1/$exp_2, 1/3);
+		// echo "A: ".$A."\n";
+		
+		// Расчет ширины плоского нагревателя
+		$B = $M * $A;
+		// echo "B: ".$B."\n";
+		
+		// Расчет длины плоского нагревателя
+		$exp_1 = 2.5 * $P * pow($U, 2) * $M;
+		$exp_2 = pow($M + 1, 2) * $RO_T * pow($B_DOP, 2);
 		$L = pow($exp_1/$exp_2, 1/3);
+		
+		$calc_res['A'] = $A;
+		$calc_res['B'] = $B;
+		$calc_res['L'] = $L;
 	}
-	else {
-		$I = $P / $U;
-		$R = $U / $I;
-		$L = (M_PI * pow($D, 2) * $R) / (4 * $RO_T);
-	}
-	
-	$calc_res['D'] = $D;
-	$calc_res['L'] = $L;
-	
 //	echo "calc result: "; print_r($calc_res); echo "\n";
 	
 	return true;
 }
 
 function get_heater_form_content($param) {
-	/*header("HTTP/1.0 500 Internal Server Error", true, 500);
-	print json_encode(array("status"=>"error", "message"=>"it's very bad!"));*/
 	if ($param == "material") {
 		$table_name = 'alloys';
 		$class_name = 'Alloy';

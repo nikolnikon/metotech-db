@@ -808,8 +808,8 @@
 											<span class="formInfo"><a data-tooltip="Проволочные спиралевидные нагреватели <img src=images/heater_calc/heater_spiral.png> <br>Проволочные спирали полузакрытые <img src=images/heater_calc/heater_groove.png> <br>Проволочные спирали на полочках в трубках <img src=images/heater_calc/heater_tube.png> <br>Проволочные зигзагообразные нагреватели <img src=images/heater_calc/heater_zigzag.png>" name="Тип и размещение нагревателей">?</a></span>
 											<br>
 											<select name="heater_type" required>
-												<option value="round" selected="selected">Проволочные</option>
-												<option value="plane">Ленточные</option>
+												<option value="1" selected="selected">Проволочные</option>
+												<option value="2">Ленточные</option>
 											</select>
 										</p>
 										<p id="size_relation" style="display: none;">Отношение ширины ленты к толщине
@@ -834,7 +834,15 @@
 										<div>
 											<p id="diameter">Диаметр нагревателя, мм
 												<br><input type="text" name="diameter" readonly>
-												<span class="formInfo"><a data-tooltip="Диаметр нагревателя, подключенного к одной фазе" id="two" name="Диаметр нагревателя">?</a></span>
+												<span class="formInfo"><a data-tooltip="Диаметр нагревателя, подключенного к одной фазе" name="Диаметр нагревателя">?</a></span>
+											</p>
+											<p id="thickness">Толщина нагревателя, мм
+												<br><input type="text" name="thickness" readonly>
+												<span class="formInfo"><a data-tooltip="Толщина нагревателя, подключенного к одной фазе" name="Толщина нагревателя">?</a></span>
+											</p>
+											<p id="width">Ширина нагревателя, мм
+												<br><input type="text" name="width" readonly>
+												<span class="formInfo"><a data-tooltip="Ширина нагревателя, подключенного к одной фазе" name="Ширина нагревателя">?</a></span>
 											</p>
 											<p id="length">Длина нагревателя, м
 												<br><input type="text" name="length" readonly>

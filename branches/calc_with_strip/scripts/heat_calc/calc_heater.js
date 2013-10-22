@@ -231,7 +231,7 @@ $(function() {
 		var options = $("select[name = 'placement'] option");
 		var first_placement_index = -1;
 		
-		if (heater_type == 'plane') { // если плоский нагреватель
+		if (heater_type == 2) { // если плоский нагреватель
 			$("p#size_relation").show("slow");
 			options.each(function(index){
 				if ($(this).data("type") == 1)
@@ -242,6 +242,7 @@ $(function() {
 					$(this).show();
 				}
 			});
+			$("input[name = 'size_relation']").val("");
 			$("input[name='size_relation']").rules("add", {
 														range: [5, 15],
 														messages: {
@@ -249,9 +250,9 @@ $(function() {
 														}
 			});
 		}
-		else if (heater_type == 'round') { // если круглый нагреватель
+		else if (heater_type == 1) { // если круглый нагреватель
 			$("p#size_relation").hide("slow");
-			$("input[name = 'size_relation']").val("");
+			$("input[name = 'size_relation']").val("0");
 			options.each(function(index){
 				if ($(this).data("type") == 2)
 					$(this).hide();
@@ -303,14 +304,25 @@ $(function() {
 				success: function(result, statusText, xhr, $form) {
 					//console.log(result);
 					var pgrid = $("select[name='pgrid'] option:selected").val();
-					$("input[name='diameter']").val(result.D);
+					var heater_type = $("select[name = 'heater_type'] option:selected").val();
 					$("input[name='length']").val(result.L);
 					$("input[name='mass']").val(result.M);
 					
 					$("#result").show("slow");
 					$("form[name='heater_calc_res']").show("slow");
-					//window.location = loc + "#result";
-					$("#diameter").show("slow");
+					if (heater_type == 1) { // если круглый нагреватель
+						$("#thickness").hide();
+						$("#width").hide();
+						$("input[name='diameter']").val(result.D);
+						$("#diameter").show("slow");
+					}
+					else if (heater_type == 2) { // если плоский нагреватель
+						$("#diameter").hide();
+						$("input[name='thickness']").val(result.A);
+						$("input[name='width']").val(result.B);
+						$("#thickness").show("slow");
+						$("#width").show("slow");
+					}
 					$("#length").show("slow");
 					$("#mass").show("slow");
 					if (pgrid == 1) {

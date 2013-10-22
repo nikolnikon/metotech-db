@@ -2,6 +2,12 @@
 require_once ('class.abstract_calculator.php');
 require_once ('class.mysql_dbase.php');
 
+class HeaterType
+{
+	const ROUND = 1;
+	const PLANE = 2;
+}
+
 /**
  * Класс, реализующий калькулятор для нагревателей
  * @author nikolnikon
@@ -53,7 +59,9 @@ class HeaterCalculator extends AbstractCalculator
 		$this->_parameters['A'] = $form_params['placement'];
 		$this->_parameters['DENS'] = $form_params['density'];
 		$this->_parameters['ALLOY'] = $form_params['material'];
-		$this->_parameters['TEMP_HEATER'] = $form_params['temp_heater']; 
+		$this->_parameters['TEMP_HEATER'] = $form_params['temp_heater'];
+		$this->_parameters['HEATER_TYPE'] = $form_params['heater_type'];
+		$this->_parameters['M'] = $form_params['size_relation'];
 		
 		
 		$ts = $form_params['temp_solid']; // температура тела
@@ -101,31 +109,38 @@ class HeaterCalculator extends AbstractCalculator
 	 * Выполняет округление полученного диаметра до стандартного, округление длины и расчет массы проволоки (в том числе для трехфазного подключения) 
 	 */
 	protected function _handleCalc() {
-		$d = $this->_result['D'];
-		try {
-			$db = MySqlDBase::instance();
-			$d *= pow(10, 3);
-			
-			$query = "SELECT MIN(`standart_diameter`) FROM `metotech_metalls`.`standart_nom_diameters` WHERE `standart_diameter` > ".mysql_real_escape_string($d);
-			$res = $db->select($query);
-			if (isset($res[0]['MIN(`standart_diameter`)'])) {
-				$d = $res[0]['MIN(`standart_diameter`)'];
+		if ($this->_parameters['HEATER_TYPE'] == HeaterType::ROUND) {
+			$d = $this->_result['D'];
+			try {
+				$db = MySqlDBase::instance();
+				$d *= pow(10, 3);
+				
+				$query = "SELECT MIN(`standart_diameter`) FROM `metotech_metalls`.`standart_nom_diameters` WHERE `standart_diameter` > ".mysql_real_escape_string($d);
+				$res = $db->select($query);
+				if (isset($res[0]['MIN(`standart_diameter`)'])) {
+					$d = $res[0]['MIN(`standart_diameter`)'];
+				}
+				
+				$this->_result['D'] = round($d, 1);
+				$this->_result['L'] = ceil($this->_result['L']);
+				$this->_result['M'] = $this->_result['L'] * $this->_parameters['DENS'] * pow(10, 3) * M_PI * pow($this->_result['D'], 2) * 0.25 * pow(10, -6);
+				$this->_result['M'] = round($this->_result['M'], 3);
+				// echo "result_array: "; print_r($this->_result); echo "\n";
+			} catch(Exception $e) {
+				$this->_errorCode = DBERROR;
+				return false;
 			}
-			
-//			$this->_result['D_CALC'] = $d;
-//			$this->_result['L_CALC'] = ceil($this->_result['L']);
-//			$this->_result['M_CALC'] = $this->_result['L_CALC'] * $this->_parameters['DENS'] * pow(10, 3) * M_PI * pow($this->_result['D_CALC'], 2) * 0.25 * pow(10, -6);
-//			$this->_result['M_CALC'] = round($this->_result['M_CALC'], 1);
-			
-			$this->_result['D'] = round($d, 1);
-			$this->_result['L'] = ceil($this->_result['L']);
-			$this->_result['M'] = $this->_result['L'] * $this->_parameters['DENS'] * pow(10, 3) * M_PI * pow($this->_result['D'], 2) * 0.25 * pow(10, -6);
-			$this->_result['M'] = round($this->_result['M'], 3);
-			// echo "result_array: "; print_r($this->_result); echo "\n";
-		} catch(Exception $e) {
-			$this->_errorCode = DBERROR;
-			return false;
 		}
+		elseif ($this->_parameters['HEATER_TYPE'] == HeaterType::PLANE) {
+			$this->_result['A'] = round($this->_result['A'] * pow(10, 3), 1);
+			// echo "res A: ".$this->_result['A']."\n";
+			$this->_result['B'] = round($this->_result['B'] * pow(10,3), 1);
+			// echo "res B: ".$this->_result['B']."\n";
+			$this->_result['L'] = ceil($this->_result['L']);
+			$this->_result['M'] = $this->_parameters['DENS'] * pow(10, 3) * $this->_result['A'] * $this->_result['B'] * $this->_result['L'] * pow(10, -6);
+			$this->_result['M'] = round($this->_result['M'], 3);
+		}
+		
 		return true;
 	}
 }
