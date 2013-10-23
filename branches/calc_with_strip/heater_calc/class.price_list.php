@@ -212,7 +212,7 @@ XML;
 		}
 		$gprice_id = $gprice_gen_obj->id;
 		// получаем все необходимые записи общего прайс-листа из таблицы general_price
-		$query = "SELECT `id` FROM `metotech_metalls`.`special_prices` WHERE `price_name` = '".mysql_real_escape_string($this->_priceName)."'";
+		$query = "SELECT `id` FROM `metotech_metalls_strip`.`special_prices` WHERE `price_name` = '".mysql_real_escape_string($this->_priceName)."'";
 		try {
 			$ids = $this->_dbase->select($query);
 			$sprice_id = $ids[0]['id'];
@@ -307,7 +307,7 @@ XML;
 				}
 			}
 			// получаем идентификаторы из general_price, удовлетворяющие критериям фильтра
-			$gprice_query = "SELECT `id` FROM `metotech_metalls`.`general_price` WHERE ";
+			$gprice_query = "SELECT `id` FROM `metotech_metalls_strip`.`general_price` WHERE ";
 			$keys = array_keys($ids_list);
 			foreach ($keys as $key) {
 				if ($key == 'alloys') {
@@ -338,8 +338,8 @@ XML;
 		}
 		
 		// получаем все необходимые записи общего прайс-листа из таблицы general_price
-		$query_1 = "SELECT `id` FROM `metotech_metalls`.`special_prices` WHERE `price_name` = '".mysql_real_escape_string($this->_priceName)."'";
-		$query_2 = "SELECT `gprice_id` FROM `metotech_metalls`.`prices_mapping` WHERE `sprice_id` = ($query_1) $gprice_query";
+		$query_1 = "SELECT `id` FROM `metotech_metalls_strip`.`special_prices` WHERE `price_name` = '".mysql_real_escape_string($this->_priceName)."'";
+		$query_2 = "SELECT `gprice_id` FROM `metotech_metalls_strip`.`prices_mapping` WHERE `sprice_id` = ($query_1) $gprice_query";
 		
 		//echo "<br><br>query_2: $query_2<br><br>";
 		
@@ -428,7 +428,7 @@ XML;
 			$query .= "`$returned_field`, ";
 		}
 		$query = substr($query, 0, strlen($query) - 2);
-		$query .= " FROM `metotech_metalls`.`$table` WHERE ";
+		$query .= " FROM `metotech_metalls_strip`.`$table` WHERE ";
 		foreach ($fields as $field => $values) {
 			$s = getCommaSeparatedList($values);
 			$query .= "`$field` IN ($s) AND ";
