@@ -242,13 +242,13 @@ $(function() {
 					$(this).show();
 				}
 			});
-			$("input[name = 'size_relation']").val("");
 			$("input[name='size_relation']").rules("add", {
 														range: [5, 15],
 														messages: {
 															range: jQuery.format("Введите отношение ширины ленты к ее толщине от {0} до {1}")
 														}
 			});
+			$("input[name = 'size_relation']").val("10");
 		}
 		else if (heater_type == 1) { // если круглый нагреватель
 			$("p#size_relation").hide("slow");
@@ -264,6 +264,16 @@ $(function() {
 			});
 			$("input[name='size_relation']").rules("remove", "min max");
 		}
+		
+		// обработка снятия/установки флажка "Редактировать отношение"
+		$("input[name='size_relation_enabled']").change(function(){
+		if ($(this).prop("checked")) // если установили флажок
+			$("input[name='size_relation']").prop("disabled", false);
+		else { // если сняли флажок
+			$("input[name='size_relation']").prop("disabled", true);
+			$("input[name='size_relation']").val(10); // устанавливаем среднее арифметическое между 5 и 15
+		}
+	});
 		
 		$("select[name = 'placement']").prop("selectedIndex", first_placement_index);
 		$("select[name = 'placement']").change();
@@ -297,6 +307,8 @@ $(function() {
 				beforeSerialize: function() {
 					$("select[name='temp_heater']").prop("disabled", false);
 					$("select[name='pgrid']").prop("disabled", false);
+					$("input[name='size_relation']").prop("disabled", false);
+					$("input[name='voltage']").prop("disabled", false);
 				},
 				beforeSubmit: function(arr, $form, options) {
 					return $form.valid();
@@ -340,6 +352,8 @@ $(function() {
 					}
 					
 					$("select[name='temp_heater']").prop("disabled", ! $("input[name='temp_heater_enabled']").prop("checked"));
+					$("input[name='size_relation']").prop("disabled", ! $("input[name='size_relation_enabled']").prop("checked"));
+					$("input[name='voltage']").prop("disabled", true);
 					if (is_pgrid_disabled)
 						$("select[name='pgrid']").prop("disabled", true);
 				}
