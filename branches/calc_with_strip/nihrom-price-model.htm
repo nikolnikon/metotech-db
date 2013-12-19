@@ -785,7 +785,7 @@
 											<br><input type="radio" name="pgrid_conn" value="STAR" checked="checked" id="star"><label for="star">Звезда</label>
 											<br><input type="radio" name="pgrid_conn" value="TRIANGLE" id="triangle"><label for="triangle">Треугольник</label>
 										</p>
-										<p>Напряжение на концах нагревателя, В <br><input type="text" name="voltage" value="220" readonly required></p>
+										<p>Напряжение на концах нагревателя, В <br><input type="text" name="voltage" value="220" readonly disabled required></p>
 										<p>Материал нагревателя
 											<br><select name="material" required>
 												<option></option>
@@ -813,7 +813,8 @@
 										</p>
 										<p id="size_relation" style="display: none;">Отношение ширины ленты к толщине
 											<span class="formInfo"><a data-tooltip="Отношение ширины к толщине должно принадлежать диапазону <u>от 5 до 15</u> включительно" name="Отношение ширины ленты к толщине">?</a></span>
-											<br><input type="text" name="size_relation">
+											<br><input type="checkbox" name="size_relation_enabled"><span style="font-size: 11px;">Редактировать отношение</span>
+											<br><input type="text" name="size_relation" disabled>
 										</p>
 										<p>Конструкция и размещение нагревателей
 											<span class="formInfo"><a data-tooltip="Проволочные спиралевидные нагреватели <img src=images/heater_calc/heater_spiral.png> <br>Проволочные спирали полузакрытые <img src=images/heater_calc/heater_groove.png> <br>Проволочные спирали на полочках в трубках <img src=images/heater_calc/heater_tube.png> <br>Проволочные зигзагообразные нагреватели <img src=images/heater_calc/heater_zigzag.png> <br>Ленточные зигзагообразные нагреватели <img src=images/heater_calc/heater_strip_zigzag.png> <br>Ленточные профилированные нагреватели <img src=images/heater_calc/heater_profile.png>" name="Конструкция и размещение нагревателей">?</a></span>
