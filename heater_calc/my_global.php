@@ -206,25 +206,27 @@ function calc_heater($params, &$calc_res) {
 	
 	elseif ($params['HEATER_TYPE'] == HeaterType::PLANE) {
 		// Расчет толщины плоского нагревателя
-		$exp_1 = $RO_T * pow($P, 2);
-		$exp_2 = $M * ($M + 1) * pow($U, 2) * $B_DOP;
-		// echo "exp_1: ".$exp_1."\n";
-		// echo "exp_2: ".$exp_2."\n";
-		$A = pow($exp_1/$exp_2, 1/3);
-		// echo "A: ".$A."\n";
-		
-		// Расчет ширины плоского нагревателя
-		$B = $M * $A;
-		// echo "B: ".$B."\n";
-		
-		// Расчет длины плоского нагревателя
-		$exp_1 = 2.5 * $P * pow($U, 2) * $M;
-		$exp_2 = pow($M + 1, 2) * $RO_T * pow($B_DOP, 2);
-		$L = pow($exp_1/$exp_2, 1/3);
-		
-		$calc_res['A'] = $A;
-		$calc_res['B'] = $B;
-		$calc_res['L'] = $L;
+		for ($M = 5; $M <= 15; $M++) {
+			$exp_1 = $RO_T * pow($P, 2);
+			$exp_2 = $M * ($M + 1) * pow($U, 2) * $B_DOP;
+			// echo "exp_1: ".$exp_1."\n";
+			// echo "exp_2: ".$exp_2."\n";
+			$A = pow($exp_1/$exp_2, 1/3);
+			// echo "A: ".$A."\n";
+			
+			// Расчет ширины плоского нагревателя
+			$B = $M * $A;
+			// echo "B: ".$B."\n";
+			
+			// Расчет длины плоского нагревателя
+			$exp_1 = 2.5 * $P * pow($U, 2) * $M;
+			$exp_2 = pow($M + 1, 2) * $RO_T * pow($B_DOP, 2);
+			$L = pow($exp_1/$exp_2, 1/3);
+			
+			$calc_res[$M - 5]['A'] = $A;
+			$calc_res[$M - 5]['B'] = $B;
+			$calc_res[$M - 5]['L'] = $L;
+		}
 	}
 //	echo "calc result: "; print_r($calc_res); echo "\n";
 	

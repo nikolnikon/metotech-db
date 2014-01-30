@@ -132,13 +132,15 @@ class HeaterCalculator extends AbstractCalculator
 			}
 		}
 		elseif ($this->_parameters['HEATER_TYPE'] == HeaterType::PLANE) {
-			$this->_result['A'] = round($this->_result['A'] * pow(10, 3), 1);
-			// echo "res A: ".$this->_result['A']."\n";
-			$this->_result['B'] = round($this->_result['B'] * pow(10,3), 1);
-			// echo "res B: ".$this->_result['B']."\n";
-			$this->_result['L'] = ceil($this->_result['L']);
-			$this->_result['M'] = $this->_parameters['DENS'] * pow(10, 3) * $this->_result['A'] * $this->_result['B'] * $this->_result['L'] * pow(10, -6);
-			$this->_result['M'] = round($this->_result['M'], 3);
+			foreach ($this->_result as &$part_result) {
+				$part_result['A'] = round($part_result['A'] * pow(10, 3), 1);
+				// echo "res A: ".$part_result['A']."\n";
+				$part_result['B'] = round($part_result['B'] * pow(10,3), 1);
+				// echo "res B: ".$part_result['B']."\n";
+				$part_result['L'] = ceil($part_result['L']);
+				$part_result['M'] = $this->_parameters['DENS'] * pow(10, 3) * $part_result['A'] * $part_result['B'] * $part_result['L'] * pow(10, -6);
+				$part_result['M'] = round($part_result['M'], 3);
+			}
 		}
 		
 		return true;
