@@ -317,21 +317,39 @@ $(function() {
 					//console.log(result);
 					var pgrid = $("select[name='pgrid'] option:selected").val();
 					var heater_type = $("select[name = 'heater_type'] option:selected").val();
-					$("input[name='length']").val(result.L);
-					$("input[name='mass']").val(result.M);
+					
 					
 					$("#result").show("slow");
 					$("form[name='heater_calc_res']").show("slow");
 					if (heater_type == 1) { // если круглый нагреватель
+						$("#options").hide();
 						$("#thickness").hide();
 						$("#width").hide();
 						$("input[name='diameter']").val(result.D);
 						$("#diameter").show("slow");
+						$("input[name='length']").val(result.L);
+						$("input[name='mass']").val(result.M);
 					}
 					else if (heater_type == 2) { // если плоский нагреватель
 						$("#diameter").hide();
-						$("input[name='thickness']").val(result.A);
-						$("input[name='width']").val(result.B);
+						var option_cont = $("#options");
+						option_cont.children().remove();
+						$.each(result, function(key, value){
+							// console.log(key + ', ' + Number(key));
+							if (Number(key) !== Number(NaN)) {
+								option_cont.append('<br><input type="radio" name="options" id="option_' + key + '" value="' + key + '"><label for="option_' + key + '">' + value.A + 'x' + value.B + '</label>');
+							}
+						});
+						$("[name = 'options']").change(function() {
+							var sel_stripe = $("input[name = 'options']:checked").val();
+							$("input[name='thickness']").val(result[sel_stripe].A);
+							$("input[name='width']").val(result[sel_stripe].B);
+							$("input[name='length']").val(result[sel_stripe].L);
+							$("input[name='mass']").val(result[sel_stripe].M);
+						});
+						$("#option_0").prop("checked", true);
+						$("[name = 'options']").change();
+						$("#options").show("slow");
 						$("#thickness").show("slow");
 						$("#width").show("slow");
 					}
@@ -347,8 +365,8 @@ $(function() {
 						$("span.formInfo #two, span.formInfo #three, span.formInfo #four").show("slow");
 						$("#total_length").show("slow");
 						$("#total_mass").show("slow");
-						$("input[name='total_length']").val(result.L * 3);
-						$("input[name='total_mass']").val((result.M * 3).toFixed(3));
+						$("input[name='total_length']").val($("input[name='length']").val() * 3);
+						$("input[name='total_mass']").val(($("input[name='mass']").val() * 3).toFixed(3));
 					}
 					
 					$("select[name='temp_heater']").prop("disabled", ! $("input[name='temp_heater_enabled']").prop("checked"));
