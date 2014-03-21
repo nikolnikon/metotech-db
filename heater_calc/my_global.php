@@ -206,7 +206,16 @@ function calc_heater($params, &$calc_res) {
 	
 	elseif ($params['HEATER_TYPE'] == HeaterType::PLANE) {
 		// Расчет толщины плоского нагревателя
-		for ($M = 5; $M <= 15; $M++) {
+		if ($M <= 0 ) { // вычисляем параметры нагревателя для всех возможных отношений ширины к толщине
+			$M_START = 5;
+			$M_END = 15;
+			}
+		else {
+			$M_START = $M;
+			$M_END = $M;
+		}
+		
+		for ($M = $M_START; $M <= $M_END; $M++) {
 			$exp_1 = $RO_T * pow($P, 2);
 			$exp_2 = $M * ($M + 1) * pow($U, 2) * $B_DOP;
 			// echo "exp_1: ".$exp_1."\n";
@@ -223,9 +232,9 @@ function calc_heater($params, &$calc_res) {
 			$exp_2 = pow($M + 1, 2) * $RO_T * pow($B_DOP, 2);
 			$L = pow($exp_1/$exp_2, 1/3);
 			
-			$calc_res[$M - 5]['A'] = $A;
-			$calc_res[$M - 5]['B'] = $B;
-			$calc_res[$M - 5]['L'] = $L;
+			$calc_res[$M - $M_START]['A'] = $A;
+			$calc_res[$M - $M_START]['B'] = $B;
+			$calc_res[$M - $M_START]['L'] = $L;
 		}
 	}
 //	echo "calc result: "; print_r($calc_res); echo "\n";
