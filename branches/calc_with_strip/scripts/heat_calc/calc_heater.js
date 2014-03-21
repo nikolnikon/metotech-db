@@ -248,7 +248,7 @@ $(function() {
 															range: jQuery.format("Введите отношение ширины ленты к ее толщине от {0} до {1}")
 														}
 			});
-			$("input[name = 'size_relation']").val("10");
+			$("input[name = 'size_relation']").val("");
 		}
 		else if (heater_type == 1) { // если круглый нагреватель
 			$("p#size_relation").hide("slow");
@@ -267,11 +267,13 @@ $(function() {
 		
 		// обработка снятия/установки флажка "Редактировать отношение"
 		$("input[name='size_relation_enabled']").change(function(){
-		if ($(this).prop("checked")) // если установили флажок
+		if ($(this).prop("checked")) { // если установили флажок
 			$("input[name='size_relation']").prop("disabled", false);
+			$("input[name='size_relation']").val(10); // устанавливаем среднее арифметическое между 5 и 15
+		}
 		else { // если сняли флажок
 			$("input[name='size_relation']").prop("disabled", true);
-			$("input[name='size_relation']").val(10); // устанавливаем среднее арифметическое между 5 и 15
+			$("input[name='size_relation']").val(""); 
 		}
 	});
 		
@@ -318,7 +320,6 @@ $(function() {
 					var pgrid = $("select[name='pgrid'] option:selected").val();
 					var heater_type = $("select[name = 'heater_type'] option:selected").val();
 					
-					
 					$("#result").show("slow");
 					$("form[name='heater_calc_res']").show("slow");
 					if (heater_type == 1) { // если круглый нагреватель
@@ -335,8 +336,7 @@ $(function() {
 						var option_cont = $("#options");
 						option_cont.children().remove();
 						$.each(result, function(key, value){
-							// console.log(key + ', ' + Number(key));
-							if (Number(key) !== Number(NaN)) {
+							if ($.isNumeric(key)) {
 								option_cont.append('<br><input type="radio" name="options" id="option_' + key + '" value="' + key + '"><label for="option_' + key + '">' + value.A + 'x' + value.B + '</label>');
 							}
 						});
@@ -346,6 +346,11 @@ $(function() {
 							$("input[name='width']").val(result[sel_stripe].B);
 							$("input[name='length']").val(result[sel_stripe].L);
 							$("input[name='mass']").val(result[sel_stripe].M);
+							
+							if (pgrid == 3) {
+								$("input[name='total_length']").val($("input[name='length']").val() * 3);
+								$("input[name='total_mass']").val(($("input[name='mass']").val() * 3).toFixed(3));
+							}
 						});
 						$("#option_0").prop("checked", true);
 						$("[name = 'options']").change();
@@ -379,4 +384,10 @@ $(function() {
 		$(this).ajaxSubmit(options);
 		return false;
 	});
+	
+	var input_height = $("#input_form").height();
+	var result_height = $("form[name='heater_calc_res']").height();
+	var max_height = Math.max(input_height, result_height);
+	$("#input_form").height(max_height);
+	$("#result_form").height(max_height);
 });
