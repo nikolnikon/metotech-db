@@ -45,6 +45,7 @@ $(function() {
 		});
 		$("form[name='heater_calc_res']").hide(is_slow);
 		$("#result").hide(is_slow);
+		$("#result_legend").hide(is_slow);
 	}
 	
 	hide_result("");
@@ -321,6 +322,7 @@ $(function() {
 					var heater_type = $("select[name = 'heater_type'] option:selected").val();
 					
 					$("#result").show("slow");
+					$("#result_legend").show("slow");
 					$("form[name='heater_calc_res']").show("slow");
 					if (heater_type == 1) { // если круглый нагреватель
 						$("#options").hide();
@@ -384,10 +386,4 @@ $(function() {
 		$(this).ajaxSubmit(options);
 		return false;
 	});
-	
-	var input_height = $("#input_form").height();
-	var result_height = $("form[name='heater_calc_res']").height();
-	var max_height = Math.max(input_height, result_height);
-	$("#input_form").height(max_height);
-	$("#result_form").height(max_height);
 });

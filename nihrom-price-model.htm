@@ -80,7 +80,7 @@
 		margin-left: 13px;
 		padding: 5px;
 		font-family: 'Play', Verdana, sans-serif;
-		height: 1050px;
+		height: 1010px;
 		width: 700px;
 		text-align: center;
 		border: 1px dotted #acb7bf;
@@ -108,9 +108,13 @@
 		text-align: left;
 	}
 	
-	div#heater_calc_input legend, div#heater_calc_res legend {
+	div#heater_calc_input legend, div#heater_calc_res legend, #input_legend, #result_legend{
 		font-size: 16px;
 		font-weight: bold;
+	}
+	
+	#result_legend {
+		display: none;
 	}
 
 	div#heater_calc_input select, div#heater_calc_input input, div#heater_calc_input label, div#heater_calc_res input, div#heater_calc_res label {
@@ -127,7 +131,7 @@
 	
 	#heater_effect {
 		width: 733px;
-		height: 1080px;
+		height: 1040px;
 		background-color: #ffffff;
 		text-align: center;
 		/*padding: 0.4em;*/
@@ -766,10 +770,11 @@
 						<h3>Калькулятор нагревателей электрических печей</h3>
 						<div id="heater_calc">
 							<div id="heater_calc_input">
-								<h1>Рассчитать нагреватель</h1>
+								<h1 style="text-align: left;">Рассчитать нагреватель</h1>
+								<div id="input_legend">Параметры электрической печи</div>
 								<form name="heater_calc" id="input_form">
-									<fieldset>
-										<legend>Параметры электрической печи</legend>
+									<fieldset style="border-width: 0px;">
+										<!-- <legend style="text-align: left;">Параметры электрической печи</legend> -->
 										<p>Мощность печи, Вт
 											<span class="formInfo"><a data-tooltip="При подключении к бытовой сети <u>однофазного тока</u> значение мощности не должно превышать <u>6999</u> Вт.<br><br>При подключении к промышленной сети <u>трехфазного тока</u> значение мощности должно принадлежать диапазону <u>от 7000 до 500000</u> Вт включительно." id="one" name="Мощность печи">?</a></span>
 											<br><input type="text" name="power">
@@ -827,11 +832,13 @@
 								</form>
 							</div>
 							<div id="heater_calc_res">
-								<h1 id="result">Результаты расчета</h1>
+								<h1 id="result" style="text-align: left;">Результаты расчета</h1>
+								<div id="result_legend" >Параметры нагревателя</div>
 								<form name="heater_calc_res" id="result_form">
-									<fieldset>
-										<legend>Параметры нагревателя</legend>
+									<fieldset style="border-width: 0px;">
+										<!-- <legend style="text-align: left;">Параметры нагревателя</legend> -->
 										<div>
+											
 											<p id="diameter">Диаметр нагревателя, мм
 												<br><input type="text" name="diameter" readonly>
 												<span class="formInfo"><a data-tooltip="Диаметр нагревателя, подключенного к одной фазе" name="Диаметр нагревателя">?</a></span>
