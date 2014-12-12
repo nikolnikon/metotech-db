@@ -386,4 +386,31 @@ $(function() {
 		$(this).ajaxSubmit(options);
 		return false;
 	});
+	
+	// обработка выбора стандартного размера для ленты
+	$("select[name='standard_sizes']").change(function(){
+		var params = $("form[name='heater_calc'] input[name!='pgrid_conn'], form[name='heater_calc'] select[name!='pgrid_conn'], form[name='heater_calc'] input[name!='size_relation_enabled'], form[name='heater_calc'] input[name!='size_relation']").serialize();
+		var a = $("select[name = 'standard_sizes'] option:selected").data("thickness");
+		var b = $("select[name = 'standard_sizes'] option:selected").data("width");
+		var m = b/a;
+		params += "&size_relation_enabled=on&size_relation=";
+		params += m;
+		var options = {
+			url: '../../heater_calc/calc_heater.php',
+			data: params,
+			dataType: 'json',
+			success: function(result, statusText, xhr, $form) {
+			// подставить выбранные стандартные толщину и ширину, длину взять из ответа, массу рассчитать
+				$("input[name='thickness']").val(a);
+				$("input[name='width']").val(b);
+				$("input[name='length']").val(result[0].L);
+				var dens = $("select[name = 'material'] option:selected").data("density");
+				var mass =  dens * Math.pow(10, 3) * a * b * result[0].L * Math.pow(10, -6);
+				mass = Math.round(mass);
+				$("input[name='mass']").val(mass);
+			}
+		};
+		$("form[name='heater_calc']").ajaxSubmit(options);
+		return false;
+	});
 });
