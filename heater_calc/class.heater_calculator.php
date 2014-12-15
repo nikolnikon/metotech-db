@@ -74,8 +74,17 @@ class HeaterCalculator extends AbstractCalculator
 			$db = MySqlDBase::instance();
 			
 			// определение удельной поверхностной мощности
-			if ($th <= 300) { // если печь низкотемпературная, то удельная поверхностная мощность составляет 4-6 Вт/см^2. Выбираем среднее значение
+			if ($th >= 100 && $th <= 300) { // если печь низкотемпературная, то удельная поверхностная мощность составляет 4-6 Вт/см^2. Выбираем среднее значение
+				$this->_parameters['B_EF'] = 4;
+				$this->_parameters['A'] = 1;
+			}
+			else if ($th >= 400 && $th <= 600) {
 				$this->_parameters['B_EF'] = 5;
+				$this->_parameters['A'] = 1;
+			}
+			else if ($th == 700) {
+				$this->_parameters['B_EF'] = 6;
+				$this->_parameters['A'] = 1;
 			}
 			else {
 				$query = "SELECT `surface_power` FROM `metotech_metalls_strip`.`heater_surface_power` WHERE `temp_solid` = ".mysql_real_escape_string($ts)." AND temp_heater = ".mysql_real_escape_string($th);

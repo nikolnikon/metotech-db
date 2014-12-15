@@ -293,7 +293,7 @@ function get_heater_form_content($param) {
 				}
 				$max_heater_temp = $res[0]['MAX(`max_temp`)'];
 				// получаем допустимые значения температуры нагревателя 
-				$query = "SELECT DISTINCT `temp_heater` FROM `metotech_metalls_strip`.`heater_surface_power` WHERE `temp_heater` <= ".mysql_real_escape_string($max_heater_temp);
+				$query = "SELECT DISTINCT `temp_heater` FROM `metotech_metalls_strip`.`heater_surface_power` WHERE `temp_heater` <= ".mysql_real_escape_string($max_heater_temp)." ORDER BY `temp_heater`";
 				$temps = $db->select($query);
 				foreach ($temps as $temp) {
 					$arr[] = $temp['temp_heater'];
