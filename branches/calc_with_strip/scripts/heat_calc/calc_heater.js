@@ -280,11 +280,16 @@ $(function() {
 		
 		$("select[name = 'placement']").prop("selectedIndex", first_placement_index);
 		$("select[name = 'placement']").change();
-		
-		// var v = validator.element("[name='power']");
-		// if (v) {
-			// $("[name='power'] li").hide();
-		// }
+	})
+	.change();
+	
+	$("input[name='standard_sizes_enabled']").change(function(){
+		if ($(this).prop("checked")) { // если установили флажок
+			$("select[name='standard_sizes']").prop("disabled", false);
+		}
+		else { // если сняли флажок
+			$("select[name='standard_sizes']").prop("disabled", true);
+		}
 	})
 	.change();
 	
@@ -299,9 +304,9 @@ $(function() {
 	});
 	
 	// отправка данных на сервер
+	var is_pgrid_disabled = $("select[name='pgrid']").prop("disabled");
 	$("form[name='heater_calc']").submit(function() {
 		var params = $("form[name='heater_calc'] input[name!='pgrid_conn'], form[name='heater_calc'] select[name!='pgrid_conn']").serialize();
-		var is_pgrid_disabled = $("select[name='pgrid']").prop("disabled");
 		//console.log(params);
 		var options = {
 				url: '../../heater_calc/calc_heater.php',
@@ -326,6 +331,7 @@ $(function() {
 					$("form[name='heater_calc_res']").show("slow");
 					if (heater_type == 1) { // если круглый нагреватель
 						$("#options").hide();
+						$("#standard_sizes").hide();
 						$("#thickness").hide();
 						$("#width").hide();
 						$("input[name='diameter']").val(result.D);
@@ -357,6 +363,7 @@ $(function() {
 						$("#option_0").prop("checked", true);
 						$("[name = 'options']").change();
 						$("#options").show("slow");
+						$("#standard_sizes").show("slow");
 						$("#thickness").show("slow");
 						$("#width").show("slow");
 					}
@@ -389,17 +396,23 @@ $(function() {
 	
 	// обработка выбора стандартного размера для ленты
 	$("select[name='standard_sizes']").change(function(){
+		$("select[name='temp_heater']").prop("disabled", false);
+		$("select[name='pgrid']").prop("disabled", false);
+		$("input[name='size_relation']").prop("disabled", false);
+		$("input[name='voltage']").prop("disabled", false);
 		var params = $("form[name='heater_calc'] input[name!='pgrid_conn'], form[name='heater_calc'] select[name!='pgrid_conn'], form[name='heater_calc'] input[name!='size_relation_enabled'], form[name='heater_calc'] input[name!='size_relation']").serialize();
+		$("select[name='temp_heater']").prop("disabled", ! $("input[name='temp_heater_enabled']").prop("checked"));
+		$("input[name='size_relation']").prop("disabled", ! $("input[name='size_relation_enabled']").prop("checked"));
+		$("input[name='voltage']").prop("disabled", true);
+		if (is_pgrid_disabled)
+			$("select[name='pgrid']").prop("disabled", true);
+						
 		var a = $("select[name = 'standard_sizes'] option:selected").data("thickness");
 		var b = $("select[name = 'standard_sizes'] option:selected").data("width");
-		var m = b/a;
-		params += "&size_relation_enabled=on&size_relation=";
+		var m = Math.round(b/a);
+		params += "&size_relation=";
 		params += m;
-		var options = {
-			url: '../../heater_calc/calc_heater.php',
-			data: params,
-			dataType: 'json',
-			success: function(result, statusText, xhr, $form) {
+		$.getJSON('../../heater_calc/calc_heater.php', params, function(result, statusText, xhr){
 			// подставить выбранные стандартные толщину и ширину, длину взять из ответа, массу рассчитать
 				$("input[name='thickness']").val(a);
 				$("input[name='width']").val(b);
@@ -408,9 +421,6 @@ $(function() {
 				var mass =  dens * Math.pow(10, 3) * a * b * result[0].L * Math.pow(10, -6);
 				mass = Math.round(mass);
 				$("input[name='mass']").val(mass);
-			}
-		};
-		$("form[name='heater_calc']").ajaxSubmit(options);
-		return false;
+		});
 	});
 });
