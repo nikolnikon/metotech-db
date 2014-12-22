@@ -141,6 +141,7 @@ class HeaterCalculator extends AbstractCalculator
 			}
 		}
 		elseif ($this->_parameters['HEATER_TYPE'] == HeaterType::PLANE) {
+			//print_r($this->_result);
 			foreach ($this->_result as &$part_result) {
 				$part_result['A'] = round($part_result['A'] * pow(10, 3), 1);
 				// echo "res A: ".$part_result['A']."\n";
