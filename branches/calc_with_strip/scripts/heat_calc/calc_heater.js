@@ -283,15 +283,20 @@ $(function() {
 	})
 	.change();
 	
-	$("input[name='standard_sizes_enabled']").change(function(){
+	// обработка снятия/установки флажка "Задать вручную"
+	$("input[name='defined_sizes_enabled']").change(function(){
 		if ($(this).prop("checked")) { // если установили флажок
-			$("select[name='standard_sizes']").prop("disabled", false);
+			$("select[name='defined_sizes']").prop("disabled", false);
 		}
 		else { // если сняли флажок
-			$("select[name='standard_sizes']").prop("disabled", true);
+			$("select[name='defined_sizes']").prop("disabled", true);
 		}
 	})
 	.change();
+	
+	// обработка  выбора стандартных/произвольных размеров плоского нагревателя
+	
+	
 	
 	// если пользователь меняет исходные данные, то результаты предыдущего расчета скрываются
 	$("form[name='heater_calc'] select, form[name='heater_calc'] input").change(function() {

@@ -845,13 +845,22 @@
 											</p>
 											<p id="options">Размеры нагревателей (толщина x ширина), мм
 											</p>
+                      <p id="defined_sizes">Задать размер нагревателей вручную</p>
+                        <br><input type="checkbox" name="defined_sizes_enabled"><span style="font-size: 11px;">Задать вручную</span>
+                        <br><select name="defined_sizes" disabled required>
+                          <option id="standard">Выбрать из стандартных</option>
+                          <option id="custom">Задать произвольный размер</option>
+                        </select>
+                      </p>
                       <p id="standard_sizes"> Выбрать из стандартных размеров (толщина х ширина), мм
-                        <br><input type="checkbox" name="standard_sizes_enabled"><span style="font-size: 11px;">Изменить размер на стандартный</span>
                         <br><select name="standard_sizes" disabled required>
                           <option id="st_size_1" data-thickness="0.1" data-width="20">0,1х20</option>
                           <option id="st_size_2" data-thickness="1.5" data-width="10">1,5х10</option>
                           <option id="st_size_3" data-thickness="3" data-width="40">3,0х40</option>
                         </select>
+                      </p>
+                      <p id="custom_sizes">
+                        <br><input type="text" name="custom_thickness"> x <input type="text" name="custom_width">
                       </p>
 											<p id="thickness">Толщина нагревателя, мм
 												<br><input type="text" name="thickness" readonly>
