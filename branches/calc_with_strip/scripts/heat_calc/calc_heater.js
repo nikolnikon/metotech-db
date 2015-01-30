@@ -233,7 +233,7 @@ $(function() {
 		var first_placement_index = -1;
 		
 		if (heater_type == 2) { // если плоский нагреватель
-			$("p#size_relation").show("slow");
+			$("p#sizes_type").show("slow");
 			options.each(function(index){
 				if ($(this).data("type") == 1)
 					$(this).hide();
@@ -246,13 +246,16 @@ $(function() {
 			$("input[name='size_relation']").rules("add", {
 														range: [5, 15],
 														messages: {
-															range: jQuery.format("Введите отношение ширины ленты к ее толщине от {0} до {1}")
+														range: jQuery.format("Введите отношение ширины ленты к ее толщине от {0} до {1}")
 														}
 			});
 			$("input[name = 'size_relation']").val("");
 		}
 		else if (heater_type == 1) { // если круглый нагреватель
-			$("p#size_relation").hide("slow");
+			$("p#sizes_type").hide("slow");
+			$("p#size_relation").hide();
+			$("p#custom_thickness").hide("slow");
+			$("p#custom_width").hide("slow");
 			$("input[name = 'size_relation']").val("0");
 			options.each(function(index){
 				if ($(this).data("type") == 2)
@@ -266,8 +269,30 @@ $(function() {
 			$("input[name='size_relation']").rules("remove", "min max");
 		}
 		
-		// обработка снятия/установки флажка "Редактировать отношение"
-		$("input[name='size_relation_enabled']").change(function(){
+		$("select[name = 'placement']").prop("selectedIndex", first_placement_index);
+		$("select[name = 'placement']").change();
+	})
+	.change();
+	
+	// обработка выбора рассчитывать оптимальные размеры ленты или использовать произвольные?
+	$("[name = 'sizes_type']").change(function() {
+		var sizes_type = $("select[name = 'sizes_type'] option:selected").val();
+		//var heater_type = $("select[name = 'heater_type'] option:selected").val();
+		
+		if (sizes_type == 1) { // если рассчитывать оптимальные размеры
+			$("p#custom_thickness").hide();
+			$("p#custom_width").hide();
+			$("p#size_relation").show("slow");
+		}
+		else if (sizes_type == 2) { // если использовать размеры, заданные пользователем
+			$("p#size_relation").hide();
+			$("p#custom_thickness").show("slow");
+			$("p#custom_width").show("slow");
+		}
+	});
+	
+	// обработка снятия/установки флажка "Редактировать отношение"
+	$("input[name='size_relation_enabled']").change(function(){
 		if ($(this).prop("checked")) { // если установили флажок
 			$("input[name='size_relation']").prop("disabled", false);
 			$("input[name='size_relation']").val(10); // устанавливаем среднее арифметическое между 5 и 15
@@ -276,27 +301,18 @@ $(function() {
 			$("input[name='size_relation']").prop("disabled", true);
 			$("input[name='size_relation']").val(""); 
 		}
-	});
-		
-		$("select[name = 'placement']").prop("selectedIndex", first_placement_index);
-		$("select[name = 'placement']").change();
 	})
 	.change();
 	
-	// обработка снятия/установки флажка "Задать вручную"
-	$("input[name='defined_sizes_enabled']").change(function(){
+	$("input[name='standard_sizes_enabled']").change(function(){
 		if ($(this).prop("checked")) { // если установили флажок
-			$("select[name='defined_sizes']").prop("disabled", false);
+			$("select[name='standard_sizes']").prop("disabled", false);
 		}
 		else { // если сняли флажок
-			$("select[name='defined_sizes']").prop("disabled", true);
+			$("select[name='standard_sizes']").prop("disabled", true);
 		}
 	})
 	.change();
-	
-	// обработка  выбора стандартных/произвольных размеров плоского нагревателя
-	
-	
 	
 	// если пользователь меняет исходные данные, то результаты предыдущего расчета скрываются
 	$("form[name='heater_calc'] select, form[name='heater_calc'] input").change(function() {
@@ -311,8 +327,10 @@ $(function() {
 	// отправка данных на сервер
 	var is_pgrid_disabled = $("select[name='pgrid']").prop("disabled");
 	$("form[name='heater_calc']").submit(function() {
-		var params = $("form[name='heater_calc'] input[name!='pgrid_conn'], form[name='heater_calc'] select[name!='pgrid_conn']").serialize();
-		//console.log(params);
+		var params = $("form[name='heater_calc'] input[name!='pgrid_conn'], form[name='heater_calc'] select[name!='pgrid_conn'], p#custom_thickness input[name!='custom_thickness'], p#custom_width input[name!='custom_width']").serialize();
+		console.log($("form[name='heater_calc'] input[name='custom_thickness']").data("hren"));
+		console.log(params);
+		
 		var options = {
 				url: '../../heater_calc/calc_heater.php',
 				data: params,
@@ -322,6 +340,12 @@ $(function() {
 					$("select[name='pgrid']").prop("disabled", false);
 					$("input[name='size_relation']").prop("disabled", false);
 					$("input[name='voltage']").prop("disabled", false);
+					var sizes_type = $("select[name = 'sizes_type'] option:selected").val();
+					if (size_type == 2) { // если используются пользовательские размеры
+						var custom_thickness = $("input[name='custom_thickness']").val();
+						var custom_width = $("input[name='custom_width']").val();
+						$("input[name='size_relation']").val(custom_width / custom_thickness);
+					}
 				},
 				beforeSubmit: function(arr, $form, options) {
 					return $form.valid();
