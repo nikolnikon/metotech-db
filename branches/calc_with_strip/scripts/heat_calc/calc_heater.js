@@ -253,7 +253,7 @@ $(function() {
 		}
 		else if (heater_type == 1) { // если круглый нагреватель
 			$("p#sizes_type").hide("slow");
-			$("p#size_relation").hide();
+			$("p#size_relation").hide("slow");
 			$("p#custom_thickness").hide("slow");
 			$("p#custom_width").hide("slow");
 			$("input[name = 'size_relation']").val("0");
@@ -289,7 +289,8 @@ $(function() {
 			$("p#custom_thickness").show("slow");
 			$("p#custom_width").show("slow");
 		}
-	});
+	})
+	.change();
 	
 	// обработка снятия/установки флажка "Редактировать отношение"
 	$("input[name='size_relation_enabled']").change(function(){
@@ -327,9 +328,7 @@ $(function() {
 	// отправка данных на сервер
 	var is_pgrid_disabled = $("select[name='pgrid']").prop("disabled");
 	$("form[name='heater_calc']").submit(function() {
-		var params = $("form[name='heater_calc'] input[name!='pgrid_conn'], form[name='heater_calc'] select[name!='pgrid_conn'], p#custom_thickness input[name!='custom_thickness'], p#custom_width input[name!='custom_width']").serialize();
-		console.log($("form[name='heater_calc'] input[name='custom_thickness']").data("hren"));
-		console.log(params);
+		var params = $("form[name='heater_calc'] input[name!='pgrid_conn'], form[name='heater_calc'] select[name!='pgrid_conn'], form[name='heater_calc'] select[name!='sizes_type'], form[name='heater_calc'] input[name!='custom_thickness'], form[name='heater_calc'] input[name!='custom_width']").serialize();
 		
 		var options = {
 				url: '../../heater_calc/calc_heater.php',
@@ -341,7 +340,7 @@ $(function() {
 					$("input[name='size_relation']").prop("disabled", false);
 					$("input[name='voltage']").prop("disabled", false);
 					var sizes_type = $("select[name = 'sizes_type'] option:selected").val();
-					if (size_type == 2) { // если используются пользовательские размеры
+					if (sizes_type == 2) { // если используются пользовательские размеры
 						var custom_thickness = $("input[name='custom_thickness']").val();
 						var custom_width = $("input[name='custom_width']").val();
 						$("input[name='size_relation']").val(custom_width / custom_thickness);
