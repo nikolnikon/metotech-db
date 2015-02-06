@@ -250,6 +250,46 @@ $(function() {
 														}
 			});
 			$("input[name = 'size_relation']").val("");
+			
+			// обработка выбора рассчитывать оптимальные размеры ленты или использовать произвольные?
+			$("[name = 'sizes_type']").change(function() {
+				var sizes_type = $("select[name = 'sizes_type'] option:selected").val();
+				
+				if (sizes_type == 1) { // если рассчитывать оптимальные размеры
+					$("p#custom_thickness").hide("slow");
+					$("p#custom_width").hide("slow");
+					$("p#size_relation").show("slow");
+					$("input[name='custom_thickness']").prop("required", false);
+					$("input[name='custom_width']").prop("required", false);
+					$("input[name='custom_thickness']").rules("remove", "required");
+					$("input[name='custom_width']").rules("remove", "required");
+				}
+				else if (sizes_type == 2) { // если использовать размеры, заданные пользователем
+					$("p#size_relation").hide("slow");
+					$("p#custom_thickness").show("slow");
+					$("p#custom_width").show("slow");
+					$("input[name='custom_thickness']").prop("required", true);
+					$("input[name='custom_width']").prop("required", true);
+					
+					$("input[name='custom_thickness']").rules("add", {
+																required: true,
+																number: true,
+																messages: {
+																	required: "Не задана толщина ленты",
+																	number: "Введите корректное значение толщины ленты"
+																}
+					});
+					$("input[name='custom_width']").rules("add", {
+																required: true,
+																number: true,
+																messages: {
+																	required: "Не задана ширина ленты",
+																	number: "Введите корректное значение ширины ленты"
+																}
+					});
+				}
+			})
+			.change();
 		}
 		else if (heater_type == 1) { // если круглый нагреватель
 			$("p#sizes_type").hide("slow");
@@ -274,24 +314,6 @@ $(function() {
 	})
 	.change();
 	
-	// обработка выбора рассчитывать оптимальные размеры ленты или использовать произвольные?
-	$("[name = 'sizes_type']").change(function() {
-		var sizes_type = $("select[name = 'sizes_type'] option:selected").val();
-		//var heater_type = $("select[name = 'heater_type'] option:selected").val();
-		
-		if (sizes_type == 1) { // если рассчитывать оптимальные размеры
-			$("p#custom_thickness").hide();
-			$("p#custom_width").hide();
-			$("p#size_relation").show("slow");
-		}
-		else if (sizes_type == 2) { // если использовать размеры, заданные пользователем
-			$("p#size_relation").hide();
-			$("p#custom_thickness").show("slow");
-			$("p#custom_width").show("slow");
-		}
-	})
-	.change();
-	
 	// обработка снятия/установки флажка "Редактировать отношение"
 	$("input[name='size_relation_enabled']").change(function(){
 		if ($(this).prop("checked")) { // если установили флажок
@@ -305,9 +327,11 @@ $(function() {
 	})
 	.change();
 	
+	// обработка снятия/установки флажка "Изменить размер на стандартный"
 	$("input[name='standard_sizes_enabled']").change(function(){
 		if ($(this).prop("checked")) { // если установили флажок
 			$("select[name='standard_sizes']").prop("disabled", false);
+			$("select[name='standard_sizes']").change();
 		}
 		else { // если сняли флажок
 			$("select[name='standard_sizes']").prop("disabled", true);
@@ -329,6 +353,7 @@ $(function() {
 	var is_pgrid_disabled = $("select[name='pgrid']").prop("disabled");
 	$("form[name='heater_calc']").submit(function() {
 		var params = $("form[name='heater_calc'] input[name!='pgrid_conn'], form[name='heater_calc'] select[name!='pgrid_conn'], form[name='heater_calc'] select[name!='sizes_type'], form[name='heater_calc'] input[name!='custom_thickness'], form[name='heater_calc'] input[name!='custom_width']").serialize();
+		var sizes_type = $("select[name = 'sizes_type'] option:selected").val();
 		
 		var options = {
 				url: '../../heater_calc/calc_heater.php',
@@ -339,7 +364,7 @@ $(function() {
 					$("select[name='pgrid']").prop("disabled", false);
 					$("input[name='size_relation']").prop("disabled", false);
 					$("input[name='voltage']").prop("disabled", false);
-					var sizes_type = $("select[name = 'sizes_type'] option:selected").val();
+					
 					if (sizes_type == 2) { // если используются пользовательские размеры
 						var custom_thickness = $("input[name='custom_thickness']").val();
 						var custom_width = $("input[name='custom_width']").val();
@@ -353,6 +378,9 @@ $(function() {
 					//console.log(result);
 					var pgrid = $("select[name='pgrid'] option:selected").val();
 					var heater_type = $("select[name = 'heater_type'] option:selected").val();
+					
+					$("input[name='standard_sizes_enabled']").prop("checked", false);
+					$("input[name='standard_sizes_enabled']").change();
 					
 					$("#result").show("slow");
 					$("#result_legend").show("slow");
@@ -371,17 +399,45 @@ $(function() {
 						$("#diameter").hide();
 						var option_cont = $("#options");
 						option_cont.children().remove();
+						var res_a;
+						var res_b;
 						$.each(result, function(key, value){
 							if ($.isNumeric(key)) {
-								option_cont.append('<br><input type="radio" name="options" id="option_' + key + '" value="' + key + '"><label for="option_' + key + '">' + value.A + 'x' + value.B + '</label>');
+								if (sizes_type == 2) { // если используются пользовательские размеры
+									res_a = $("input[name='custom_thickness']").val();
+									res_b = $("input[name='custom_width']").val();
+									}
+								else {
+									res_a = value.A;
+									res_b = value.B;
+								}
+								option_cont.append('<br><input type="radio" name="options" id="option_' + key + '" value="' + key + '"><label for="option_' + key + '">' + res_a + 'x' + res_b + '</label>');
 							}
 						});
-						$("[name = 'options']").change(function() {
+						$("[name = 'options']").change(function() { // обработка выбора одного из вариантов расчета ленточного нагревателя
 							var sel_stripe = $("input[name = 'options']:checked").val();
-							$("input[name='thickness']").val(result[sel_stripe].A);
-							$("input[name='width']").val(result[sel_stripe].B);
-							$("input[name='length']").val(result[sel_stripe].L);
-							$("input[name='mass']").val(result[sel_stripe].M);
+							
+							$("input[name='standard_sizes_enabled']").prop("checked", false);
+							$("input[name='standard_sizes_enabled']").change();
+							
+							if (sizes_type == 2) { // если используются пользовательские размеры ленты, подставить пользовательские толщину и ширину, длину взять из ответа, массу рассчитать
+								var a = $("input[name='custom_thickness']").val();
+								var b = $("input[name='custom_width']").val();
+								var dens = $("select[name = 'material'] option:selected").data("density");
+								var mass = dens * Math.pow(10, 3) * a * b * result[sel_stripe].L * Math.pow(10, -6);
+								mass = mass.toFixed(3);
+								
+								$("input[name='thickness']").val(a);
+								$("input[name='width']").val(b);
+								$("input[name='length']").val(result[sel_stripe].L);
+								$("input[name='mass']").val(mass);
+							}
+							else {
+								$("input[name='thickness']").val(result[sel_stripe].A);
+								$("input[name='width']").val(result[sel_stripe].B);
+								$("input[name='length']").val(result[sel_stripe].L);
+								$("input[name='mass']").val(result[sel_stripe].M);
+							}
 							
 							if (pgrid == 3) {
 								$("input[name='total_length']").val($("input[name='length']").val() * 3);
@@ -441,14 +497,19 @@ $(function() {
 		params += "&size_relation=";
 		params += m;
 		$.getJSON('../../heater_calc/calc_heater.php', params, function(result, statusText, xhr){
+			var pgrid = $("select[name='pgrid'] option:selected").val();
 			// подставить выбранные стандартные толщину и ширину, длину взять из ответа, массу рассчитать
 				$("input[name='thickness']").val(a);
 				$("input[name='width']").val(b);
 				$("input[name='length']").val(result[0].L);
 				var dens = $("select[name = 'material'] option:selected").data("density");
 				var mass =  dens * Math.pow(10, 3) * a * b * result[0].L * Math.pow(10, -6);
-				mass = Math.round(mass);
+				mass = mass.toFixed(3);
 				$("input[name='mass']").val(mass);
+				if (pgrid == 3) {
+					$("input[name='total_length']").val($("input[name='length']").val() * 3);
+					$("input[name='total_mass']").val(($("input[name='mass']").val() * 3).toFixed(3));
+				}
 		});
 	});
 });
