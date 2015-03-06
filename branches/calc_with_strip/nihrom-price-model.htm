@@ -816,8 +816,8 @@
 												<option value="2">Ленточные</option>
 											</select>
 										</p>
-                    <p id="sizes_type" style="display: none;">Размеры ленты
-                      <span class="formInfo"><a data-tooltip="Отношение ширины к толщине должно принадлежать диапазону <u>от 5 до 15</u> включительно" name="Отношение ширины ленты к толщине">?</a></span>
+                    <p id="sizes_type" style="display: none;">Тип расчета
+                      <span class="formInfo"><a data-tooltip="При выборе пункта <b>&quot;Рассчитать оптимальные размеры&quot;</b> выполняется расчет оптимальных размеров ленточного нагревателя для заданных исходных данных. <br><br>При выборе пункта <b>&quot;Ввести произвольные размеры&quot;</b> выполняется расчет необходимой длины и массы ленточного нагревателя для заданных толщины, ширины и других исходных данных." name="Тип расчета">?</a></span>
                       <br>
                       <select name="sizes_type" required>
 												<option value="1" selected="selected">Рассчитать оптимальные размеры</option>
@@ -830,11 +830,11 @@
 											<br><input type="text" name="size_relation" disabled>
 										</p>
                     <p id="custom_thickness" style="display: none;">Произвольная толщина ленты, мм
-											<span class="formInfo"><a data-tooltip="Отношение ширины к толщине должно принадлежать диапазону <u>от 5 до 15</u> включительно" name="Отношение ширины ленты к толщине">?</a></span>
+											<span class="formInfo"><a data-tooltip="Толщина ленточного нагревателя, вводимая пользователем в качестве исходных данных." name="Произвольная толщина ленты">?</a></span>
 											<br><input type="text" name="custom_thickness">
 										</p>
                     <p id="custom_width" style="display: none;">Произвольная ширина ленты, мм
-											<span class="formInfo"><a data-tooltip="Отношение ширины к толщине должно принадлежать диапазону <u>от 5 до 15</u> включительно" name="Отношение ширины ленты к толщине">?</a></span>
+											<span class="formInfo"><a data-tooltip="Ширина ленточного нагревателя, вводимая пользователем в качестве исходных данных." name="Произвольная ширина ленты">?</a></span>
 											<br><input type="text" name="custom_width">
 										</p>
 										<p>Конструкция и размещение нагревателей
@@ -862,6 +862,7 @@
 											<p id="options">Размеры нагревателей (толщина x ширина), мм
 											</p>
                       <p id="standard_sizes"> Выбрать из стандартных размеров (толщина х ширина), мм
+                        <span class="formInfo"><a data-tooltip="Для оптимизации итоговой массы нагревателей следует выбирать стандартные размеры, близкие к оптимальным (в случае выбора пункта &quot;Рассчитать оптимальные размеры&quot;)." name="Выбрать из стандартных размеров">?</a></span>
                         <br><input type="checkbox" name="standard_sizes_enabled"><span style="font-size: 11px;">Изменить размер на стандартный</span>
                         <br><select name="standard_sizes" disabled required>
                           <option id="st_size_1" data-thickness="0.1" data-width="20">0,1х20</option>

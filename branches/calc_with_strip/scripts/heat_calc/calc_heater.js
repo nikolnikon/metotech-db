@@ -335,9 +335,11 @@ $(function() {
 		}
 		else { // если сняли флажок
 			$("select[name='standard_sizes']").prop("disabled", true);
+			//$("input[name = 'options']:checked").prop("checked", false);
+			//$("input[name = 'options']:checked").change();
 		}
-	})
-	.change();
+	});
+	//.change();
 	
 	// если пользователь меняет исходные данные, то результаты предыдущего расчета скрываются
 	$("form[name='heater_calc'] select, form[name='heater_calc'] input").change(function() {
