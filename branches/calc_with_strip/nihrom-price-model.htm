@@ -80,7 +80,7 @@
 		margin-left: 13px;
 		padding: 5px;
 		font-family: 'Play', Verdana, sans-serif;
-		height: 1010px;
+		height: 1060px;
 		width: 700px;
 		text-align: center;
 		border: 1px dotted #acb7bf;
@@ -117,7 +117,7 @@
 		display: none;
 	}
 
-	div#heater_calc_input select, div#heater_calc_input input, div#heater_calc_input label, div#heater_calc_res input, div#heater_calc_res label {
+	div#heater_calc_input select, div#heater_calc_input input, div#heater_calc_input label, div#heater_calc_res input, div#heater_calc_res select, div#heater_calc_res label {
 		font-family: 'Cuprum', Verdana, sans-serif;
 		font-size: 20px;
 	}
@@ -865,9 +865,41 @@
                         <span class="formInfo"><a data-tooltip="Для оптимизации итоговой массы нагревателей следует выбирать стандартные размеры, близкие к оптимальным (в случае выбора пункта &quot;Рассчитать оптимальные размеры&quot;)." name="Выбрать из стандартных размеров">?</a></span>
                         <br><input type="checkbox" name="standard_sizes_enabled"><span style="font-size: 11px;">Изменить размер на стандартный</span>
                         <br><select name="standard_sizes" disabled required>
-                          <option id="st_size_1" data-thickness="0.1" data-width="20">0,1х20</option>
-                          <option id="st_size_2" data-thickness="1.5" data-width="10">1,5х10</option>
-                          <option id="st_size_3" data-thickness="3" data-width="40">3,0х40</option>
+                          <option id="st_size_1" data-thickness="0.1" data-width="60">0,1х60</option>
+                          <option id="st_size_2" data-thickness="0.1" data-width="100">0,1х100</option>
+                          <option id="st_size_3" data-thickness="0.1" data-width="200">0,1х200</option>
+						  <option id="st_size_4" data-thickness="0.1" data-width="400">0,1х400</option>
+						  <option id="st_size_5" data-thickness="0.2" data-width="2.5">0,2х2,5</option>
+						  <option id="st_size_6" data-thickness="0.2" data-width="8">0,2х8</option>
+						  <option id="st_size_7" data-thickness="0.2" data-width="60">0,2х60</option>
+						  <option id="st_size_8" data-thickness="0.3" data-width="1.85">0,3х1,85</option>
+						  <option id="st_size_9" data-thickness="0.3" data-width="60">0,3х60</option>
+						  <option id="st_size_10" data-thickness="0.3" data-width="400">0,3х400</option>
+						  <option id="st_size_11" data-thickness="0.35" data-width="2.35">0,35х2,35</option>
+						  <option id="st_size_12" data-thickness="0.35" data-width="2.4">0,35х2,4</option>
+						  <option id="st_size_13" data-thickness="0.5" data-width="2.25">0,5х2,25</option>
+						  <option id="st_size_14" data-thickness="0.5" data-width="6">0,5х6</option>
+						  <option id="st_size_15" data-thickness="0.5" data-width="8">0,5х8</option>
+						  <option id="st_size_16" data-thickness="1" data-width="6">1,0х6</option>
+						  <option id="st_size_17" data-thickness="1" data-width="10">1,0х10</option>
+						  <option id="st_size_18" data-thickness="1" data-width="15">1,0х15</option>
+						  <option id="st_size_19" data-thickness="1" data-width="20">1,0х20</option>
+						  <option id="st_size_20" data-thickness="1.2" data-width="20">1,2х20</option>
+						  <option id="st_size_21" data-thickness="1.5" data-width="10">1,5х10</option>
+						  <option id="st_size_22" data-thickness="1.5" data-width="12">1,5х12</option>
+						  <option id="st_size_23" data-thickness="1.5" data-width="15">1,5х15</option>
+						  <option id="st_size_24" data-thickness="2" data-width="10">2,0х10</option>
+						  <option id="st_size_25" data-thickness="2" data-width="20">2,0х20</option>
+						  <option id="st_size_26" data-thickness="2" data-width="25">2,0х25</option>
+						  <option id="st_size_28" data-thickness="2" data-width="30">2,0х30</option>
+						  <option id="st_size_29" data-thickness="2" data-width="40">2,0х40</option>
+						  <option id="st_size_30" data-thickness="2.5" data-width="20">2,5х20</option>
+						  <option id="st_size_31" data-thickness="2.5" data-width="25">2,5х25</option>
+						  <option id="st_size_32" data-thickness="2.5" data-width="30">2,5х30</option>
+						  <option id="st_size_33" data-thickness="2.5" data-width="60">2,5х60</option>
+						  <option id="st_size_34" data-thickness="3" data-width="20">3,0х20</option>
+						  <option id="st_size_35" data-thickness="3" data-width="30">3,0х30</option>
+						  <option id="st_size_36" data-thickness="3" data-width="40">3,0х40</option>
                         </select>
                       </p>
 											<p id="thickness">Толщина нагревателя, мм
